@@ -1,10 +1,14 @@
 import { Container } from "@nextui-org/react";
 import OpenLocalSave from "../../projects/save-editor/components/OpenLocalSave";
+import SaveEditor from "../../projects/save-editor/SaveEditor";
 
-const SaveEditor = () => {
-  const onOpen = (file: File) => {
-    console.log(`Reading save file "${file.name}" (${file.size} bytes)`);
-    file.arrayBuffer().then(console.log);
+const SaveEditorPage = () => {
+  const onOpen = async (file: File) => {
+    console.log(`Opening local save file "${file.name}" (${file.size} bytes)`);
+    const editor = new SaveEditor(file);
+    await editor.loadDatabase();
+
+    console.log("Save version:", editor.getVersion());
   }
 
   return (
@@ -14,4 +18,4 @@ const SaveEditor = () => {
   );
 }
 
-export default SaveEditor;
+export default SaveEditorPage;
