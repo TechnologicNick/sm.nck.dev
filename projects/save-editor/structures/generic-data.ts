@@ -25,7 +25,7 @@ export default class GenericData implements IGenericData, IDeserializable<Generi
   static deserialize(buffer: Buffer) {
 
     const uid = new Uuid(buffer.slice(0, 16));
-    const channel = buffer.readUInt16LE(0x10);
+    const channel = buffer.readUInt16BE(0x10);
     const key = buffer.readUInt32LE(0x12);
     const worldId = buffer.readUInt16BE(0x16);
     const flags = buffer.readUInt32LE(0x18);
