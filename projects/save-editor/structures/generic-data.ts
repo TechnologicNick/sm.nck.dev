@@ -36,11 +36,6 @@ export default class GenericData implements IGenericData, IDeserializable<Generi
     const size = LZ4.decodeBlock(compressed, uncompressed);
     const data = Buffer.from(uncompressed.slice(0, size));
 
-    console.log(compressed);
-    console.log(data);
-    console.log(compressed.toString("hex"));
-    console.log(data.toString("hex"));
-
     return new GenericData({
       uid,
       channel,
