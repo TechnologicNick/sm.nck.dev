@@ -17,3 +17,5 @@ export default class Uuid {
   }
     
 }
+
+export const NIL = new Uuid();

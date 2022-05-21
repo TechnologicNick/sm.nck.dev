@@ -1,39 +1,25 @@
 import Uuid from "./uuid";
 import { LZ4 } from "../components/Lz4Context";
+import GenericData, { IGenericData } from "./generic-data";
+import { IDeserializable } from "./deserializable";
 
-export interface IPlayer {
-  uid: Uuid;
+export interface IPlayer extends IGenericData {
   steamId64: BigInt;
 }
 
-export default class Player implements IPlayer {
+export default class Player extends GenericData implements IPlayer, IDeserializable<IPlayer> {
 
-  uid: Uuid;
-  steamId64: BigInt;
+  steamId64: BigInt = BigInt(0);
 
-  static fromCompressedBlob(blob: Uint8Array) {
-
-    const uid = new Uuid(blob.subarray(0, 16));
-    const steamId64 = BigInt(0);
-
-    const buffer = Buffer.alloc(64);
-    const compressed = Buffer.from(blob.slice(0x1D, blob.length));
-    const size = LZ4.decodeBlock(compressed, buffer);
-    const uncompressed = buffer.slice(0, size);
-
-    console.log(compressed);
-    console.log(uncompressed);
-    console.log(compressed.toString("hex"));
-    console.log(uncompressed.toString("hex"));
+  static deserialize(buffer: Buffer) {
+    const base = super.deserialize(buffer);
 
     return new Player({
-      uid,
-      steamId64,
+      ...base,
     })
   }
 
-  constructor({ uid, steamId64 }: IPlayer) {
-    this.uid = uid;
-    this.steamId64 = steamId64;
+  constructor(base: Partial<IGenericData & IPlayer>) {
+    super(base);
   }
 }

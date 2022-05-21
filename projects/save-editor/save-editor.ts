@@ -30,6 +30,6 @@ export default class SaveEditor {
 
   getAllPlayers() {
     return this.db.exec("SELECT data FROM GenericData WHERE worldId = 65534 AND flags = 3")[0].values
-      .map(value => Player.fromCompressedBlob(value[0] as Uint8Array));
+      .map(value => Player.deserialize(Buffer.from(value[0] as Uint8Array)));
   }
 }
