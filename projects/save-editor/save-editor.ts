@@ -1,4 +1,5 @@
 import initSqlJs, { Database, SqlJsStatic } from "sql.js";
+import Player from "./structures/player";
 
 export let SQL: SqlJsStatic;
 
@@ -25,5 +26,10 @@ export default class SaveEditor {
 
   getVersion() {
     return this.db.exec("SELECT savegameversion FROM Game")[0].values[0][0] as number;
+  }
+
+  getAllPlayers() {
+    return this.db.exec("SELECT data FROM GenericData WHERE worldId = 65534 AND flags = 3")[0].values
+      .map(value => Player.fromCompressedBlob(value[0] as Uint8Array));
   }
 }

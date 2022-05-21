@@ -539,6 +539,13 @@
   resolved "https://registry.yarnpkg.com/@types/emscripten/-/emscripten-1.39.6.tgz#698b90fe60d44acf93c31064218fbea93fbfd85a"
   integrity sha512-H90aoynNhhkQP6DRweEjJp5vfUVdIj7tdPLsu7pq89vODD/lcugKfZOsfgwpvM6XUewEp2N5dCg1Uf3Qe55Dcg==
 
+"@types/lz4@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@types/lz4/-/lz4-0.6.0.tgz#7669344df4921cbeda1d5c4be1ba45cba86a7922"
+  integrity sha512-HxdNqDQYShhilOdOny0VFDmZQXksfXcz+1cIjO30pJ4y1NpBeWS/hvP8QWTIaen+OEKAwnUtz37kW/Et4tmSuA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/node@*", "@types/node@^17.0.31":
   version "17.0.35"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.35.tgz#635b7586086d51fb40de0a2ec9d1014a5283ba4a"
@@ -570,6 +577,11 @@
   dependencies:
     "@types/emscripten" "*"
     "@types/node" "*"
+
+"@types/uuid@^8.3.4":
+  version "8.3.4"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.4.tgz#bd86a43617df0594787d38b735f55c805becf1bc"
+  integrity sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==
 
 "@use-it/event-listener@^0.1.2":
   version "0.1.7"
@@ -728,3 +740,8 @@ use-persisted-state@^0.3.0:
   integrity sha512-pCNlvYC8+XjRxwnIut4teGC9f2p9aD88R8OGseQGZa2dvqG/h1vEGk1vRE1IZG0Vf161UDpn+NlW4+UGubQflQ==
   dependencies:
     "@use-it/event-listener" "^0.1.2"
+
+uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
