@@ -1,23 +1,29 @@
 import { Container } from "@nextui-org/react";
-import Script from "next/script";
+import { useState } from "react";
 import Lz4Context from "../../projects/save-editor/components/Lz4Context";
 import OpenLocalSave from "../../projects/save-editor/components/OpenLocalSave";
+import SaveBrowser from "../../projects/save-editor/components/SaveBrowser";
 import SaveEditor from "../../projects/save-editor/save-editor";
 
 const SaveEditorPage = () => {
+  const [saveEditor, setSaveEditor] = useState<SaveEditor>();
+
   const onOpen = async (file: File) => {
     console.log(`Opening local save file "${file.name}" (${file.size} bytes)`);
     const editor = new SaveEditor(file);
     await editor.loadDatabase();
-
-    console.log("Save version:", editor.getVersion());
-    console.log("Players:", editor.getAllPlayers());
+    
+    setSaveEditor(editor);
   }
 
   return (
     <Container>
       <Lz4Context>
-        <OpenLocalSave onOpen={onOpen}/>
+        {saveEditor ? (
+          <SaveBrowser saveEditor={saveEditor} />
+        ) : (
+          <OpenLocalSave onOpen={onOpen} />
+        )}
       </Lz4Context>
     </Container>
   );
