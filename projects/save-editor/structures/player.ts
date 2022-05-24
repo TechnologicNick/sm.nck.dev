@@ -4,7 +4,7 @@ import GenericData, { IGenericData } from "./generic-data";
 import { IDeserializable } from "./deserializable";
 
 export interface IPlayer extends IGenericData {
-  unknown0x00: number;
+  worldId: number;
   z: number;
   y: number;
   x: number;
@@ -19,7 +19,7 @@ export interface IPlayer extends IGenericData {
 
 export default class Player extends GenericData implements IPlayer, IDeserializable<IPlayer> {
 
-  unknown0x00: number = 1;
+  worldId: number = 1;
   z: number = 0;
   y: number = 0;
   x: number = 0;
@@ -34,7 +34,7 @@ export default class Player extends GenericData implements IPlayer, IDeserializa
   static deserialize(buffer: Buffer) {
     const base = super.deserialize(buffer);
 
-    const unknown0x00 = base.data.readUInt16BE(0x00);
+    const worldId = base.data.readUInt16BE(0x00);
     const z = base.data.readFloatBE(0x02);
     const y = base.data.readFloatBE(0x06);
     const x = base.data.readFloatBE(0x0A);
@@ -48,7 +48,7 @@ export default class Player extends GenericData implements IPlayer, IDeserializa
 
     return new Player({
       ...base,
-      unknown0x00,
+      worldId,
       z,
       y,
       x,
