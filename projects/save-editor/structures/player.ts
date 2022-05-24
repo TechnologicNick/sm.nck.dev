@@ -11,7 +11,7 @@ export interface IPlayer extends IGenericData {
   unknown0x0E: Buffer;
   yaw: number;
   pitch: number;
-  steamId64: BigInt;
+  steamId64: bigint;
   inventoryContainerId: number;
   unknown0x2E: number;
   unknown0x32: number;
@@ -26,7 +26,7 @@ export default class Player extends GenericData implements IPlayer, IDeserializa
   unknown0x0E: Buffer = Buffer.alloc(12);
   yaw: number = 0;
   pitch: number = 0;
-  steamId64: BigInt = BigInt(0);
+  steamId64: bigint = BigInt(0);
   inventoryContainerId: number = 0;
   unknown0x2E: number = 0;
   unknown0x32: number = 0xFFFFFFFF;
