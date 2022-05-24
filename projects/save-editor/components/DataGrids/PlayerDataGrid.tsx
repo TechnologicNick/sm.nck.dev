@@ -1,7 +1,9 @@
 import { Table, useAsyncList, useCollator } from "@nextui-org/react";
+import { cacheMissingSummaries } from "../../caches/player-summary-cache";
 
 import SaveEditor from "../../save-editor";
 import Player from "../../structures/player";
+import SteamProfileCell from "./Cells/SteamProfileCell";
 
 export interface PlayerDataGridProps {
   saveEditor: SaveEditor;
@@ -13,8 +15,11 @@ const PlayerDataGrid = ({ saveEditor, players }: PlayerDataGridProps) => {
   
   const list = useAsyncList<Player>({
     async load({ }) {
+      const playerRows = players ?? saveEditor.getAllPlayers();
+      cacheMissingSummaries(playerRows.map(playerRow => playerRow.steamId64));
+
       return {
-        items: players ?? saveEditor.getAllPlayers(),
+        items: playerRows,
       };
     },
     async sort({ items, sortDescriptor }) {
@@ -40,6 +45,9 @@ const PlayerDataGrid = ({ saveEditor, players }: PlayerDataGridProps) => {
       selectionMode="multiple"
     >
       <Table.Header>
+        <Table.Column key="profile" allowsSorting>
+          Steam Profile
+        </Table.Column>
         <Table.Column key="steamId64" allowsSorting>
           SteamId64
         </Table.Column>
@@ -57,6 +65,15 @@ const PlayerDataGrid = ({ saveEditor, players }: PlayerDataGridProps) => {
         {(item) => (
           <Table.Row key={item.steamId64.toString()}>
             {(columnKey) => {
+              switch(columnKey) {
+                case "profile":
+                  return (
+                    <Table.Cell>
+                      <SteamProfileCell steamId64={item.steamId64} />
+                    </Table.Cell>
+                  )
+              }
+
               const value = item[columnKey as keyof typeof item];
               switch(typeof value) {
                 case "number":
