@@ -42,11 +42,11 @@ export interface ActionProps {
 }
 
 export const Action = ({ tooltip, color, onClick, children, icon }: ActionProps) => {
-  const OptionalTooltip = tooltip ? Tooltip : React.Fragment;
+  const OptionalTooltip = tooltip ? (Tooltip as typeof Tooltip & React.FC<{ disabled: boolean }>) : React.Fragment;
 
   return (
     <Col css={{ d: "flex" }}>
-      <OptionalTooltip content={tooltip} color={color}>
+      <OptionalTooltip content={tooltip} color={color} disabled>
         <IconButton onPress={() => {
           onClick?.();
         }}>
