@@ -23,13 +23,15 @@ const StyledIconButton = styled("button", {
 });
 
 export const IconButton = (props: Parameters<typeof StyledIconButton>[0] & AriaButtonProps<"button">) => {
-  let ref = useRef() as React.MutableRefObject<HTMLButtonElement>;
-  let { buttonProps } = useButton({
-    ...props,
-  }, ref);
+  const ref = useRef<HTMLButtonElement>(null);
+  const { buttonProps } = useButton({ ...props }, ref);
+
+  // Fix "Unknown event handler property `onPress`. It will be ignored." warning
+  const propsCopy = { ...props };
+  delete propsCopy.onPress;
   
   return (
-    <StyledIconButton {...buttonProps} {...props} ref={ref} />
+    <StyledIconButton {...buttonProps} {...propsCopy} ref={ref} />
   );
 }
 
