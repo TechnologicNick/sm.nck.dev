@@ -1,8 +1,8 @@
 import { Table, useAsyncList, useCollator } from "@nextui-org/react";
 import { cacheMissingSummaries } from "../../caches/player-summary-cache";
-
 import SaveEditor from "../../save-editor";
 import Player from "../../structures/player";
+import ActionsCell, { Action } from "./Cells/ActionsCell";
 import SteamProfileCell from "./Cells/SteamProfileCell";
 
 export interface PlayerDataGridProps {
@@ -66,27 +66,39 @@ const PlayerDataGrid = ({ saveEditor, players }: PlayerDataGridProps) => {
         <Table.Column key="z" allowsSorting>
           Z
         </Table.Column>
+        <Table.Column key="actions" hideHeader align="center">
+          Actions
+        </Table.Column>
       </Table.Header>
       <Table.Body items={list.items} loadingState={list.loadingState}>
-        {(item) => (
-          <Table.Row key={item.steamId64.toString()}>
+        {(player) => (
+          <Table.Row key={player.steamId64.toString()}>
             {(columnKey) => {
-              const value = item[columnKey as keyof typeof item];
+              const value = player[columnKey as keyof typeof player];
 
               switch(columnKey) {
                 case "profile":
                   return (
                     <Table.Cell>
-                      <SteamProfileCell steamId64={item.steamId64} />
+                      <SteamProfileCell steamId64={player.steamId64} />
                     </Table.Cell>
                   )
                 case "x":
                 case "y":
                 case "z":
                   return <Table.Cell>{(value as number).toFixed(2)}</Table.Cell>
+                case "actions":
+                  return (
+                    <Table.Cell>
+                      <ActionsCell>
+                        <Action tooltip="Edit player" onClick={() => console.log("Edit player", player)} icon="edit" />
+                        <Action tooltip="Delete player" onClick={() => console.log("Delete player", player)} icon="delete" color="error" />
+                      </ActionsCell>
+                    </Table.Cell>
+                  )
               }
 
-              return <Table.Cell>{value.toString()}</Table.Cell>
+              return <Table.Cell>{value?.toString()}</Table.Cell>
             }}
           </Table.Row>
         )}
