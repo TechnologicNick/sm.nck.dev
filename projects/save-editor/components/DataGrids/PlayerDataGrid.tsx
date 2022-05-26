@@ -45,7 +45,7 @@ const PlayerDataGrid = ({ saveEditor, players }: PlayerDataGridProps) => {
       selectionMode="multiple"
     >
       <Table.Header>
-        <Table.Column key="profile" allowsSorting>
+        <Table.Column key="profile">
           Steam Profile
         </Table.Column>
         <Table.Column key="steamId64" allowsSorting>
