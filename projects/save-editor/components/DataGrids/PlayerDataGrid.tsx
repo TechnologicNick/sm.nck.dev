@@ -45,6 +45,9 @@ const PlayerDataGrid = ({ saveEditor, players }: PlayerDataGridProps) => {
       selectionMode="multiple"
     >
       <Table.Header>
+        <Table.Column key="key" allowsSorting>
+          Id
+        </Table.Column>
         <Table.Column key="profile">
           Steam Profile
         </Table.Column>
@@ -66,6 +69,9 @@ const PlayerDataGrid = ({ saveEditor, players }: PlayerDataGridProps) => {
           <Table.Row key={item.steamId64.toString()}>
             {(columnKey) => {
               switch(columnKey) {
+                case "key":
+                  const value = item[columnKey as keyof typeof item];
+                  return <Table.Cell>{value.toString()}</Table.Cell>
                 case "profile":
                   return (
                     <Table.Cell>
