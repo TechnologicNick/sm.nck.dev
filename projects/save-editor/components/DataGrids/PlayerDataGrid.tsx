@@ -22,6 +22,9 @@ const PlayerDataGrid = ({ saveEditor, players }: PlayerDataGridProps) => {
         items: playerRows,
       };
     },
+    getKey(player) {
+      return player.steamId64.toString();
+    },
     async sort({ items, sortDescriptor }) {
       return {
         items: items.sort((a, b) => {
@@ -92,7 +95,9 @@ const PlayerDataGrid = ({ saveEditor, players }: PlayerDataGridProps) => {
                     <Table.Cell>
                       <ActionsCell>
                         <Action tooltip="Edit player" onClick={() => console.log("Edit player", player)} icon="edit" />
-                        <Action tooltip="Delete player" onClick={() => console.log("Delete player", player)} icon="delete" color="error" />
+                        <Action tooltip="Delete player" icon="delete" color="error" onClick={() => {
+                          saveEditor.deletePlayers([ player ]) && list.remove(player.steamId64.toString())
+                        }}/>
                       </ActionsCell>
                     </Table.Cell>
                   )

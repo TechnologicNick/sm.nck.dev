@@ -9,6 +9,8 @@ export const initSql = async () => {
   });
 }
 
+const parameters = (count: number) => "?, ".repeat(count).replace(/, $/, "");
+
 export default class SaveEditor {
 
   file: File;
@@ -31,5 +33,15 @@ export default class SaveEditor {
   getAllPlayers() {
     return this.db.exec("SELECT data FROM GenericData WHERE worldId = 65534 AND flags = 3 ORDER BY key ASC")
       .flatMap(result => result.values.map(value => Player.deserialize(Buffer.from(value[0] as Uint8Array))));
+  }
+
+  deletePlayers(players: Player[]) {
+    this.db.exec(`DELETE FROM GenericData WHERE worldId = 65534 AND flags = 3 AND key IN (${parameters(players.length)})`, players.map(player => {
+      let buffer = Buffer.alloc(4);
+      buffer.writeUInt32LE(player.key);
+      return buffer;
+    }));
+
+    return this.db.getRowsModified();
   }
 }
