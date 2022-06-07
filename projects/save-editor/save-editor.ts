@@ -44,4 +44,10 @@ export default class SaveEditor {
 
     return this.db.getRowsModified();
   }
+
+  deleteAllPlayers() {
+    this.db.exec(`DELETE FROM GenericData WHERE worldId = 65534 AND flags = 3`);
+
+    return this.db.getRowsModified();
+  }
 }

@@ -56,8 +56,20 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
       ? list.items.length === 0
       : selection.size === 0;
 
+    const deleteSelectedPlayers = () => {
+      if (selection === "all") {
+        saveEditor.deleteAllPlayers();
+        const selectedPlayerKeys = list.items.map(player => player.steamId64.toString());
+        list.remove(...selectedPlayerKeys);
+      } else {
+        const selectedPlayers = Array.from(selection).map(key => list.getItem(key));
+        saveEditor.deletePlayers(selectedPlayers);
+        list.remove(...selection);
+      }
+    }
+
     return (
-      <Button color="error" flat disabled={disabled}>
+      <Button color="error" flat disabled={disabled} onClick={deleteSelectedPlayers}>
         {children}
       </Button>
     );
