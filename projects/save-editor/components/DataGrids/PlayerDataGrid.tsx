@@ -62,7 +62,9 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
         const selectedPlayerKeys = list.items.map(player => player.steamId64.toString());
         list.remove(...selectedPlayerKeys);
       } else {
-        const selectedPlayers = Array.from(selection).map(key => list.getItem(key));
+        const selectedPlayers = Array.from(selection)
+          .map(key => list.getItem(key))
+          .filter(player => player !== undefined);
         saveEditor.deletePlayers(selectedPlayers);
         list.remove(...selection);
       }
