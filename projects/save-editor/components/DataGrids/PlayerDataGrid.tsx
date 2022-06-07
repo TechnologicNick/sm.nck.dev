@@ -76,7 +76,7 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
     }
 
     return (
-      <Button color="error" flat disabled={disabled} onClick={deleteSelectedPlayers}>
+      <Button color="error" disabled={disabled} onClick={deleteSelectedPlayers}>
         {children}
       </Button>
     );
