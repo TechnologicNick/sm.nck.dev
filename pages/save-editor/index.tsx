@@ -1,4 +1,4 @@
-import { Container } from "@nextui-org/react";
+import { Container, Spacer } from "@nextui-org/react";
 import { useState } from "react";
 import Lz4Context from "../../projects/save-editor/components/Lz4Context";
 import OpenLocalSave from "../../projects/save-editor/components/OpenLocalSave";
@@ -19,6 +19,7 @@ const SaveEditorPage = () => {
   return (
     <Container>
       <Lz4Context>
+        <Spacer />
         {saveEditor ? (
           <SaveBrowser
             key={saveEditor.uuid.toString()}
