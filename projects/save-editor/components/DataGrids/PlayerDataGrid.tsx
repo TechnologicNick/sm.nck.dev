@@ -1,5 +1,5 @@
 import { Button, Container, Row, Table, useAsyncList, useCollator } from "@nextui-org/react";
-import { forwardRef, Key, ReactNode, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, Key, ReactNode, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { cacheMissingSummaries } from "../../caches/player-summary-cache";
 import SaveEditor from "../../save-editor";
 import Player from "../../structures/player";
@@ -41,6 +41,11 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
       };
     },
   });
+
+  // Force reload on saveEditor change
+  useEffect(() => {
+    list.reload();
+  }, [saveEditor])
 
   type DeleteButtonHandle = {
     setSelection: (newSelection: "all" | Set<Key>) => void;
