@@ -20,7 +20,12 @@ const SaveEditorPage = () => {
     <Container>
       <Lz4Context>
         {saveEditor ? (
-          <SaveBrowser saveEditor={saveEditor} />
+          <SaveBrowser
+            saveEditor={saveEditor}
+            buttons={<>
+              <OpenLocalSave onOpen={onOpen} />
+            </>}
+          />
         ) : (
           <OpenLocalSave onOpen={onOpen} />
         )}

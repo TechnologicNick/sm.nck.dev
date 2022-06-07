@@ -1,4 +1,4 @@
-import { Button, Col, Container, Row, Table, useAsyncList, useCollator } from "@nextui-org/react";
+import { Button, Container, Row, Table, useAsyncList, useCollator } from "@nextui-org/react";
 import { forwardRef, Key, ReactNode, useImperativeHandle, useRef, useState } from "react";
 import { cacheMissingSummaries } from "../../caches/player-summary-cache";
 import SaveEditor from "../../save-editor";
@@ -14,7 +14,7 @@ export interface PlayerDataGridProps {
 
 const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) => {
   const collator = useCollator({ numeric: true });
-  
+
   const list = useAsyncList<Player>({
     async load({ }) {
       const playerRows = players ?? saveEditor.getAllPlayers();
