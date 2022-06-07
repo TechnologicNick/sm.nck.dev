@@ -1,4 +1,5 @@
-import { Table, useAsyncList, useCollator } from "@nextui-org/react";
+import { Button, Col, Container, Row, Table, useAsyncList, useCollator } from "@nextui-org/react";
+import { forwardRef, Key, ReactNode, useImperativeHandle, useRef, useState } from "react";
 import { cacheMissingSummaries } from "../../caches/player-summary-cache";
 import SaveEditor from "../../save-editor";
 import Player from "../../structures/player";
@@ -8,9 +9,10 @@ import SteamProfileCell from "./Cells/SteamProfileCell";
 export interface PlayerDataGridProps {
   saveEditor: SaveEditor;
   players?: Player[];
+  buttons?: ReactNode;
 }
 
-const PlayerDataGrid = ({ saveEditor, players }: PlayerDataGridProps) => {
+const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) => {
   const collator = useCollator({ numeric: true });
   
   const list = useAsyncList<Player>({
@@ -40,12 +42,43 @@ const PlayerDataGrid = ({ saveEditor, players }: PlayerDataGridProps) => {
     },
   });
 
-  return (
+  type DeleteButtonHandle = {
+    setSelection: (newSelection: "all" | Set<Key>) => void;
+  }
+
+  const DeleteButton = forwardRef<DeleteButtonHandle, { children?: ReactNode }>(({ children }, ref) => {
+    const [selection, setSelection] = useState<"all" | Set<Key>>(new Set());
+    useImperativeHandle(ref, () => ({
+      setSelection: (newSelection) => setSelection(newSelection),
+    }))
+
+    const disabled = selection === "all"
+      ? list.items.length === 0
+      : selection.size === 0;
+
+    return (
+      <Button color="error" flat disabled={disabled}>
+        {children}
+      </Button>
+    );
+  });
+  const deleteButtonRef = useRef<DeleteButtonHandle>(null);
+
+  return (<>
+    <Container fluid>
+      <Row>
+        {buttons}
+        <DeleteButton ref={deleteButtonRef}>
+          Delete
+        </DeleteButton>
+      </Row>
+    </Container>
     <Table
       aria-label="Player data table"
       sortDescriptor={list.sortDescriptor}
       onSortChange={list.sort}
       selectionMode="multiple"
+      onSelectionChange={(keys) => deleteButtonRef.current!.setSelection(keys)}
     >
       <Table.Header>
         <Table.Column key="key" allowsSorting>
@@ -109,7 +142,7 @@ const PlayerDataGrid = ({ saveEditor, players }: PlayerDataGridProps) => {
         )}
       </Table.Body>
     </Table>
-  );
+  </>);
 }
 
 export default PlayerDataGrid;
