@@ -80,11 +80,15 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
 
   return (<>
     <Container fluid>
-      <Row>
-        {buttons}
-        <DeleteButton ref={deleteButtonRef}>
-          Delete
-        </DeleteButton>
+      <Row justify="space-between">
+        <Row fluid={false}>
+          {buttons}
+        </Row>
+        <Row fluid={false}>
+          <DeleteButton ref={deleteButtonRef}>
+            Delete
+          </DeleteButton>
+        </Row>
       </Row>
     </Container>
     <Table
