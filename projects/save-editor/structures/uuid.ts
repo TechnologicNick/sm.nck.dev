@@ -1,4 +1,4 @@
-import { stringify } from "uuid";
+import { stringify, parse, v4 as uuidv4 } from "uuid";
 
 export default class Uuid {
 
@@ -12,10 +12,12 @@ export default class Uuid {
     }
   }
 
-  tostring() {
+  toString() {
     return stringify(this.blob);
   }
     
 }
 
 export const NIL = new Uuid();
+
+export const randomUuid = () => new Uuid(parse(uuidv4()) as Uint8Array);

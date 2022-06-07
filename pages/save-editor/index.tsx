@@ -21,6 +21,7 @@ const SaveEditorPage = () => {
       <Lz4Context>
         {saveEditor ? (
           <SaveBrowser
+            key={saveEditor.uuid.toString()}
             saveEditor={saveEditor}
             buttons={<>
               <OpenLocalSave onOpen={onOpen} />

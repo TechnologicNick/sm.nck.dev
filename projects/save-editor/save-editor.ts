@@ -1,5 +1,6 @@
 import initSqlJs, { Database, SqlJsStatic } from "sql.js";
 import Player from "./structures/player";
+import Uuid, { randomUuid } from "./structures/uuid";
 
 export let SQL: SqlJsStatic;
 
@@ -13,10 +14,12 @@ const parameters = (count: number) => "?, ".repeat(count).replace(/, $/, "");
 
 export default class SaveEditor {
 
+  uuid: Uuid;
   file: File;
   db!: Database;
 
   constructor(file: File) {
+    this.uuid = randomUuid();
     this.file = file;
   }
 
