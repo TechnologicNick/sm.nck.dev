@@ -17,9 +17,8 @@ const SaveEditorPage = () => {
   }
 
   return (
-    <Container>
+    <Container css={{ pt: "$10" }}>
       <Lz4Context>
-        <Spacer />
         {saveEditor ? (
           <SaveBrowser
             key={saveEditor.uuid.toString()}
