@@ -1,6 +1,6 @@
 import initSqlJs, { Database, SqlJsStatic } from "sql.js";
 import Player from "./structures/player";
-import Uuid, { randomUuid } from "./structures/uuid";
+import Uuid from "./structures/uuid";
 
 export let SQL: SqlJsStatic;
 
@@ -19,7 +19,7 @@ export default class SaveEditor {
   db!: Database;
 
   constructor(file: File) {
-    this.uuid = randomUuid();
+    this.uuid = Uuid.randomUuid();
     this.file = file;
   }
 

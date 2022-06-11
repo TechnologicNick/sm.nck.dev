@@ -1,4 +1,4 @@
-import Uuid, { NIL } from "./uuid";
+import Uuid from "./uuid";
 import { LZ4 } from "../components/Lz4Context";
 import { IDeserializable } from "./deserializable";
 
@@ -14,7 +14,7 @@ export interface IGenericData {
 
 export default class GenericData implements IGenericData, IDeserializable<GenericData> {
 
-  uid: Uuid = NIL;
+  uid: Uuid = Uuid.NIL;
   channel: number = 4;
   key: number = 0;
   worldId: number = 65534;
