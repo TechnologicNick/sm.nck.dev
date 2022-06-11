@@ -1,10 +1,8 @@
-import Uuid from "./uuid";
-import { LZ4 } from "../components/Lz4Context";
 import GenericData, { IGenericData } from "./generic-data";
 import { IDeserializable } from "./deserializable";
 
 export interface IPlayer extends IGenericData {
-  worldId: number;
+  characterWorldId: number;
   z: number;
   y: number;
   x: number;
@@ -19,7 +17,7 @@ export interface IPlayer extends IGenericData {
 
 export default class Player extends GenericData implements IPlayer, IDeserializable<IPlayer> {
 
-  worldId: number = 1;
+  characterWorldId: number = 1;
   z: number = 0;
   y: number = 0;
   x: number = 0;
@@ -34,11 +32,11 @@ export default class Player extends GenericData implements IPlayer, IDeserializa
   static deserialize(buffer: Buffer) {
     const base = super.deserialize(buffer);
 
-    const worldId = base.data.readUInt16BE(0x00);
+    const characterWorldId = base.data.readUInt16BE(0x00);
     const z = base.data.readFloatBE(0x02);
     const y = base.data.readFloatBE(0x06);
     const x = base.data.readFloatBE(0x0A);
-    const unknown0x0E = base.data.slice(0x0E, 0x0E + 12);
+    const unknown0x0E = Buffer.from(base.data.slice(0x0E, 0x0E + 12));
     const yaw = base.data.readFloatBE(0x1A);
     const pitch = base.data.readFloatBE(0x1E);
     const steamId64 = BigInt(`0x${base.data.slice(0x22, 0x22 + 8).toString("hex")}`);
@@ -48,7 +46,7 @@ export default class Player extends GenericData implements IPlayer, IDeserializa
 
     return new Player({
       ...base,
-      worldId,
+      characterWorldId,
       z,
       y,
       x,
@@ -65,5 +63,25 @@ export default class Player extends GenericData implements IPlayer, IDeserializa
   constructor(base: Partial<IGenericData & IPlayer>) {
     super(base);
     Object.assign(this, base);
+  }
+
+  serialize() {
+    const buffer = Buffer.alloc(0x36);
+
+    buffer.writeUInt16BE(this.characterWorldId, 0x00);
+    buffer.writeFloatBE(this.z, 0x02);
+    buffer.writeFloatBE(this.y, 0x06);
+    buffer.writeFloatBE(this.x, 0x0A);
+    this.unknown0x0E.copy(buffer, 0x0E);
+    buffer.writeFloatBE(this.yaw, 0x1A);
+    buffer.writeFloatBE(this.pitch, 0x1E);
+    Buffer.from(this.steamId64.toString(16).padStart(16, "0"), "hex").copy(buffer, 0x22, 0, 8);
+    buffer.writeUInt32BE(this.inventoryContainerId, 0x2A);
+    buffer.writeUInt32BE(this.unknown0x2E, 0x2E);
+    buffer.writeUInt32BE(this.unknown0x32, 0x32);
+
+    this.data = buffer;
+
+    return super.serialize();
   }
 }
