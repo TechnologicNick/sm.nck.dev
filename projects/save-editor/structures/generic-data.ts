@@ -50,4 +50,23 @@ export default class GenericData implements IGenericData, IDeserializable<Generi
   constructor(base: Partial<IGenericData>) {
     Object.assign(this, base);
   }
+
+  serialize() {
+    const compressed = Buffer.alloc(this.data.length);
+    const uncompressed = Buffer.from(this.data);
+    const size = LZ4.encodeBlock(uncompressed, compressed);
+    const data = Buffer.from(compressed.slice(0, size));
+
+    const buffer = Buffer.alloc(0x1D + data.length);
+
+    Buffer.from(this.uid.blob).copy(buffer, 0, 0, 16);
+    buffer.writeUInt16BE(this.channel, 0x10);
+    buffer.writeUInt32LE(this.key, 0x12);
+    buffer.writeUInt16BE(this.worldId, 0x16);
+    buffer.writeUInt32LE(this.flags, 0x18);
+    buffer.writeUInt8(this.compressedSize, 0x1C);
+    data.copy(buffer, 0x1D);
+
+    return buffer;
+  }
 }
