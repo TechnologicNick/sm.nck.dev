@@ -1,7 +1,7 @@
-import { Button, Modal, ModalProps, Spacer, Text, useModal } from "@nextui-org/react";
+import { Button, Col, Modal, ModalProps, Row, Spacer, Text, useModal } from "@nextui-org/react";
 import React, { useImperativeHandle, useRef } from "react";
 import Player, { IPlayer } from "../../structures/player";
-import { FieldProps, SteamId64Field } from "./Fields";
+import { FieldProps, NumberField, SteamId64Field } from "./Fields";
 
 export interface PlayerDataModalProps extends ModalProps {
   player: Player;
@@ -19,7 +19,7 @@ const PlayerDataModal = React.forwardRef(({ player, ...props }: PlayerDataModalP
       values.current![key] = value;
     }
   }
-  const getFieldProps = <T extends keyof IPlayer>(key: T): FieldProps<IPlayer[T]> => {
+  const getFieldProps = <T extends keyof IPlayer>(key: T) => {
     return {
       initialValue: player[key],
       onChange: setValue(key),
@@ -34,7 +34,33 @@ const PlayerDataModal = React.forwardRef(({ player, ...props }: PlayerDataModalP
         </Text>
       </Modal.Header>
       <Modal.Body>
-        <SteamId64Field {...getFieldProps("steamId64")} />
+        <SteamId64Field {...getFieldProps("steamId64")} label="Steam Id" />
+        <Spacer y={1} />
+        <Row>
+          <Col>
+            <NumberField {...getFieldProps("x")} label="X" />
+          </Col>
+          <Spacer x={1} />
+          <Col>
+            <NumberField {...getFieldProps("y")} label="Y" />
+          </Col>
+          <Spacer x={1} />
+          <Col>
+            <NumberField {...getFieldProps("z")} label="Z" />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <NumberField {...getFieldProps("yaw")} label="Yaw" />
+          </Col>
+          <Spacer x={1} />
+          <Col>
+            <NumberField {...getFieldProps("pitch")} label="Pitch" />
+          </Col>
+        </Row>
+        <Spacer y={1} />
+        <NumberField {...getFieldProps("characterWorldId")} label="World Id" integer />
+        <NumberField {...getFieldProps("inventoryContainerId")} label="Inventory Container Id" integer />
         <Spacer y={0.1} />
       </Modal.Body>
       <Modal.Footer>

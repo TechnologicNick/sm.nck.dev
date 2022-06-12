@@ -4,7 +4,7 @@ import SteamID from "steamid";
 import { FieldProps } from ".";
 import SteamProfileCell from "../../DataGrids/Cells/SteamProfileCell";
 
-const SteamId64Field = ({ initialValue, onChange }: FieldProps<bigint>) => {
+const SteamId64Field = ({ label, initialValue, onChange }: FieldProps<bigint>) => {
   const { value, reset, bindings } = useInput(`${initialValue}`);
   
   const helper = useMemo((): any => {
@@ -53,7 +53,7 @@ const SteamId64Field = ({ initialValue, onChange }: FieldProps<bigint>) => {
       onClearClick={reset}
       helperColor={"error"}
       helperText={helper.error ?? ""}
-      label="Steam ID"
+      label={label}
     />
   </>);
 }
