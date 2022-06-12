@@ -15,6 +15,7 @@
     "react-dom": "^18.0.0",
     "react-icons": "^4.3.1",
     "sql.js": "^1.6.2",
+    "steamid": "^2.0.0",
     "use-dark-mode": "^2.3.1",
     "uuid": "^8.3.2"
   },
@@ -26,6 +27,7 @@
     "@types/node": "^17.0.31",
     "@types/react": "^18.0.8",
     "@types/sql.js": "^1.4.3",
+    "@types/steamid": "^2.0.1",
     "@types/uuid": "^8.3.4",
     "jest": "^28.1.1",
     "jest-environment-jsdom": "^28.1.1",

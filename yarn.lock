@@ -1556,6 +1556,11 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
 
+"@types/steamid@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@types/steamid/-/steamid-2.0.1.tgz#79e164f2da554ca7d2ecf4acc80b2560d6639e4c"
+  integrity sha512-B8sy9wfOOeh+yNrFFzyghCQ1n3rssYbTvZD2kXzuy3HSJEK7TVeYnrpXG/0dOKrq1VU8D7cWORgszsdqKBZnVg==
+
 "@types/testing-library__jest-dom@^5.9.1":
   version "5.14.3"
   resolved "https://registry.yarnpkg.com/@types/testing-library__jest-dom/-/testing-library__jest-dom-5.14.3.tgz#ee6c7ffe9f8595882ee7bda8af33ae7b8789ef17"
@@ -3503,6 +3508,11 @@ stack-utils@^2.0.3:
   integrity sha512-xrQcmYhOsn/1kX+Vraq+7j4oE2j/6BFscZ0etmYg81xuM8Gq0022Pxb8+IqgOFUIaxHs0KaSb7T1+OegiNrNFA==
   dependencies:
     escape-string-regexp "^2.0.0"
+
+steamid@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/steamid/-/steamid-2.0.0.tgz#6d4a51feb80638c1fe4793be77aa972996f4ad75"
+  integrity sha512-+BFJMbo+IxzyfovLR37E7APkaNfmrL3S+88T7wTMRHnQ6LBhzEawPnjfWNKM9eUL/dH45j+7vhSX4WaGXoa4/Q==
 
 string-length@^4.0.1:
   version "4.0.2"
