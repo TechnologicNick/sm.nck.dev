@@ -1,5 +1,5 @@
-import { Col, Row, Tooltip, styled, TooltipColors } from "@nextui-org/react";
-import React, { ReactNode, useRef } from "react";
+import { Col, Row, Tooltip, styled, TooltipColors, Modal } from "@nextui-org/react";
+import React, { ReactElement, ReactNode, useRef, useState } from "react";
 import { AriaButtonProps } from "@react-types/button";
 import { useButton } from "@react-aria/button";
 import { Icon, AvailableIcons } from "./Icons";
@@ -41,16 +41,22 @@ export interface ActionProps {
   onClick?: () => void;
   children?: ReactNode;
   icon?: AvailableIcons;
+  modal?: ReactElement;
 }
 
-export const Action = ({ tooltip, color, onClick, children, icon }: ActionProps) => {
+export const Action = ({ tooltip, color, onClick, children, icon, modal }: ActionProps) => {
   const OptionalTooltip = tooltip ? (Tooltip as typeof Tooltip & React.FC<{ disabled: boolean }>) : React.Fragment;
+  const modalRef = useRef<{
+    setVisible: (visible: boolean) => void;
+  }>();
 
   return (
     <Col css={{ d: "flex" }}>
+      {modal && React.cloneElement(modal, { ref: modalRef })}
       <OptionalTooltip content={tooltip} color={color} disabled>
         <IconButton onPress={() => {
           onClick?.();
+          modalRef.current?.setVisible(true);
         }}>
           {icon && <Icon icon={icon} size={20} focusable={false} />}
           {children}

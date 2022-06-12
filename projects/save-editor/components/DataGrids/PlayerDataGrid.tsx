@@ -3,6 +3,7 @@ import { forwardRef, Key, ReactNode, useImperativeHandle, useRef, useState } fro
 import { cacheMissingSummaries } from "../../caches/player-summary-cache";
 import SaveEditor from "../../save-editor";
 import Player from "../../structures/player";
+import PlayerDataModal from "../Modals/PlayerDataModal";
 import ActionsCell, { Action } from "./Cells/ActionsCell";
 import SteamProfileCell from "./Cells/SteamProfileCell";
 
@@ -145,7 +146,7 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
                   return (
                     <Table.Cell>
                       <ActionsCell>
-                        <Action tooltip="Edit player" onClick={() => console.log("Edit player", player)} icon="edit" />
+                        <Action tooltip="Edit player" modal={<PlayerDataModal player={player} />} icon="edit" />
                         <Action tooltip="Delete player" icon="delete" color="error" onClick={() => {
                           saveEditor.deletePlayers([ player ]) && list.remove(player.steamId64.toString())
                         }}/>
