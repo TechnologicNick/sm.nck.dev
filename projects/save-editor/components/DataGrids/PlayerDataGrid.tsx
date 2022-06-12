@@ -109,7 +109,7 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
         <Table.Column key="steamId64" allowsSorting>
           SteamId64
         </Table.Column>
-        <Table.Column key="worldId" allowsSorting>
+        <Table.Column key="characterWorldId" allowsSorting>
           World Id
         </Table.Column>
         <Table.Column key="x" allowsSorting>
