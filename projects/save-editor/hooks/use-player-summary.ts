@@ -11,7 +11,15 @@ const usePlayerSummary = (steamId: bigint | string, requestMissing = false) => {
     if (cached) {
       setSummary(cached);
     } else if (requestMissing && steamId) {
-      cacheMissingSummaries([ steamId ]);
+      setSummary("loading");
+      cacheMissingSummaries([ steamId ]).then((summaries) => {
+        const summary = summaries[`${steamId}`];
+        if (summary) {
+          setSummary(summary);
+        } else {
+          setSummary("error");
+        }
+      });
     } else {
       setSummary("error");
     }

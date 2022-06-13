@@ -26,4 +26,6 @@ export const cacheMissingSummaries = async (ids: (bigint | string)[]) => {
     Object.entries(fetched)
       .map(([steamId, summary]) => ({ key: steamId, val: summary }))
   );
+
+  return summaryCache.mget<PlayerSummary>(ids.map(id => `${id}`));
 }
