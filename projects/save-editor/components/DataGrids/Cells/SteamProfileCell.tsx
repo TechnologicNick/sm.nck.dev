@@ -29,7 +29,7 @@ const SteamProfileCell = ({ steamId64, cacheMissing = false }: SteamProfileCellP
       squared
       bordered
     >
-      <Link href={summary.profileUrl} css={{
+      <Link href={summary.profileUrl} target="_blank" css={{
         whiteSpace: "nowrap",
         textOverflow: "ellipsis",
         overflow: "hidden",
