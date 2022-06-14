@@ -1,5 +1,5 @@
 import { Link, Loading, User } from "@nextui-org/react"
-import usePlayerSummary from "../../../hooks/use-player-summary";
+import { usePlayerSummary } from "../../../hooks";
 
 export interface SteamProfileCellProps {
   steamId64: bigint | string;
