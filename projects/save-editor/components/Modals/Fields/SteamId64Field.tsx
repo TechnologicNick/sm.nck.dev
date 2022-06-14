@@ -10,6 +10,12 @@ const SteamId64Field = ({ label, initialValue, onChange }: FieldProps<bigint>) =
   
   const helper = useMemo((): any => {
     try {
+      if (value.length === 0) {
+        return {
+          validSteamId64: initialValue,
+        }
+      }
+
       const id = new SteamID(value);
       if (!id.isValid()) {
         return {
@@ -32,7 +38,11 @@ const SteamId64Field = ({ label, initialValue, onChange }: FieldProps<bigint>) =
   }, [value]);
 
   useNoInitialEffect(() => {
-    onChange(helper.validSteamId64 !== undefined ? BigInt(helper.validSteamId64) : undefined);
+    onChange(
+      value.length !== 0 && helper.validSteamId64 !== undefined
+        ? BigInt(helper.validSteamId64)
+        : undefined
+    );
   }, [helper.validSteamId64])
 
   return (<>
@@ -55,6 +65,7 @@ const SteamId64Field = ({ label, initialValue, onChange }: FieldProps<bigint>) =
       helperColor={"error"}
       helperText={helper.error ?? ""}
       label={label}
+      placeholder={`${initialValue}`}
     />
   </>);
 }
