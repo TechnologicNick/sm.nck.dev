@@ -28,6 +28,13 @@ const PlayerDataModal = React.forwardRef(({ player, ...props }: PlayerDataModalP
     }
   }
 
+  const update = () => {
+    const updatedFields = Object.entries(values.current).filter(([, value]) => value !== undefined)
+    Object.assign(player, Object.fromEntries(updatedFields));
+
+    values.current = {};
+  }
+
   const uint32 = {
     integer: true,
     min: 0,
@@ -95,7 +102,7 @@ const PlayerDataModal = React.forwardRef(({ player, ...props }: PlayerDataModalP
         <Button auto flat color="error" onClick={() => setVisible(false)}>
           Close
         </Button>
-        <Button auto>
+        <Button auto onClick={() => update()}>
           Update
         </Button>
       </Modal.Footer>
