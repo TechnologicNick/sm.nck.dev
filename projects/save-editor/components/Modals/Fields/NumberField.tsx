@@ -1,6 +1,7 @@
 import { Input, useInput } from "@nextui-org/react";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { FieldProps } from ".";
+import { useNoInitialEffect } from "../../../hooks";
 
 export interface NumberFieldProps extends FieldProps<number> {
   min?: number;
@@ -39,7 +40,7 @@ const NumberField = ({ label, initialValue, onChange, min, max, step, integer }:
     }
   }, [value]);
 
-  useEffect(() => {
+  useNoInitialEffect(() => {
     onChange(helper.valid);
   }, [helper.valid])
 

@@ -1,7 +1,8 @@
 import { Input, Row, useInput } from "@nextui-org/react";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import SteamID from "steamid";
 import { FieldProps } from ".";
+import { useNoInitialEffect } from "../../../hooks";
 import SteamProfileCell from "../../DataGrids/Cells/SteamProfileCell";
 
 const SteamId64Field = ({ label, initialValue, onChange }: FieldProps<bigint>) => {
@@ -30,7 +31,7 @@ const SteamId64Field = ({ label, initialValue, onChange }: FieldProps<bigint>) =
     }
   }, [value]);
 
-  useEffect(() => {
+  useNoInitialEffect(() => {
     onChange(helper.validSteamId64 !== undefined ? BigInt(helper.validSteamId64) : undefined);
   }, [helper.validSteamId64])
 

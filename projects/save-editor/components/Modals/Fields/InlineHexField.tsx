@@ -1,6 +1,7 @@
 import { Input, useInput } from "@nextui-org/react";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { FieldProps } from ".";
+import { useNoInitialEffect } from "../../../hooks";
 
 const InlineHexField = ({ label, initialValue, onChange }: FieldProps<Buffer>) => {
   const initialValueString = Array.from(initialValue).map(byte => byte.toString(16).padStart(2, '0')).join(" ");
@@ -34,7 +35,7 @@ const InlineHexField = ({ label, initialValue, onChange }: FieldProps<Buffer>) =
     }
   }, [value]);
 
-  useEffect(() => {
+  useNoInitialEffect(() => {
     onChange(helper.valid);
   }, [helper.valid])
 
