@@ -7,6 +7,8 @@ export interface PlayerDataModalProps extends ModalProps {
   player: Player;
 }
 
+export let currentlyExpanded: number | null = 1;
+
 const PlayerDataModal = React.forwardRef(({ player, ...props }: PlayerDataModalProps, ref) => {
   const { setVisible, bindings } = useModal();
   useImperativeHandle(ref, () => ({
@@ -42,6 +44,9 @@ const PlayerDataModal = React.forwardRef(({ player, ...props }: PlayerDataModalP
       <Modal.Body>
         <SteamId64Field {...getFieldProps("steamId64")} label="Steam Id" />
         <Collapse.Group
+          onChange={(index, expanded) => {
+            currentlyExpanded = expanded ? index! : null;
+          }}
           css={{
             padding: 0,
             "& > * > *:last-child": {
@@ -51,7 +56,7 @@ const PlayerDataModal = React.forwardRef(({ player, ...props }: PlayerDataModalP
             },
           }}
         >
-          <Collapse title="Position" expanded>
+          <Collapse title="Position" expanded={currentlyExpanded === 1}>
             <Row>
               <Col>
                 <NumberField {...getFieldProps("x")} label="X" />
@@ -75,11 +80,11 @@ const PlayerDataModal = React.forwardRef(({ player, ...props }: PlayerDataModalP
               </Col>
             </Row>
           </Collapse>
-          <Collapse title="Ids">
+          <Collapse title="Ids" expanded={currentlyExpanded === 2}>
             <NumberField {...getFieldProps("characterWorldId")} label="World Id" {...uint32} />
             <NumberField {...getFieldProps("inventoryContainerId")} label="Inventory Container Id" {...uint32} />
           </Collapse>
-          <Collapse title="Unidentified">
+          <Collapse title="Unidentified" expanded={currentlyExpanded === 3}>
             <NumberField {...getFieldProps("unknown0x2E")} label="Inventory Container Id +1 (bytes 0x2E-0x31)" {...uint32} />
             <NumberField {...getFieldProps("unknown0x32")} label="Always 0xFFFFFFFF (bytes 0x32-0x35)" {...uint32} />
           </Collapse>
