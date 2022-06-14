@@ -146,7 +146,14 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
                   return (
                     <Table.Cell>
                       <ActionsCell>
-                        <Action tooltip="Edit player" modal={<PlayerDataModal player={player} />} icon="edit" />
+                        <Action tooltip="Edit player" icon="edit" modal={
+                          <PlayerDataModal
+                            player={player}
+                            onUpdate={(newPlayer) => {
+                              list.update(player.steamId64.toString(), newPlayer);
+                            }}
+                          />
+                        }/>
                         <Action tooltip="Delete player" icon="delete" color="error" onClick={() => {
                           saveEditor.deletePlayers([ player ]) && list.remove(player.steamId64.toString())
                         }}/>

@@ -5,11 +5,12 @@ import { InlineHexField, NumberField, SteamId64Field } from "./Fields";
 
 export interface PlayerDataModalProps extends ModalProps {
   player: Player;
+  onUpdate: (newPlayer: Player) => void;
 }
 
 export let currentlyExpanded: number | null = 1;
 
-const PlayerDataModal = React.forwardRef(({ player, ...props }: PlayerDataModalProps, ref) => {
+const PlayerDataModal = React.forwardRef(({ player, onUpdate, ...props }: PlayerDataModalProps, ref) => {
   const { setVisible, bindings } = useModal();
   useImperativeHandle(ref, () => ({
     setVisible,
@@ -30,9 +31,12 @@ const PlayerDataModal = React.forwardRef(({ player, ...props }: PlayerDataModalP
 
   const update = () => {
     const updatedFields = Object.entries(values.current).filter(([, value]) => value !== undefined)
-    Object.assign(player, Object.fromEntries(updatedFields));
+
+    const newPlayer = new Player(Object.assign({}, player, Object.fromEntries(updatedFields)));
+    onUpdate(newPlayer);
 
     values.current = {};
+    setVisible(false);
   }
 
   const uint32 = {
