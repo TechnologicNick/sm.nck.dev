@@ -52,7 +52,9 @@ export default class GenericData implements IGenericData, IDeserializable<Generi
   }
 
   serialize() {
-    const compressed = Buffer.alloc(this.data.length);
+    // Allocate more than enough. Throws an error when less than 70,
+    // even though tests pass with 54 (`this.data.length`).
+    const compressed = Buffer.alloc(256);
     const uncompressed = Buffer.from(this.data);
     this.compressedSize = LZ4.encodeBlock(uncompressed, compressed);
 

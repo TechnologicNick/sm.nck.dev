@@ -151,6 +151,7 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
                             player={player}
                             onUpdate={(newPlayer) => {
                               list.update(player.steamId64.toString(), newPlayer);
+                              saveEditor.updatePlayer(player, newPlayer);
                             }}
                           />
                         }/>

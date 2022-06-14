@@ -1,4 +1,5 @@
 import initSqlJs, { Database, SqlJsStatic } from "sql.js";
+import GenericData from "./structures/generic-data";
 import Player from "./structures/player";
 import Uuid from "./structures/uuid";
 
@@ -11,6 +12,12 @@ export const initSql = async () => {
 }
 
 const parameters = (count: number) => "?, ".repeat(count).replace(/, $/, "");
+
+const toUInt32LE = (number: number) => {
+  let buffer = Buffer.alloc(4);
+  buffer.writeUInt32LE(number);
+  return buffer;
+}
 
 export default class SaveEditor {
 
@@ -39,18 +46,52 @@ export default class SaveEditor {
   }
 
   deletePlayers(players: Player[]) {
-    this.db.exec(`DELETE FROM GenericData WHERE worldId = 65534 AND flags = 3 AND key IN (${parameters(players.length)})`, players.map(player => {
-      let buffer = Buffer.alloc(4);
-      buffer.writeUInt32LE(player.key);
-      return buffer;
-    }));
+    this.db.exec(`DELETE FROM GenericData WHERE worldId = 65534 AND flags = 3 AND key IN (${parameters(players.length)})`,
+      players.map(player => toUInt32LE(player.key))
+    );
 
     return this.db.getRowsModified();
   }
 
   deleteAllPlayers() {
-    this.db.exec(`DELETE FROM GenericData WHERE worldId = 65534 AND flags = 3`);
+    this.db.exec("DELETE FROM GenericData WHERE worldId = 65534 AND flags = 3");
 
     return this.db.getRowsModified();
+  }
+
+  updatePlayer(oldGenericData: GenericData, newPlayer: Player) {
+    this.db.exec(
+      "UPDATE GenericData SET "+
+        "uid = $newUid, " +
+        "key = $newKey, " +
+        "worldId = $newWorldId, " +
+        "flags = $newFlags, " +
+        "data = $newData " +
+      "WHERE " +
+        "uid = $oldUid AND " +
+        "key = $oldKey AND " +
+        "worldId = $oldWorldId AND " +
+        "flags = $oldFlags",
+      {
+        $newUid: newPlayer.uid.blob,
+        $newKey: toUInt32LE(newPlayer.key),
+        $newWorldId: newPlayer.worldId,
+        $newFlags: newPlayer.flags,
+        $newData: newPlayer.serialize(),
+
+        $oldUid: oldGenericData.uid.blob,
+        $oldKey: toUInt32LE(oldGenericData.key),
+        $oldWorldId: oldGenericData.worldId,
+        $oldFlags: oldGenericData.flags,
+      }
+    );
+
+    const modified = this.db.getRowsModified();
+
+    if (modified === 0) {
+      throw new Error(`Failed to find oldGenericData ${JSON.stringify(oldGenericData)}`);
+    }
+
+    return modified;
   }
 }
