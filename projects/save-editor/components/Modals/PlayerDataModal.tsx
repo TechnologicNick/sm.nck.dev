@@ -53,7 +53,12 @@ const PlayerDataModal = React.forwardRef(({ player, onUpdate, ...props }: Player
         </Text>
       </Modal.Header>
       <Modal.Body>
-        <SteamId64Field {...getFieldProps("steamId64")} label="Steam Id" />
+        <SteamId64Field {...getFieldProps("steamId64")} label="Steam Id">
+          <Spacer x={1} />
+          <Row fluid={false}>
+            <NumberField {...getFieldProps("key")} label="Player Id" {...uint32} />
+          </Row>
+        </SteamId64Field>
         <Collapse.Group
           onChange={(index, expanded) => {
             currentlyExpanded = expanded ? index! : null;

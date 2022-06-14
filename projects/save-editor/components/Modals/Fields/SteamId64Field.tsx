@@ -1,11 +1,15 @@
 import { Input, Row, useInput } from "@nextui-org/react";
-import { useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 import SteamID from "steamid";
 import { FieldProps } from ".";
 import { useNoInitialEffect } from "../../../hooks";
 import SteamProfileCell from "../../DataGrids/Cells/SteamProfileCell";
 
-const SteamId64Field = ({ label, initialValue, onChange }: FieldProps<bigint>) => {
+export interface SteamId64FieldProps extends FieldProps<bigint> {
+  children: ReactNode;
+}
+
+const SteamId64Field = ({ label, initialValue, onChange, children }: SteamId64FieldProps) => {
   const { value, reset, bindings } = useInput(`${initialValue}`);
   
   const helper = useMemo((): any => {
@@ -56,17 +60,20 @@ const SteamId64Field = ({ label, initialValue, onChange }: FieldProps<bigint>) =
     }}>
       <SteamProfileCell steamId64={helper.validSteamId64} cacheMissing />
     </Row>
-    <Input
-      {...bindings}
-      clearable
-      bordered
-      fullWidth
-      onClearClick={reset}
-      helperColor={"error"}
-      helperText={helper.error ?? ""}
-      label={label}
-      placeholder={`${initialValue}`}
-    />
+    <Row>
+      <Input
+        {...bindings}
+        clearable
+        bordered
+        fullWidth
+        onClearClick={reset}
+        helperColor={"error"}
+        helperText={helper.error ?? ""}
+        label={label}
+        placeholder={`${initialValue}`}
+      />
+      {children}
+    </Row>
   </>);
 }
 
