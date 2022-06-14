@@ -1,7 +1,7 @@
 import { Button, Col, Collapse, Modal, ModalProps, Row, Spacer, Text, useModal } from "@nextui-org/react";
 import React, { useImperativeHandle, useRef } from "react";
 import Player, { IPlayer } from "../../structures/player";
-import { FieldProps, NumberField, SteamId64Field } from "./Fields";
+import { InlineHexField, NumberField, SteamId64Field } from "./Fields";
 
 export interface PlayerDataModalProps extends ModalProps {
   player: Player;
@@ -21,7 +21,7 @@ const PlayerDataModal = React.forwardRef(({ player, ...props }: PlayerDataModalP
       values.current![key] = value;
     }
   }
-  const getFieldProps = <T extends keyof IPlayer>(key: T) => {
+  const getFieldProps = <K extends keyof IPlayer>(key: K) => {
     return {
       initialValue: player[key],
       onChange: setValue(key),
@@ -87,6 +87,7 @@ const PlayerDataModal = React.forwardRef(({ player, ...props }: PlayerDataModalP
           <Collapse title="Unidentified" expanded={currentlyExpanded === 3}>
             <NumberField {...getFieldProps("unknown0x2E")} label="Inventory Container Id +1 (bytes 0x2E-0x31)" {...uint32} />
             <NumberField {...getFieldProps("unknown0x32")} label="Always 0xFFFFFFFF (bytes 0x32-0x35)" {...uint32} />
+            <InlineHexField {...getFieldProps("unknown0x0E")} label="Unknown (bytes 0x0E - 0x19)" />
           </Collapse>
         </Collapse.Group>
       </Modal.Body>
