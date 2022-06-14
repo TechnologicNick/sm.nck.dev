@@ -17,9 +17,7 @@ const InlineHexField = ({ label, initialValue, onChange }: FieldProps<Buffer>) =
     const joined = value.replaceAll(/\s/g, "");
     
     if (value.length === 0) {
-      return {
-        valid: initialValue,
-      }
+      return {}
     } else if (joined.length < initialValue.length * 2) {
       return {
         error: `Too short (${initialValue.length} bytes required, currently ${joined.length / 2})`,
