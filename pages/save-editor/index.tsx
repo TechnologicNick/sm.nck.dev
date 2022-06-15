@@ -1,5 +1,6 @@
 import { Container, Spacer } from "@nextui-org/react";
 import { useState } from "react";
+import DownloadSave from "../../projects/save-editor/components/DownloadSave";
 import Lz4Context from "../../projects/save-editor/components/Lz4Context";
 import OpenLocalSave from "../../projects/save-editor/components/OpenLocalSave";
 import SaveBrowser from "../../projects/save-editor/components/SaveBrowser";
@@ -25,6 +26,8 @@ const SaveEditorPage = () => {
             saveEditor={saveEditor}
             buttons={<>
               <OpenLocalSave onOpen={onOpen} />
+              <Spacer />
+              <DownloadSave saveEditor={saveEditor} />
             </>}
           />
         ) : (
