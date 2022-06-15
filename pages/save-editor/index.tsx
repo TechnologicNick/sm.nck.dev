@@ -1,5 +1,6 @@
 import { Container, Spacer } from "@nextui-org/react";
 import { useState } from "react";
+import { BluePinkBackground } from "../../components/Backgrounds";
 import DownloadSave from "../../projects/save-editor/components/DownloadSave";
 import Lz4Context from "../../projects/save-editor/components/Lz4Context";
 import OpenLocalSave from "../../projects/save-editor/components/OpenLocalSave";
@@ -17,7 +18,8 @@ const SaveEditorPage = () => {
     setSaveEditor(editor);
   }
 
-  return (
+  return (<>
+    <BluePinkBackground />
     <Container css={{ pt: "$10" }}>
       <Lz4Context>
         {saveEditor ? (
@@ -35,7 +37,7 @@ const SaveEditorPage = () => {
         )}
       </Lz4Context>
     </Container>
-  );
+  </>);
 }
 
 export default SaveEditorPage;
