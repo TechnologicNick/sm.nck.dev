@@ -33,7 +33,17 @@ const SaveEditorPage = () => {
             </>}
           />
         ) : (
-          <OpenLocalSave onOpen={onOpen} />
+          <Container css={{
+            d: "flex",
+            jc: "center",
+            ai: "center",
+            fd: "column",
+            position: "absolute",
+            inset: 0,
+            h: "100vh",
+          }}>
+            <OpenLocalSave onOpen={onOpen} />
+          </Container>
         )}
       </Lz4Context>
     </Container>
