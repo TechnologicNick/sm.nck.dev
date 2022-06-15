@@ -53,7 +53,7 @@ export let LZ4: {
 };
 
 const Lz4Context = ({ children }: { children: ReactNode }) => {
-  const [lz4, setLZ4] = useState();
+  const [lz4, setLZ4] = useState(LZ4);
 
   return (
     <>
