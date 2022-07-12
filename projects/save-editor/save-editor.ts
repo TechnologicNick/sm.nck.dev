@@ -7,7 +7,7 @@ export let SQL: SqlJsStatic;
 
 export const initSql = async () => {
   return SQL ??= await initSqlJs({
-    locateFile: (file: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/${file}`
+    locateFile: (file: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.7.0/${file}`
   });
 }
 
