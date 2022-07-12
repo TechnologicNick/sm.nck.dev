@@ -43,6 +43,12 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
     },
   });
 
+  if (list.error) {
+    // TODO: Show an error to the user
+    console.error("Failed loading players:");
+    console.error(list.error);
+  }
+
   type DeleteButtonHandle = {
     setSelection: (newSelection: "all" | Set<Key>) => void;
   }
