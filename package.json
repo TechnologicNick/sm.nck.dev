@@ -9,7 +9,7 @@
   "dependencies": {
     "@nextui-org/react": "^1.0.0-beta.8",
     "@react-aria/button": "^3.4.4",
-    "next": "latest",
+    "next": "^12.2.2",
     "node-cache": "^5.1.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
