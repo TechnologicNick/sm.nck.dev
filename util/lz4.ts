@@ -6,5 +6,3 @@ import "!!null-loader!https://raw.githubusercontent.com/pierrec/node-lz4/master/
 
 export const decodeBlock = uncompress as typeof decodeBlockType;
 export const encodeBlock = compress as typeof encodeBlockType;
-
-console.log({ decodeBlock, encodeBlock });
