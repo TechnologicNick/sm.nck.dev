@@ -1,7 +1,7 @@
-import { jest } from "@jest/globals";
+import { useActualLz4, useActualUuid } from "./mocks";
 
-jest.dontMock("../uuid");
-jest.unstable_mockModule("./../../../../util/lz4.ts", () => jest.requireActual("lz4"));
+useActualUuid();
+useActualLz4();
 
 import Uuid from "../uuid";
 import type { IGenericData } from "./../generic-data";

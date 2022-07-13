@@ -15,6 +15,10 @@ const customJestConfig = {
   moduleDirectories: ['node_modules', '<rootDir>/'],
   testEnvironment: 'jest-environment-jsdom',
 
+  testMatch: [
+    "**/__tests__/**/*.test.[jt]s?(x)",
+  ],
+
   transform: {
     ...tsjPreset.transform,
   },
