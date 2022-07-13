@@ -1,6 +1,6 @@
 import { Container } from "@nextui-org/react";
 import { ReactNode } from "react";
-import SaveEditor from "../save-editor";
+import SaveEditor from "@/save-editor/save-editor";
 import PlayerDataGrid from "./DataGrids/PlayerDataGrid";
 
 export interface SaveBrowserProps {

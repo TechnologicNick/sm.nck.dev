@@ -1,9 +1,9 @@
 import { Button, Container, Row, Table, useAsyncList, useCollator } from "@nextui-org/react";
 import { forwardRef, Key, ReactNode, useImperativeHandle, useRef, useState } from "react";
-import { cacheMissingSummaries } from "../../caches/player-summary-cache";
-import SaveEditor from "../../save-editor";
-import Player from "../../structures/player";
-import PlayerDataModal from "../Modals/PlayerDataModal";
+import { cacheMissingSummaries } from "@/save-editor/caches/player-summary-cache";
+import SaveEditor from "@/save-editor/save-editor";
+import Player from "@/save-editor/structures/player";
+import PlayerDataModal from "@/save-editor/components/Modals/PlayerDataModal";
 import ActionsCell, { Action } from "./Cells/ActionsCell";
 import SteamProfileCell from "./Cells/SteamProfileCell";
 

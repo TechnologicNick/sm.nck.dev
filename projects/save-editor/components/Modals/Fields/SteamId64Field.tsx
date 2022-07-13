@@ -2,8 +2,8 @@ import { Input, Row, useInput } from "@nextui-org/react";
 import { ReactNode, useMemo } from "react";
 import SteamID from "steamid";
 import { FieldProps } from ".";
-import { useNoInitialEffect } from "../../../hooks";
-import SteamProfileCell from "../../DataGrids/Cells/SteamProfileCell";
+import { useNoInitialEffect } from "@/save-editor/hooks";
+import SteamProfileCell from "@/save-editor/components/DataGrids/Cells/SteamProfileCell";
 
 export interface SteamId64FieldProps extends FieldProps<bigint> {
   children: ReactNode;

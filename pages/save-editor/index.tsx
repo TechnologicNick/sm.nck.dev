@@ -1,10 +1,10 @@
 import { Container, Spacer } from "@nextui-org/react";
 import { useState } from "react";
-import { BluePinkBackground } from "../../components/Backgrounds";
-import DownloadSave from "../../projects/save-editor/components/DownloadSave";
-import OpenLocalSave from "../../projects/save-editor/components/OpenLocalSave";
-import SaveBrowser from "../../projects/save-editor/components/SaveBrowser";
-import SaveEditor from "../../projects/save-editor/save-editor";
+import { BluePinkBackground } from "components/Backgrounds";
+import DownloadSave from "@/save-editor/components/DownloadSave";
+import OpenLocalSave from "@/save-editor/components/OpenLocalSave";
+import SaveBrowser from "@/save-editor/components/SaveBrowser";
+import SaveEditor from "@/save-editor/save-editor";
 
 const SaveEditorPage = () => {
   const [saveEditor, setSaveEditor] = useState<SaveEditor>();

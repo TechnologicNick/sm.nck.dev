@@ -2,7 +2,7 @@ import { Button, Card, Col, Container, Grid, Link, Spacer, Text } from "@nextui-
 import { TbFileDatabase } from "react-icons/tb"
 import Head from "next/head";
 import NextLink from "next/link";
-import { BluePinkBackground } from "../components/Backgrounds";
+import { BluePinkBackground } from "components/Backgrounds";
 
 export const SaveEditorProject = () => {
   return (

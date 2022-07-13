@@ -1,5 +1,5 @@
 import Uuid from "./uuid";
-import { decodeBlock, encodeBlock } from "../../../util/lz4";
+import { decodeBlock, encodeBlock } from "util/lz4";
 import { IDeserializable } from "./deserializable";
 
 export interface IGenericData {

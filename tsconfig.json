@@ -6,6 +6,10 @@
       "dom.iterable",
       "esnext"
     ],
+    "baseUrl": ".",
+    "paths": {
+      "@/save-editor/*": ["projects/save-editor/*"]
+    },
     "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
