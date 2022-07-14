@@ -13,7 +13,12 @@ const SaveEditorPage = () => {
     console.log(`Opening local save file "${file.name}" (${file.size} bytes)`);
     const editor = new SaveEditor(file);
     await editor.loadDatabase();
-    
+
+    // Expose the save editor to the developer console
+    if (window !== undefined) {
+      (window as any).editor = editor;
+    }
+
     setSaveEditor(editor);
   }
 
