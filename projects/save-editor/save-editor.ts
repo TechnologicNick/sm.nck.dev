@@ -2,6 +2,7 @@ import initSqlJs, { Database, SqlJsStatic } from "sql.js";
 import GenericData from "./structures/generic-data";
 import Player from "./structures/player";
 import Uuid from "./structures/uuid";
+import GameMode from "./types/game-mode";
 
 export let SQL: SqlJsStatic;
 
@@ -90,6 +91,22 @@ export default class SaveEditor {
 
     if (modified === 0) {
       throw new Error(`Failed to find oldGenericData ${JSON.stringify(oldGenericData)}`);
+    }
+
+    return modified;
+  }
+
+  getGameMode(): GameMode {
+    return this.db.exec("SELECT flags FROM Game")[0].values[0][0] as number;
+  }
+
+  setGameMode(gameMode: GameMode) {
+    this.db.exec("UPDATE Game SET flags = ?", [ gameMode ]);
+
+    const modified = this.db.getRowsModified();
+
+    if (modified === 0) {
+      throw new Error(`Failed to set game mode`);
     }
 
     return modified;
