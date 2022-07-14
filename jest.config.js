@@ -19,6 +19,10 @@ const customJestConfig = {
     "**/__tests__/**/*.test.[jt]s?(x)",
   ],
 
+  // Required to fix jest issue when BigInts are sent between workers in a failing test
+  // https://github.com/facebook/jest/issues/11617
+  // maxWorkers: 1,
+
   transform: {
     ...tsjPreset.transform,
   },
