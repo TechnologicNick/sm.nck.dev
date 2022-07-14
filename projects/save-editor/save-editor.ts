@@ -1,6 +1,8 @@
 import initSqlJs, { Database, SqlJsStatic } from "sql.js";
 import GenericData from "./structures/generic-data";
+import Mods from "./structures/mods";
 import Player from "./structures/player";
+import { IUserGeneratedContent } from "./structures/user-generated-content";
 import Uuid from "./structures/uuid";
 import GameMode from "./types/game-mode";
 
@@ -107,6 +109,28 @@ export default class SaveEditor {
 
     if (modified === 0) {
       throw new Error(`Failed to set game mode`);
+    }
+
+    return modified;
+  }
+
+  getUserGeneratedContent() {
+    const blob = this.db.exec("SELECT mods FROM Game")[0].values[0][0] as Uint8Array;
+
+    const { ugcItems } = Mods.deserialize(Buffer.from(blob));
+
+    return ugcItems;
+  }
+
+  setUserGeneratedContent(ugcItems: IUserGeneratedContent[]) {
+    const mods = new Mods({ ugcItems }).serialize();
+
+    this.db.exec("UPDATE Game SET mods = ?", [ mods ]);
+
+    const modified = this.db.getRowsModified();
+
+    if (modified === 0) {
+      throw new Error(`Failed to set user generated content`);
     }
 
     return modified;
