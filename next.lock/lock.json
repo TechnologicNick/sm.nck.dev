@@ -1,0 +1,5 @@
+{
+  "https://raw.githubusercontent.com/pierrec/node-lz4/master/LICENSE": { "integrity": "sha512-yI66XZCinr7LJfzgK2PYwcDHlbDwD62DZj6zao6L9wkYgdvW6Le9fvW3qz+bIjeUQV5y/AEJA6nuvSAneiHJwg==", "contentType": "text/plain; charset=utf-8" },
+  "https://raw.githubusercontent.com/pierrec/node-lz4/master/lib/binding.js": { "integrity": "sha512-A2fdpPD7MyIgkewpHqYIvYDSiz9BY5lT2eYU2KtPuXUrTCrOCKmxtAjMQt36eOTB6VKXeFMT8Ncrq6/t2afUWQ==", "contentType": "text/plain; charset=utf-8" },
+  "version": 1
+}

@@ -1,7 +1,7 @@
 import { Input, useInput } from "@nextui-org/react";
 import { useMemo } from "react";
 import { FieldProps } from ".";
-import { useNoInitialEffect } from "../../../hooks";
+import { useNoInitialEffect } from "@/save-editor/hooks";
 
 export interface NumberFieldProps extends FieldProps<number> {
   min?: number;

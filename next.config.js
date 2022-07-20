@@ -1,9 +1,18 @@
+// @ts-check
+
+/**
+ * @returns {import('next').NextConfig}
+ */
 module.exports = (phase, { defaultConfig }) => {
   return {
     ...defaultConfig,
 
+    output: "standalone",
+
     experimental: {
-      outputStandalone: true,
+      urlImports: [
+        "https://raw.githubusercontent.com/pierrec/node-lz4",
+      ],
     },
 
     webpack: (config) => {
@@ -11,7 +20,7 @@ module.exports = (phase, { defaultConfig }) => {
         ...config.resolve,
         fallback: {
           "fs": false,
-        }
+        },
       }
       return config
     },

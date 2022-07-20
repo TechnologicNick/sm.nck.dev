@@ -1,5 +1,5 @@
 import Uuid from "./uuid";
-import { LZ4 } from "../components/Lz4Context";
+import { decodeBlock, encodeBlock } from "util/lz4";
 import { IDeserializable } from "./deserializable";
 
 export interface IGenericData {
@@ -33,7 +33,7 @@ export default class GenericData implements IGenericData, IDeserializable<Generi
 
     const uncompressed = Buffer.alloc(128);
     const compressed = Buffer.from(buffer.slice(0x1D));
-    const size = LZ4.decodeBlock(compressed, uncompressed);
+    const size = decodeBlock(compressed, uncompressed);
     const data = Buffer.from(uncompressed.slice(0, size));
 
     return new GenericData({
@@ -56,7 +56,7 @@ export default class GenericData implements IGenericData, IDeserializable<Generi
     // even though tests pass with 54 (`this.data.length`).
     const compressed = Buffer.alloc(256);
     const uncompressed = Buffer.from(this.data);
-    this.compressedSize = LZ4.encodeBlock(uncompressed, compressed);
+    this.compressedSize = encodeBlock(uncompressed, compressed);
 
     const buffer = Buffer.alloc(0x1D + this.compressedSize);
 

@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/react"
 import { useRef } from "react";
-import SaveEditor from "../save-editor";
+import SaveEditor from "@/save-editor/save-editor";
 
 export interface DownloadSaveProps {
   saveEditor: SaveEditor;

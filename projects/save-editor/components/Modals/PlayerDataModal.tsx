@@ -1,6 +1,6 @@
 import { Button, Col, Collapse, Modal, ModalProps, Row, Spacer, Text, useModal } from "@nextui-org/react";
 import React, { useImperativeHandle, useRef } from "react";
-import Player, { IPlayer } from "../../structures/player";
+import Player, { IPlayer } from "@/save-editor/structures/player";
 import { InlineHexField, NumberField, SteamId64Field } from "./Fields";
 
 export interface PlayerDataModalProps extends ModalProps {
