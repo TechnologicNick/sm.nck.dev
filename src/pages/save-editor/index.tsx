@@ -5,9 +5,9 @@ import OpenLocalSave from "@/save-editor/components/OpenLocalSave";
 import SaveBrowser from "@/save-editor/components/SaveBrowser";
 import SaveEditor from "@/save-editor/save-editor";
 import type { Page } from "pages/_app";
-import { Sidebar } from "components/navigation/Sidebar";
-import { useRouter } from "next/router";
+import { Sidebar, SidebarLink } from "components/navigation/Sidebar";
 import NoSsr from "util/NoSsr";
+import { BrowserRouter } from "react-router-dom";
 
 const SaveEditorPage: Page = () => {
   const [saveEditor, setSaveEditor] = useState<SaveEditor>();
@@ -55,14 +55,21 @@ const SaveEditorPage: Page = () => {
 }
 
 SaveEditorPage.Sidebar = () => {
-  const router = useRouter();
-
   return (
     <Sidebar title="Save Editor">
-      <NoSsr>
-        Path: {(router.query.path as string[] ?? []).join("/")}
-      </NoSsr>
+      <SidebarLink to={"players"}>Players</SidebarLink>
+      <SidebarLink to={"mods"}>Mods</SidebarLink>
     </Sidebar>
+  );
+}
+
+SaveEditorPage.Wrapper = ({ children }) => {
+  return (
+    <NoSsr>
+      <BrowserRouter basename="/save-editor">
+        {children}
+      </BrowserRouter>
+    </NoSsr>
   );
 }
 

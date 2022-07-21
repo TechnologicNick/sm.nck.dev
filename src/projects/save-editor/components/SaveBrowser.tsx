@@ -1,7 +1,8 @@
 import { Container } from "@nextui-org/react";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import SaveEditor from "@/save-editor/save-editor";
 import PlayerDataGrid from "./DataGrids/PlayerDataGrid";
+import { Route, Routes } from "react-router-dom";
 
 export interface SaveBrowserProps {
   saveEditor: SaveEditor;
@@ -11,7 +12,10 @@ export interface SaveBrowserProps {
 const SaveBrowser = ({ saveEditor, buttons }: SaveBrowserProps) => {
   return (
     <Container fluid>
-      <PlayerDataGrid saveEditor={saveEditor} buttons={buttons} />
+      <Routes>
+        <Route path="players" element={<PlayerDataGrid saveEditor={saveEditor} buttons={buttons} />} />
+        <Route path="mods" element={"Mods"} />
+      </Routes>
     </Container>
   );
 }

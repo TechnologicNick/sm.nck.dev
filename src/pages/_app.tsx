@@ -3,6 +3,7 @@ import { Col, createTheme, NextUIProvider, Row } from "@nextui-org/react";
 import useDarkMode from "use-dark-mode";
 import { BluePinkBackground } from "components/Backgrounds";
 import { NextPage } from "next";
+import { ReactNode } from "react";
 
 const lightTheme = createTheme({
   type: "light",
@@ -24,6 +25,7 @@ const darkTheme = createTheme({
 
 export type Page = NextPage & {
   Sidebar?: React.FC<{}>;
+  Wrapper?: React.FC<{ children: ReactNode }>;
 }
 
 type AppPageProps = AppProps & {
@@ -33,17 +35,21 @@ type AppPageProps = AppProps & {
 function MyApp({ Component, pageProps }: AppPageProps) {
   const darkMode = useDarkMode(true);
 
+  const Wrapper = Component.Wrapper ?? (({ children }: { children: ReactNode }) => <>{children}</>);
+
   return (
     <NextUIProvider theme={darkMode.value ? darkTheme : lightTheme}>
       <BluePinkBackground />
-      <Row>
-        {Component.Sidebar && (
-          <Component.Sidebar />
-        )}
-        <Col>
-          <Component {...pageProps} />
-        </Col>
-      </Row>
+      <Wrapper>
+        <Row>
+          {Component.Sidebar && (
+            <Component.Sidebar />
+          )}
+          <Col>
+            <Component {...pageProps} />
+          </Col>
+        </Row>
+      </Wrapper>
     </NextUIProvider>
   );
 }
