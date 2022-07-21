@@ -1,12 +1,15 @@
 import { Container, Spacer } from "@nextui-org/react";
 import { useState } from "react";
-import { BluePinkBackground } from "components/Backgrounds";
 import DownloadSave from "@/save-editor/components/DownloadSave";
 import OpenLocalSave from "@/save-editor/components/OpenLocalSave";
 import SaveBrowser from "@/save-editor/components/SaveBrowser";
 import SaveEditor from "@/save-editor/save-editor";
+import type { Page } from "pages/_app";
+import { Sidebar } from "components/navigation/Sidebar";
+import { useRouter } from "next/router";
+import NoSsr from "util/NoSsr";
 
-const SaveEditorPage = () => {
+const SaveEditorPage: Page = () => {
   const [saveEditor, setSaveEditor] = useState<SaveEditor>();
 
   const onOpen = async (file: File) => {
@@ -22,8 +25,7 @@ const SaveEditorPage = () => {
     setSaveEditor(editor);
   }
 
-  return (<>
-    <BluePinkBackground />
+  return (
     <Container css={{ pt: "$10" }}>
       {saveEditor ? (
         <SaveBrowser
@@ -49,7 +51,19 @@ const SaveEditorPage = () => {
         </Container>
       )}
     </Container>
-  </>);
+  );
+}
+
+SaveEditorPage.Sidebar = () => {
+  const router = useRouter();
+
+  return (
+    <Sidebar title="Save Editor">
+      <NoSsr>
+        Path: {(router.query.path as string[] ?? []).join("/")}
+      </NoSsr>
+    </Sidebar>
+  );
 }
 
 export default SaveEditorPage;

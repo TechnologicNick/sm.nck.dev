@@ -1,8 +1,7 @@
-import { Button, Card, Col, Container, Grid, Link, Spacer, Text } from "@nextui-org/react";
+import { Button, Container, Grid, Link, Spacer, Text } from "@nextui-org/react";
 import { TbFileDatabase } from "react-icons/tb"
 import Head from "next/head";
 import NextLink from "next/link";
-import { BluePinkBackground } from "components/Backgrounds";
 
 export const SaveEditorProject = () => {
   return (
@@ -27,7 +26,6 @@ export default function Home() {
         <title>Scrap Mechanic Projects - nck.dev</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <BluePinkBackground />
       <Container sm display="flex" justify="center" direction="column" css={{ pt: "$10" }}>
         <Text h1>
           Scrap Mechanic Projects

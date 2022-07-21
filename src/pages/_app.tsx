@@ -1,6 +1,8 @@
 import type { AppProps } from "next/app";
-import { createTheme, NextUIProvider } from "@nextui-org/react";
+import { Col, createTheme, NextUIProvider, Row } from "@nextui-org/react";
 import useDarkMode from "use-dark-mode";
+import { BluePinkBackground } from "components/Backgrounds";
+import { NextPage } from "next";
 
 const lightTheme = createTheme({
   type: "light",
@@ -20,12 +22,28 @@ const darkTheme = createTheme({
   },
 });
 
-function MyApp({ Component, pageProps }: AppProps) {
+export type Page = NextPage & {
+  Sidebar?: React.FC<{}>;
+}
+
+type AppPageProps = AppProps & {
+  Component: Page
+}
+
+function MyApp({ Component, pageProps }: AppPageProps) {
   const darkMode = useDarkMode(true);
 
   return (
     <NextUIProvider theme={darkMode.value ? darkTheme : lightTheme}>
-      <Component {...pageProps} />
+      <BluePinkBackground />
+      <Row>
+        {Component.Sidebar && (
+          <Component.Sidebar />
+        )}
+        <Col>
+          <Component {...pageProps} />
+        </Col>
+      </Row>
     </NextUIProvider>
   );
 }
