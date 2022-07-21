@@ -3,25 +3,25 @@ import { createTheme, NextUIProvider } from "@nextui-org/react";
 import useDarkMode from "use-dark-mode";
 
 const lightTheme = createTheme({
-	type: "light",
-	theme: {
-		colors: {
+  type: "light",
+  theme: {
+    colors: {
 
-		},
-	},
+    },
+  },
 });
-	
+  
 const darkTheme = createTheme({
-	type: "dark",
-	theme: {
-		colors: {
+  type: "dark",
+  theme: {
+    colors: {
 
-		},
-	},
+    },
+  },
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-	const darkMode = useDarkMode(true);
+  const darkMode = useDarkMode(true);
 
   return (
     <NextUIProvider theme={darkMode.value ? darkTheme : lightTheme}>
