@@ -4,6 +4,7 @@ import useDarkMode from "use-dark-mode";
 import { BluePinkBackground } from "components/Backgrounds";
 import { NextPage } from "next";
 import { ReactNode } from "react";
+import { trpc } from "util/trpc";
 
 const lightTheme = createTheme({
   type: "light",
@@ -54,4 +55,4 @@ function MyApp({ Component, pageProps }: AppPageProps) {
   );
 }
 
-export default MyApp;
+export default trpc.withTRPC(MyApp);
