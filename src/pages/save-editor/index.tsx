@@ -6,7 +6,7 @@ import SaveBrowser from "@/save-editor/components/SaveBrowser";
 import SaveEditor from "@/save-editor/save-editor";
 import type { Page } from "pages/_app";
 import { Sidebar, SidebarLink } from "components/navigation/Sidebar";
-import NoSsr from "util/NoSsr";
+import NoSsr from "utils/NoSsr";
 import { BrowserRouter } from "react-router-dom";
 
 const SaveEditorPage: Page = () => {
