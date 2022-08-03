@@ -7,12 +7,19 @@ import SaveEditor from "@/save-editor/save-editor";
 import type { Page } from "pages/_app";
 import { Sidebar, SidebarLink } from "components/navigation/Sidebar";
 import NoSsr from "utils/NoSsr";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useMatch, useNavigate } from "react-router-dom";
 
 const SaveEditorPage: Page = () => {
   const [saveEditor, setSaveEditor] = useState<SaveEditor>();
+  const isRoot = useMatch("/");
+  const navigate = useNavigate();
 
   const onOpen = async (file: File) => {
+    // Make sure we don't stay on the root page
+    if (isRoot) {
+      navigate("/players", { replace: true });
+    }
+
     console.log(`Opening local save file "${file.name}" (${file.size} bytes)`);
     const editor = new SaveEditor(file);
     await editor.loadDatabase();
