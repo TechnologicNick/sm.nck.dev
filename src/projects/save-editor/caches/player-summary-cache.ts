@@ -1,5 +1,5 @@
 import NodeCache from "node-cache";
-import { PlayerSummary } from "pages/api/save-editor/player-summaries";
+import type { PlayerSummary } from "pages/api/save-editor/player-summaries";
 
 export const summaryCache = new NodeCache({
   stdTTL: 60 * 60,

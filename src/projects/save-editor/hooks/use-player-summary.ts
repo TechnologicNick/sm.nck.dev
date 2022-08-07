@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PlayerSummary } from "pages/api/save-editor/player-summaries";
+import type { PlayerSummary } from "pages/api/save-editor/player-summaries";
 import { cacheMissingSummaries, summaryCache } from "@/save-editor/caches/player-summary-cache";
 
 const usePlayerSummary = (steamId: bigint | string, requestMissing = false) => {
