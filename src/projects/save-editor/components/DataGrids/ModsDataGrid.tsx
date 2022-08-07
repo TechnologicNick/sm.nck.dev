@@ -1,10 +1,10 @@
 import { Button, Container, Row, Table, useAsyncList, useCollator } from "@nextui-org/react";
 import { forwardRef, Key, ReactNode, useImperativeHandle, useRef, useState } from "react";
 import SaveEditor from "@/save-editor/save-editor";
-import PlayerDataModal from "@/save-editor/components/Modals/PlayerDataModal";
 import ActionsCell, { Action } from "./Cells/ActionsCell";
-import SteamProfileCell from "./Cells/SteamProfileCell";
 import { IUserGeneratedContent } from "@/save-editor/structures/user-generated-content";
+import SteamWorkshopCell from "./Cells/SteamWorkshopCell";
+import { cacheMissingDetails } from "@/save-editor/caches/workshop-details-cache";
 
 export interface ModsDataGridProps {
   saveEditor: SaveEditor;
@@ -19,8 +19,11 @@ const PlayerDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataG
 
   const list = useAsyncList<IUserGeneratedContent>({
     async load({ }) {
+      const ugcRows = userGeneratedContent ?? saveEditor.getUserGeneratedContent();
+      cacheMissingDetails(ugcRows.map(ugcRow => ugcRow.fileId));
+
       return {
-        items: userGeneratedContent ?? saveEditor.getUserGeneratedContent(),
+        items: ugcRows,
       };
     },
     getKey,
@@ -127,8 +130,7 @@ const PlayerDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataG
                 case "details":
                   return (
                     <Table.Cell>
-                      {/* <SteamProfileCell steamId64={ugcItem.steamId64} /> */}
-                      Details
+                      <SteamWorkshopCell fileId={ugcItem.fileId} />
                     </Table.Cell>
                   )
                 case "fileId":
