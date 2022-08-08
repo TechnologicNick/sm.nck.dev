@@ -122,10 +122,10 @@ const PlayerDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataG
         <Table.Column key="details">
           Steam Details
         </Table.Column>
-        <Table.Column key="fileId" allowsSorting>
+        <Table.Column key="fileId">
           File Id
         </Table.Column>
-        <Table.Column key="localId" allowsSorting>
+        <Table.Column key="localId">
           Local Id
         </Table.Column>
         <Table.Column key="actions" hideHeader align="center">
