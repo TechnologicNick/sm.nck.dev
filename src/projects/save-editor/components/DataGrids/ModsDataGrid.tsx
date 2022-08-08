@@ -5,6 +5,7 @@ import ActionsCell, { Action } from "./Cells/ActionsCell";
 import { IUserGeneratedContent } from "@/save-editor/structures/user-generated-content";
 import SteamWorkshopCell from "./Cells/SteamWorkshopCell";
 import { cacheMissingDetails } from "@/save-editor/caches/workshop-details-cache";
+import Uuid from "@/save-editor/structures/uuid";
 
 export interface ModsDataGridProps {
   saveEditor: SaveEditor;
@@ -12,18 +13,29 @@ export interface ModsDataGridProps {
   buttons?: ReactNode;
 }
 
+type Identifyable<T> = T & {
+  identifier: Key;
+}
+
+const addIdentifier = <T,>(content: T): Identifyable<T> => {
+  return {
+    ...content,
+    identifier: Uuid.randomUuid().toString(),
+  };
+}
+
 const PlayerDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGridProps) => {
   const collator = useCollator({ numeric: true });
 
-  const getKey = (ugcItem: IUserGeneratedContent) => `${ugcItem.fileId}_${ugcItem.localId}`;
+  const getKey = (identifyable: Identifyable<any>) => identifyable.identifier;
 
-  const list = useAsyncList<IUserGeneratedContent>({
+  const list = useAsyncList<Identifyable<IUserGeneratedContent>>({
     async load({ }) {
       const ugcRows = userGeneratedContent ?? saveEditor.getUserGeneratedContent();
       cacheMissingDetails(ugcRows.map(ugcRow => ugcRow.fileId));
 
       return {
-        items: ugcRows,
+        items: ugcRows.map(addIdentifier),
       };
     },
     getKey,
