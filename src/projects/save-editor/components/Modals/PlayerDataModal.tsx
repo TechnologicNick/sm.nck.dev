@@ -1,7 +1,8 @@
-import { Button, Col, Collapse, Modal, ModalProps, Row, Spacer, Text, useModal } from "@nextui-org/react";
+import { Button, Col, Collapse, Modal, Row, Spacer, Text, useModal } from "@nextui-org/react";
 import React, { useImperativeHandle, useRef } from "react";
 import Player, { IPlayer } from "@/save-editor/structures/player";
 import { InlineHexField, NumberField, SteamId64Field } from "./Fields";
+import { ModalProps } from ".";
 
 export interface PlayerDataModalProps extends ModalProps {
   player: Player;
@@ -10,9 +11,9 @@ export interface PlayerDataModalProps extends ModalProps {
 
 export let currentlyExpanded: number | null = 1;
 
-const PlayerDataModal = React.forwardRef(({ player, onUpdate, ...props }: PlayerDataModalProps, ref) => {
+const PlayerDataModal = ({ player, onUpdate, modalRef, ...props }: PlayerDataModalProps) => {
   const { setVisible, bindings } = useModal();
-  useImperativeHandle(ref, () => ({
+  useImperativeHandle(modalRef, () => ({
     setVisible,
   }));
 
@@ -117,6 +118,6 @@ const PlayerDataModal = React.forwardRef(({ player, onUpdate, ...props }: Player
       </Modal.Footer>
     </Modal>
   );
-});
+};
 
 export default PlayerDataModal;

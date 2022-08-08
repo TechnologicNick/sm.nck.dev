@@ -3,6 +3,7 @@ import React, { ReactElement, ReactNode, useRef, useState } from "react";
 import { AriaButtonProps } from "@react-types/button";
 import { useButton } from "@react-aria/button";
 import { Icon, AvailableIcons } from "./Icons";
+import { ModalProps } from "../../Modals";
 
 const StyledIconButton = styled("button", {
   dflex: "center",
@@ -46,13 +47,11 @@ export interface ActionProps {
 
 export const Action = ({ tooltip, color, onClick, children, icon, modal }: ActionProps) => {
   const OptionalTooltip = tooltip ? (Tooltip as typeof Tooltip & React.FC<{ disabled: boolean }>) : React.Fragment;
-  const modalRef = useRef<{
-    setVisible: (visible: boolean) => void;
-  }>();
+  const modalRef: ModalProps["modalRef"] = useRef<any>();
 
   return (
     <Col css={{ d: "flex" }}>
-      {modal && React.cloneElement(modal, { ref: modalRef })}
+      {modal && React.cloneElement(modal, { modalRef })}
       <OptionalTooltip content={tooltip} color={color} disabled>
         <IconButton onPress={() => {
           onClick?.();

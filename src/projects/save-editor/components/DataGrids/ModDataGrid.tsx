@@ -6,6 +6,7 @@ import { IUserGeneratedContent } from "@/save-editor/structures/user-generated-c
 import SteamWorkshopCell from "./Cells/SteamWorkshopCell";
 import { cacheMissingDetails } from "@/save-editor/caches/workshop-details-cache";
 import Uuid from "@/save-editor/structures/uuid";
+import UgcDataModal from "@/save-editor/components/Modals/UgcDataModal";
 
 export interface ModsDataGridProps {
   saveEditor: SaveEditor;
@@ -152,9 +153,17 @@ const ModDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGrid
                   return (
                     <Table.Cell>
                       <ActionsCell>
-                        <Action tooltip="Edit mod" icon="edit" onClick={() => {
-                          console.log("Edit", ugcItem);
-                        }}/>
+                        <Action tooltip="Edit mod" icon="edit" modal={
+                          <UgcDataModal
+                            ugcItem={ugcItem}
+                            onUpdate={(newUgcItem) => {
+                              const newUgcItems = list.items
+                                .map(item => getKey(item) === getKey(ugcItem) ? newUgcItem : item)
+                              saveEditor.setUserGeneratedContent(newUgcItems);
+                              list.update(ugcItem.identifier, newUgcItem);
+                            }}
+                          />
+                        }/>
                         <Action tooltip="Delete mod" icon="delete" color="error" onClick={() => {
                           const otherUgcItems = list.items
                             .filter(item => getKey(item) !== getKey(ugcItem));
