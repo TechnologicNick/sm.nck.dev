@@ -1,9 +1,8 @@
-import { Button, Modal, Row, Text, useModal } from "@nextui-org/react";
+import { Button, Modal, Text, useModal } from "@nextui-org/react";
 import React, { useImperativeHandle, useRef } from "react";
 import { IUserGeneratedContent } from "@/save-editor/structures/user-generated-content";
-import { BigIntField } from "./Fields";
 import { ModalProps } from ".";
-import { SteamWorkshopField } from "./Fields";
+import { SteamWorkshopField, UuidField } from "./Fields";
 
 export interface UgcDataModalProps<T extends IUserGeneratedContent> extends ModalProps {
   ugcItem: T;
@@ -53,6 +52,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
       </Modal.Header>
       <Modal.Body>
         <SteamWorkshopField {...getFieldProps("fileId")} label="File Id" />
+        <UuidField {...getFieldProps("localId")} label="Local Id" {...uint64} />
       </Modal.Body>
       <Modal.Footer>
         <Button auto flat color="error" onClick={() => setVisible(false)}>
