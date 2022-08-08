@@ -13,6 +13,12 @@ const BigIntField = ({ label, initialValue, onChange, min, max }: BigIntFieldPro
   
   const helper = useMemo((): any => {
     try {
+      if (value.length === 0) {
+        return {
+          valid: initialValue,
+        }
+      }
+
       const parsedValue = BigInt(value);
       if (min !== undefined && parsedValue < min) {
         return {
@@ -41,8 +47,10 @@ const BigIntField = ({ label, initialValue, onChange, min, max }: BigIntFieldPro
   return (<>
     <Input
       {...bindings}
+      clearable
       bordered
       fullWidth
+      onClearClick={reset}
       helperColor={"error"}
       helperText={helper.error ?? ""}
       label={label}

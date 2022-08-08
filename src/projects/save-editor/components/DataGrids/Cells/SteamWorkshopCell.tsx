@@ -1,24 +1,26 @@
-import { Link, Loading, User } from "@nextui-org/react"
+import { Link, Loading, Text, User } from "@nextui-org/react"
 import { useWorkshopDetails } from "@/save-editor/hooks";
 
 export interface SteamProfileCellProps {
   fileId: bigint | string;
   cacheMissing?: boolean;
+  compact?: boolean;
 }
 
-const SteamWorkshopCell = ({ fileId, cacheMissing = false }: SteamProfileCellProps) => {
+const SteamWorkshopCell = ({ fileId, cacheMissing = false, compact = false }: SteamProfileCellProps) => {
   const details = useWorkshopDetails(fileId, cacheMissing);
 
   const userCss: React.ComponentProps<typeof User>["css"] = {
     ".nextui-user-avatar": {
       aspectRatio: 16 / 9,
       width: "unset",
+      minWidth: `${64 * 16 / 9}px`,
       "--nextui-radii-squared": `${36 * 0.33}px`,
     }
   };
 
   if (details === "loading") {
-    return <Loading />
+    return <Loading size="xl" />
   } else if (details === "error") {
     return (
       <User
@@ -32,33 +34,29 @@ const SteamWorkshopCell = ({ fileId, cacheMissing = false }: SteamProfileCellPro
     )
   }
 
+  const linkCss: React.ComponentProps<typeof Link>["css"] = {
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    display: "inline-block",
+    lineHeight: "1em"
+  }
+
   return (
     <User
-      name={details.title}
+      name={details.title || "(Untitled)"}
       src={details.previewUrl}
       squared
       bordered
       size="xl"
       css={userCss}
     >
-      <Link href={`https://steamcommunity.com/sharedfiles/filedetails/?id=${fileId}`} target="_blank" css={{
-        whiteSpace: "nowrap",
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        display: "inline-block",
-        lineHeight: "1em"
-      }}>
-        View on steamcommunity.com
+      <Link href={`https://steamcommunity.com/sharedfiles/filedetails/?id=${fileId}`} target="_blank" css={linkCss}>
+        {compact ? "steamcommunity.com" : "View on steamcommunity.com"}
       </Link>
       {" | "}
-      <Link href={`steam://openurl/https://steamcommunity.com/sharedfiles/filedetails/?id=${fileId}`} css={{
-        whiteSpace: "nowrap",
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        display: "inline-block",
-        lineHeight: "1em"
-      }}>
-        View in Steam
+      <Link href={`steam://openurl/https://steamcommunity.com/sharedfiles/filedetails/?id=${fileId}`} css={linkCss}>
+        {compact ? "Steam" : "View in Steam"}
       </Link>
     </User>
   )

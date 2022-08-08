@@ -3,6 +3,7 @@ import React, { useImperativeHandle, useRef } from "react";
 import { IUserGeneratedContent } from "@/save-editor/structures/user-generated-content";
 import { BigIntField } from "./Fields";
 import { ModalProps } from ".";
+import { SteamWorkshopField } from "./Fields";
 
 export interface UgcDataModalProps<T extends IUserGeneratedContent> extends ModalProps {
   ugcItem: T;
@@ -51,9 +52,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
         </Text>
       </Modal.Header>
       <Modal.Body>
-        <Row>
-          <BigIntField {...getFieldProps("fileId")} label="File Id" {...uint64} />
-        </Row>
+        <SteamWorkshopField {...getFieldProps("fileId")} label="File Id" />
       </Modal.Body>
       <Modal.Footer>
         <Button auto flat color="error" onClick={() => setVisible(false)}>
