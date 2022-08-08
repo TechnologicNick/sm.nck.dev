@@ -24,7 +24,7 @@ const addIdentifier = <T,>(content: T): Identifyable<T> => {
   };
 }
 
-const PlayerDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGridProps) => {
+const ModDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGridProps) => {
   const collator = useCollator({ numeric: true });
 
   const getKey = (identifyable: Identifyable<any>) => identifyable.identifier;
@@ -175,4 +175,4 @@ const PlayerDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataG
   </>);
 }
 
-export default PlayerDataGrid;
+export default ModDataGrid;
