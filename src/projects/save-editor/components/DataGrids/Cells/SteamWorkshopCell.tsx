@@ -12,9 +12,11 @@ const SteamWorkshopCell = ({ fileId, cacheMissing = false, compact = false }: St
 
   const userCss: React.ComponentProps<typeof User>["css"] = {
     ".nextui-user-avatar": {
-      aspectRatio: 16 / 9,
+      ".nextui-avatar-img": {
+        aspectRatio: 16 / 9,
+      },
       width: "unset",
-      minWidth: `${64 * 16 / 9}px`,
+      minWidth: `${60 * 16 / 9}px`,
       "--nextui-radii-squared": `${36 * 0.33}px`,
     }
   };

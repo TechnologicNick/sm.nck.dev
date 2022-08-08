@@ -13,7 +13,7 @@ const SteamWorkshopField = ({ label, initialValue, onChange, children }: SteamWo
   return (<>
     <Row css={{
       ".nextui-user-info": {
-        "width": `calc(100% - 1 * var(--nextui-space-sm) - ${64 * 16 / 9}px)`,
+        "width": `calc(100% - 1 * var(--nextui-space-sm) - ${60 * 16 / 9 + 4}px)`,
         "& > *": {
           "width": "100%",
         }
