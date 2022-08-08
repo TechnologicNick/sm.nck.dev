@@ -14,11 +14,11 @@ const BigIntField = ({ label, initialValue, onChange, min, max }: BigIntFieldPro
   const helper = useMemo((): any => {
     try {
       const parsedValue = BigInt(value);
-      if (min && parsedValue < min) {
+      if (min !== undefined && parsedValue < min) {
         return {
           error: `Lower than ${min}`,
         }
-      } else if (max && parsedValue > max) {
+      } else if (max !== undefined && parsedValue > max) {
         return {
           error: `Higher than ${max}`,
         }

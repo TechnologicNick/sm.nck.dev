@@ -20,11 +20,11 @@ const NumberField = ({ label, initialValue, onChange, min, max, step, integer }:
         return {
           error: "Invalid number",
         }
-      } else if (min && parsedValue < min) {
+      } else if (min !== undefined && parsedValue < min) {
         return {
           error: `Lower than ${min}`,
         }
-      } else if (max && parsedValue > max) {
+      } else if (max !== undefined && parsedValue > max) {
         return {
           error: `Higher than ${max}`,
         }
