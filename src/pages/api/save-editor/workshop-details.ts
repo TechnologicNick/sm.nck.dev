@@ -25,15 +25,20 @@ export const fetchWorkshopDetails = async (publishedFileIds: string[]): Promise<
   const data = await fetch(`https://api.steampowered.com/IPublishedFileService/GetDetails/v1/?${params}`);
   const json = await data.json();
 
-  return Object.fromEntries(json.response.publishedfiledetails.map((details: any) => (
-    [details.publishedfileid, {
-      publishedFileId: details.publishedfileid,
-      title: details.title,
-      creatorId: details.creator,
-      appName: details.app_name,
-      previewUrl: details.preview_url,
-    }]
-  )));
+  return Object.fromEntries(
+    json.response.publishedfiledetails
+      .filter((details: any) => details.result === 1) // k_EResultOK
+      .map((details: any) => (
+        [details.publishedfileid, {
+          publishedFileId: details.publishedfileid,
+          title: details.title,
+          creatorId: details.creator,
+          appName: details.app_name,
+          previewUrl: details.preview_url,
+        }]
+      )
+    )
+  );
 }
 
 export const getWorkshopDetails = async (publishedFileIds: string[]) => {
