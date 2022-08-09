@@ -1,4 +1,4 @@
-import { Button, Modal, Text, useModal } from "@nextui-org/react";
+import { Button, Modal, Row, Spacer, Text, Tooltip, useModal } from "@nextui-org/react";
 import React, { useImperativeHandle, useRef } from "react";
 import { IUserGeneratedContent } from "@/save-editor/structures/user-generated-content";
 import { ModalProps } from ".";
@@ -44,15 +44,60 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
   }
 
   return (
-    <Modal closeButton aria-labelledby="modal-title" {...props} {...bindings}>
+    <Modal
+      closeButton
+      aria-labelledby="modal-title"
+      width="460px"
+      {...props}
+      {...bindings}
+    >
       <Modal.Header>
         <Text id="modal-title" size={18}>
           Edit mod
         </Text>
       </Modal.Header>
       <Modal.Body>
-        <SteamWorkshopField {...getFieldProps("fileId")} label="File Id" />
-        <UuidField {...getFieldProps("localId")} label="Local Id" {...uint64} />
+        <SteamWorkshopField {...getFieldProps("fileId")} label="File Id">
+          <Spacer x={1} />
+          <Tooltip
+            content="Infer File Id from the Steam Workshop (uses Local Id)"
+            color="secondary"
+            placement="topEnd"
+            css={{ zIndex: 10000 }}
+          >
+            <Button
+              auto
+              bordered
+              color="secondary"
+              onClick={() => {
+
+              }}
+            >
+              Infer
+            </Button>
+          </Tooltip>
+        </SteamWorkshopField>
+        <Row css={{ alignItems: "flex-end" }}>
+          <UuidField {...getFieldProps("localId")} label="Local Id" {...uint64} />
+          <Spacer x={1} />
+          <Tooltip
+            content="Infer Local Id from the Steam Workshop (uses Local Id)"
+            color="secondary"
+            placement="topEnd"
+            css={{ zIndex: 10000 }}
+          >
+            <Button
+              auto
+              bordered
+              color="secondary"
+              onClick={() => {
+
+              }}
+            >
+              Infer
+            </Button>
+          </Tooltip>
+        </Row>
       </Modal.Body>
       <Modal.Footer>
         <Button auto flat color="error" onClick={() => setVisible(false)}>

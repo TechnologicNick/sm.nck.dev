@@ -21,7 +21,7 @@ const SteamWorkshopField = ({ label, initialValue, onChange, children }: SteamWo
     }}>
       <SteamWorkshopCell fileId={fileId} cacheMissing compact />
     </Row>
-    <Row>
+    <Row css={{ alignItems: "flex-end" }}>
       <BigIntField
         label={label}
         initialValue={initialValue}
