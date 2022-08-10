@@ -1,5 +1,5 @@
 import { Input, useInput } from "@nextui-org/react";
-import { useMemo } from "react";
+import { useImperativeHandle, useMemo } from "react";
 import { FieldProps } from ".";
 import { useNoInitialEffect } from "@/save-editor/hooks";
 
@@ -8,8 +8,13 @@ export interface BigIntFieldProps extends FieldProps<bigint> {
   max?: bigint;
 }
 
-const BigIntField = ({ label, initialValue, onChange, errorText, min, max }: BigIntFieldProps) => {
-  const { value, reset, bindings } = useInput(`${initialValue}`);
+const BigIntField = ({ label, initialValue, onChange, errorText, fieldRef, min, max }: BigIntFieldProps) => {
+  const { value, reset, bindings, setValue } = useInput(`${initialValue}`);
+  if (fieldRef) {
+    useImperativeHandle(fieldRef, () => ({
+      setValue: (value) => setValue(`${value}`),
+    }));
+  }
   
   const helper = useMemo((): any => {
     try {

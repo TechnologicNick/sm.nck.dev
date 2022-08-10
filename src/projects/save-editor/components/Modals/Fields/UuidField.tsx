@@ -1,12 +1,17 @@
 import { Input, useInput } from "@nextui-org/react";
-import { useMemo } from "react";
+import { useImperativeHandle, useMemo } from "react";
 import { FieldProps } from ".";
 import { useNoInitialEffect } from "@/save-editor/hooks";
 import Uuid from "@/save-editor/structures/uuid";
 
-const BigIntField = ({ label, initialValue, onChange, errorText }: FieldProps<Uuid>) => {
-  const { value, reset, bindings } = useInput(`${initialValue}`);
-  
+const BigIntField = ({ label, initialValue, onChange, errorText, fieldRef }: FieldProps<Uuid>) => {
+  const { value, reset, bindings, setValue } = useInput(`${initialValue}`);
+  if (fieldRef) {
+    useImperativeHandle(fieldRef, () => ({
+      setValue: (value) => setValue(value.toString()),
+    }));
+  }
+
   const helper = useMemo((): any => {
     try {
       if (value.length === 0) {

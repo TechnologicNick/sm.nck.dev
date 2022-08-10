@@ -1,11 +1,18 @@
 import { Input, useInput } from "@nextui-org/react";
-import { useMemo } from "react";
+import { useImperativeHandle, useMemo } from "react";
 import { FieldProps } from ".";
 import { useNoInitialEffect } from "@/save-editor/hooks";
 
-const InlineHexField = ({ label, initialValue, onChange, errorText }: FieldProps<Buffer>) => {
-  const initialValueString = Array.from(initialValue).map(byte => byte.toString(16).padStart(2, '0')).join(" ");
-  const { value, reset, bindings } = useInput(initialValueString);
+const bufferToHex = (buffer: Buffer) => Array.from(buffer).map(byte => byte.toString(16).padStart(2, '0')).join(" ");
+
+const InlineHexField = ({ label, initialValue, onChange, errorText, fieldRef }: FieldProps<Buffer>) => {
+  const initialValueString = bufferToHex(initialValue);
+  const { value, reset, bindings, setValue } = useInput(initialValueString);
+  if (fieldRef) {
+    useImperativeHandle(fieldRef, () => ({
+      setValue: (value) => setValue(bufferToHex(value)),
+    }));
+  }
 
   const helper = useMemo((): any => {
     if (value.match(/[^0-9a-fA-F\s]/g)) {

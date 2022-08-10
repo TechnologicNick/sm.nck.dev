@@ -10,4 +10,9 @@ export interface FieldProps<T> {
   initialValue: T;
   onChange: (value: T | undefined) => void;
   errorText?: string;
+  fieldRef?: React.RefObject<FieldHandle<T>>;
+}
+
+export interface FieldHandle<T> {
+  setValue: (value: T) => void;
 }

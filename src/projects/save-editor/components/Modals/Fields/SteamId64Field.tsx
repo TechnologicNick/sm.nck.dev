@@ -1,5 +1,5 @@
 import { Input, Row, useInput } from "@nextui-org/react";
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useImperativeHandle, useMemo } from "react";
 import SteamID from "steamid";
 import { FieldProps } from ".";
 import { useNoInitialEffect } from "@/save-editor/hooks";
@@ -9,8 +9,13 @@ export interface SteamId64FieldProps extends FieldProps<bigint> {
   children: ReactNode;
 }
 
-const SteamId64Field = ({ label, initialValue, onChange, errorText, children }: SteamId64FieldProps) => {
-  const { value, reset, bindings } = useInput(`${initialValue}`);
+const SteamId64Field = ({ label, initialValue, onChange, errorText, fieldRef, children }: SteamId64FieldProps) => {
+  const { value, reset, bindings, setValue } = useInput(`${initialValue}`);
+  if (fieldRef) {
+    useImperativeHandle(fieldRef, () => ({
+      setValue: (value) => setValue(`${value}`),
+    }));
+  }
   
   const helper = useMemo((): any => {
     try {

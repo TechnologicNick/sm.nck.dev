@@ -1,5 +1,5 @@
 import { Input, useInput } from "@nextui-org/react";
-import { useMemo } from "react";
+import { useImperativeHandle, useMemo } from "react";
 import { FieldProps } from ".";
 import { useNoInitialEffect } from "@/save-editor/hooks";
 
@@ -10,8 +10,13 @@ export interface NumberFieldProps extends FieldProps<number> {
   integer?: boolean;
 }
 
-const NumberField = ({ label, initialValue, onChange, errorText, min, max, step, integer }: NumberFieldProps) => {
-  const { value, reset, bindings } = useInput(`${integer ? Math.round(initialValue) : initialValue}`);
+const NumberField = ({ label, initialValue, onChange, errorText, fieldRef, min, max, step, integer }: NumberFieldProps) => {
+  const { value, reset, bindings, setValue } = useInput(`${integer ? Math.round(initialValue) : initialValue}`);
+  if (fieldRef) {
+    useImperativeHandle(fieldRef, () => ({
+      setValue: (value) => setValue(`${value}`),
+    }));
+  }
   
   const helper = useMemo((): any => {
     try {
