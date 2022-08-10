@@ -55,7 +55,7 @@ const NumberField = ({ label, initialValue, onChange, errorText, fieldRef, min, 
       bordered
       fullWidth
       helperColor={"error"}
-      helperText={helper.error ?? errorText ?? ""}
+      helperText={errorText ?? helper.error ?? ""}
       label={label}
       type="number"
       min={min}

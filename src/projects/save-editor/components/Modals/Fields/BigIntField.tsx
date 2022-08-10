@@ -57,7 +57,7 @@ const BigIntField = ({ label, initialValue, onChange, errorText, fieldRef, min, 
       fullWidth
       onClearClick={reset}
       helperColor={"error"}
-      helperText={helper.error ?? errorText ?? ""}
+      helperText={errorText ?? helper.error ?? ""}
       label={label}
       type="text"
     />

@@ -73,7 +73,7 @@ const SteamId64Field = ({ label, initialValue, onChange, errorText, fieldRef, ch
         fullWidth
         onClearClick={reset}
         helperColor={"error"}
-        helperText={helper.error ?? errorText ?? ""}
+        helperText={errorText ?? helper.error ?? ""}
         label={label}
         placeholder={`${initialValue}`}
       />
