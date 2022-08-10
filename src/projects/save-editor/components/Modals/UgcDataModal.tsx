@@ -64,7 +64,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
           initialValue={ugcItem.fileId}
           onChange={(value) => {
             setFileIdError(null);
-            setInferFileIdDisabled(value === undefined);
+            setInferLocalIdDisabled(value === undefined);
             setValue("fileId")(value);
           }}
           label="File Id"
@@ -84,10 +84,6 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
               color="secondary"
               disabled={inferFileIdDisabled}
               onClick={async () => {
-                if (inferFileIdDisabled) {
-                  return;
-                }
-            
                 try {
                   const description = await clientProxy.modDatabase.descriptions.byLocalId.query((values.current.localId ?? ugcItem.localId).toString());
                   if (!description) {
@@ -110,7 +106,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
             initialValue={ugcItem.localId}
             onChange={(value) => {
               setLocalIdError(null);
-              setInferLocalIdDisabled(value === undefined);
+              setInferFileIdDisabled(value === undefined);
               setValue("localId")(value);
             }}
             label="Local Id"
@@ -130,10 +126,6 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
               color="secondary"
               disabled={inferLocalIdDisabled}
               onClick={async () => {
-                if (inferLocalIdDisabled) {
-                  return;
-                }
-            
                 try {
                   const description = await clientProxy.modDatabase.descriptions.byFileId.query(values.current.fileId ?? ugcItem.fileId);
                   if (!description) {
