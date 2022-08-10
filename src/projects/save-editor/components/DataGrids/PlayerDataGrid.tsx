@@ -1,4 +1,4 @@
-import { Button, Container, Row, Table, useAsyncList, useCollator } from "@nextui-org/react";
+import { Button, Container, Row, Spacer, Table, useAsyncList, useCollator } from "@nextui-org/react";
 import { forwardRef, Key, ReactNode, useImperativeHandle, useRef, useState } from "react";
 import { cacheMissingSummaries } from "@/save-editor/caches/player-summary-cache";
 import SaveEditor from "@/save-editor/save-editor";
@@ -86,11 +86,18 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
   const deleteButtonRef = useRef<DeleteButtonHandle>(null);
 
   return (<>
-    <Container fluid>
+    <Container fluid css={{
+      "@mdMax": {
+        "button": {
+          minWidth: "fit-content",
+        },
+      }
+    }}>
       <Row justify="space-between">
         <Row fluid={false}>
           {buttons}
         </Row>
+        <Spacer x={1} />
         <Row fluid={false}>
           <DeleteButton ref={deleteButtonRef}>
             Delete

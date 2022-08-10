@@ -1,4 +1,4 @@
-import { Button, Container, Row, Table, useAsyncList, useCollator } from "@nextui-org/react";
+import { Button, Container, Row, Spacer, Table, useAsyncList, useCollator } from "@nextui-org/react";
 import { forwardRef, Key, ReactNode, useImperativeHandle, useRef, useState } from "react";
 import SaveEditor from "@/save-editor/save-editor";
 import ActionsCell, { Action } from "./Cells/ActionsCell";
@@ -100,11 +100,18 @@ const ModDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGrid
   const deleteButtonRef = useRef<DeleteButtonHandle>(null);
 
   return (<>
-    <Container fluid>
+    <Container fluid css={{
+      "@mdMax": {
+        "button": {
+          minWidth: "fit-content",
+        },
+      }
+    }}>
       <Row justify="space-between">
         <Row fluid={false}>
           {buttons}
         </Row>
+        <Spacer x={1} />
         <Row fluid={false}>
           <DeleteButton ref={deleteButtonRef}>
             Delete
