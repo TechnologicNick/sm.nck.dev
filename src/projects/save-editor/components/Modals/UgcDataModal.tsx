@@ -1,8 +1,10 @@
 import { Button, Modal, Row, Spacer, Text, Tooltip, useModal } from "@nextui-org/react";
-import React, { useImperativeHandle, useRef } from "react";
+import React, { useImperativeHandle, useRef, useState } from "react";
 import { IUserGeneratedContent } from "@/save-editor/structures/user-generated-content";
 import { ModalProps } from ".";
 import { SteamWorkshopField, UuidField } from "./Fields";
+import { clientProxy } from "utils/trpc";
+import Uuid from "@/save-editor/structures/uuid";
 
 export interface UgcDataModalProps<T extends IUserGeneratedContent> extends ModalProps {
   ugcItem: T;
@@ -15,16 +17,15 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
     setVisible,
   }));
 
+  const [fileIdError, setFileIdError] = useState<string | null>(null);
+  const [localIdError, setLocalIdError] = useState<string | null>(null);
+  const [inferFileIdDisabled, setInferFileIdDisabled] = useState(ugcItem.localId === undefined);
+  const [inferLocalIdDisabled, setInferLocalIdDisabled] = useState(ugcItem.fileId === undefined);
+
   const values = useRef<Partial<IUserGeneratedContent>>({});
   const setValue = <K extends keyof IUserGeneratedContent>(key: K) => {
     return (value: IUserGeneratedContent[K] | undefined) => {
-      values.current![key] = value;
-    }
-  }
-  const getFieldProps = <K extends keyof IUserGeneratedContent>(key: K) => {
-    return {
-      initialValue: ugcItem[key],
-      onChange: setValue(key),
+      values.current[key] = value;
     }
   }
 
@@ -57,7 +58,16 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
         </Text>
       </Modal.Header>
       <Modal.Body>
-        <SteamWorkshopField {...getFieldProps("fileId")} label="File Id">
+        <SteamWorkshopField
+          initialValue={ugcItem.fileId}
+          onChange={(value) => {
+            setFileIdError(null);
+            setInferFileIdDisabled(value === undefined);
+            setValue("fileId")(value);
+          }}
+          label="File Id"
+          errorText={fileIdError ?? undefined}
+        >
           <Spacer x={1} />
           <Tooltip
             content="Infer File Id from the Steam Workshop (uses Local Id)"
@@ -69,16 +79,40 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
               auto
               bordered
               color="secondary"
-              onClick={() => {
+              disabled={inferFileIdDisabled}
+              onClick={async () => {
+                if (inferFileIdDisabled) {
+                  return;
+                }
+            
+                try {
+                  const description = await clientProxy.modDatabase.descriptions.byLocalId.query((values.current.localId ?? ugcItem.localId).toString());
+                  if (!description) {
+                    throw new Error("No description found");
+                  }
 
+                  setValue("fileId")(description.fileId);
+                } catch (err: any) {
+                  setLocalIdError(`Inference failed: ${err.message}`);
+                }
               }}
             >
               Infer
             </Button>
           </Tooltip>
         </SteamWorkshopField>
-        <Row css={{ alignItems: "flex-end" }}>
-          <UuidField {...getFieldProps("localId")} label="Local Id" {...uint64} />
+        <Row css={{ alignItems: "flex-end", paddingBottom: 10 }}>
+          <UuidField
+            initialValue={ugcItem.localId}
+            onChange={(value) => {
+              setLocalIdError(null);
+              setInferLocalIdDisabled(value === undefined);
+              setValue("localId")(value);
+            }}
+            label="Local Id"
+            errorText={localIdError ?? undefined}
+            {...uint64}
+          />
           <Spacer x={1} />
           <Tooltip
             content="Infer Local Id from the Steam Workshop (uses Local Id)"
@@ -90,8 +124,22 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
               auto
               bordered
               color="secondary"
-              onClick={() => {
+              disabled={inferLocalIdDisabled}
+              onClick={async () => {
+                if (inferLocalIdDisabled) {
+                  return;
+                }
+            
+                try {
+                  const description = await clientProxy.modDatabase.descriptions.byFileId.query(values.current.fileId ?? ugcItem.fileId);
+                  if (!description) {
+                    throw new Error("No description found");
+                  }
 
+                  setValue("localId")(Uuid.parse(description.localId));
+                } catch (err: any) {
+                  setLocalIdError(`Inference failed: ${err.message}`);
+                }
               }}
             >
               Infer
