@@ -2,7 +2,7 @@ import { Button, Modal, Row, Spacer, Text, Tooltip, useModal } from "@nextui-org
 import React, { useImperativeHandle, useRef, useState } from "react";
 import { IUserGeneratedContent } from "@/save-editor/structures/user-generated-content";
 import { ModalProps } from ".";
-import { SteamWorkshopField, UuidField } from "./Fields";
+import { FieldHandle, SteamWorkshopField, UuidField } from "./Fields";
 import { clientProxy } from "utils/trpc";
 import Uuid from "@/save-editor/structures/uuid";
 
@@ -21,6 +21,8 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
   const [localIdError, setLocalIdError] = useState<string | null>(null);
   const [inferFileIdDisabled, setInferFileIdDisabled] = useState(ugcItem.localId === undefined);
   const [inferLocalIdDisabled, setInferLocalIdDisabled] = useState(ugcItem.fileId === undefined);
+  const fileIdField = useRef<FieldHandle<bigint>>(null);
+  const localIdField = useRef<FieldHandle<Uuid>>(null);
 
   const values = useRef<Partial<IUserGeneratedContent>>({});
   const setValue = <K extends keyof IUserGeneratedContent>(key: K) => {
@@ -67,6 +69,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
           }}
           label="File Id"
           errorText={fileIdError ?? undefined}
+          fieldRef={fileIdField}
         >
           <Spacer x={1} />
           <Tooltip
@@ -91,6 +94,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
                     throw new Error("No description found");
                   }
 
+                  fileIdField.current?.setValue(description.fileId);
                   setValue("fileId")(description.fileId);
                 } catch (err: any) {
                   setLocalIdError(`Inference failed: ${err.message}`);
@@ -111,7 +115,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
             }}
             label="Local Id"
             errorText={localIdError ?? undefined}
-            {...uint64}
+            fieldRef={localIdField}
           />
           <Spacer x={1} />
           <Tooltip
@@ -135,8 +139,10 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
                   if (!description) {
                     throw new Error("No description found");
                   }
-
-                  setValue("localId")(Uuid.parse(description.localId));
+                  
+                  const localId = Uuid.parse(description.localId);
+                  localIdField.current?.setValue(localId);
+                  setValue("localId")(localId);
                 } catch (err: any) {
                   setLocalIdError(`Inference failed: ${err.message}`);
                 }
