@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { FieldProps } from ".";
 import { useNoInitialEffect } from "@/save-editor/hooks";
 
-const InlineHexField = ({ label, initialValue, onChange }: FieldProps<Buffer>) => {
+const InlineHexField = ({ label, initialValue, onChange, errorText }: FieldProps<Buffer>) => {
   const initialValueString = Array.from(initialValue).map(byte => byte.toString(16).padStart(2, '0')).join(" ");
   const { value, reset, bindings } = useInput(initialValueString);
 
@@ -45,7 +45,7 @@ const InlineHexField = ({ label, initialValue, onChange }: FieldProps<Buffer>) =
       fullWidth
       onClearClick={reset}
       helperColor={"error"}
-      helperText={helper.error ?? ""}
+      helperText={helper.error ?? errorText ?? ""}
       label={label}
       placeholder={initialValueString}
     />

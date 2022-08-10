@@ -9,4 +9,5 @@ export interface FieldProps<T> {
   label: string;
   initialValue: T;
   onChange: (value: T | undefined) => void;
+  errorText?: string;
 }

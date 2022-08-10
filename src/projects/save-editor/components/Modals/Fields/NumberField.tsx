@@ -10,7 +10,7 @@ export interface NumberFieldProps extends FieldProps<number> {
   integer?: boolean;
 }
 
-const NumberField = ({ label, initialValue, onChange, min, max, step, integer }: NumberFieldProps) => {
+const NumberField = ({ label, initialValue, onChange, errorText, min, max, step, integer }: NumberFieldProps) => {
   const { value, reset, bindings } = useInput(`${integer ? Math.round(initialValue) : initialValue}`);
   
   const helper = useMemo((): any => {
@@ -50,7 +50,7 @@ const NumberField = ({ label, initialValue, onChange, min, max, step, integer }:
       bordered
       fullWidth
       helperColor={"error"}
-      helperText={helper.error ?? ""}
+      helperText={helper.error ?? errorText ?? ""}
       label={label}
       type="number"
       min={min}

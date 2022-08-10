@@ -8,7 +8,7 @@ export interface BigIntFieldProps extends FieldProps<bigint> {
   max?: bigint;
 }
 
-const BigIntField = ({ label, initialValue, onChange, min, max }: BigIntFieldProps) => {
+const BigIntField = ({ label, initialValue, onChange, errorText, min, max }: BigIntFieldProps) => {
   const { value, reset, bindings } = useInput(`${initialValue}`);
   
   const helper = useMemo((): any => {
@@ -52,7 +52,7 @@ const BigIntField = ({ label, initialValue, onChange, min, max }: BigIntFieldPro
       fullWidth
       onClearClick={reset}
       helperColor={"error"}
-      helperText={helper.error ?? ""}
+      helperText={helper.error ?? errorText ?? ""}
       label={label}
       type="text"
     />

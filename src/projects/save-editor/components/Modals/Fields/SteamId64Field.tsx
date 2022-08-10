@@ -9,7 +9,7 @@ export interface SteamId64FieldProps extends FieldProps<bigint> {
   children: ReactNode;
 }
 
-const SteamId64Field = ({ label, initialValue, onChange, children }: SteamId64FieldProps) => {
+const SteamId64Field = ({ label, initialValue, onChange, errorText, children }: SteamId64FieldProps) => {
   const { value, reset, bindings } = useInput(`${initialValue}`);
   
   const helper = useMemo((): any => {
@@ -68,7 +68,7 @@ const SteamId64Field = ({ label, initialValue, onChange, children }: SteamId64Fi
         fullWidth
         onClearClick={reset}
         helperColor={"error"}
-        helperText={helper.error ?? ""}
+        helperText={helper.error ?? errorText ?? ""}
         label={label}
         placeholder={`${initialValue}`}
       />

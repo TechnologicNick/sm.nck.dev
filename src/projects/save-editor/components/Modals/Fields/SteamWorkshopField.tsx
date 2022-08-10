@@ -7,7 +7,7 @@ export interface SteamWorkshopFieldProps extends FieldProps<bigint> {
   children?: ReactNode;
 }
 
-const SteamWorkshopField = ({ label, initialValue, onChange, children }: SteamWorkshopFieldProps) => {
+const SteamWorkshopField = ({ label, initialValue, onChange, errorText, children }: SteamWorkshopFieldProps) => {
   const [fileId, setFileId] = useState(initialValue);
 
   return (<>
@@ -31,6 +31,7 @@ const SteamWorkshopField = ({ label, initialValue, onChange, children }: SteamWo
         }}
         min={BigInt("0")}
         max={BigInt("0xFFFFFFFFFFFFFFFF")}
+        errorText={errorText}
       />
       {children}
     </Row>

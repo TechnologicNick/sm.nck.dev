@@ -4,7 +4,7 @@ import { FieldProps } from ".";
 import { useNoInitialEffect } from "@/save-editor/hooks";
 import Uuid from "@/save-editor/structures/uuid";
 
-const BigIntField = ({ label, initialValue, onChange }: FieldProps<Uuid>) => {
+const BigIntField = ({ label, initialValue, onChange, errorText }: FieldProps<Uuid>) => {
   const { value, reset, bindings } = useInput(`${initialValue}`);
   
   const helper = useMemo((): any => {
@@ -40,7 +40,7 @@ const BigIntField = ({ label, initialValue, onChange }: FieldProps<Uuid>) => {
       fullWidth
       onClearClick={reset}
       helperColor={"error"}
-      helperText={helper.error ?? ""}
+      helperText={helper.error ?? errorText ?? ""}
       label={label}
       type="text"
     />
