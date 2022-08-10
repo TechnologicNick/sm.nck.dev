@@ -1,5 +1,6 @@
 import { setupTRPC } from "@trpc/next";
 import type { AppRouter } from "server/routers/_app";
+import superjson from "superjson";
 
 export const trpc = setupTRPC<AppRouter>({
   config({ ctx }) {
@@ -13,6 +14,7 @@ export const trpc = setupTRPC<AppRouter>({
 
     return {
       url,
+      transformer: superjson,
       /**
        * @link https://react-query.tanstack.com/reference/QueryClient
        */
