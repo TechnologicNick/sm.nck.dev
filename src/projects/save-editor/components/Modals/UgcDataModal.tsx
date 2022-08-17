@@ -50,7 +50,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
       if ((fileIdError ?? localIdError) !== null) {
         setUpdateDisabled(true);
       } else if (type === "add") {
-        setUpdateDisabled(Object.values(values.current).some(value => value === undefined));
+        setUpdateDisabled(values.current.localId === undefined || values.current.fileId === undefined);
       }
     }
   }
