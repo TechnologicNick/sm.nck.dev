@@ -34,6 +34,12 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
   const setValue = <K extends keyof IUserGeneratedContent>(key: K) => {
     return (value: IUserGeneratedContent[K] | undefined) => {
       values.current[key] = value;
+
+      if ((fileIdError ?? localIdError) !== null) {
+        setUpdateDisabled(true);
+      } else if (type === "add") {
+        setUpdateDisabled(Object.values(values.current).some(value => value === undefined));
+      }
     }
   }
 
@@ -91,7 +97,12 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
               disabled={inferFileIdDisabled}
               onClick={async () => {
                 try {
-                  const description = await clientProxy.modDatabase.descriptions.byLocalId.query((values.current.localId ?? ugcItem?.localId ?? Uuid.NIL).toString());
+                  const localId = values.current.localId ?? ugcItem?.localId;
+                  if (localId === undefined) {
+                    throw new Error("Local Id is required");
+                  }
+
+                  const description = await clientProxy.modDatabase.descriptions.byLocalId.query(localId.toString());
                   if (!description) {
                     throw new Error("No description found");
                   }
@@ -133,7 +144,12 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
               disabled={inferLocalIdDisabled}
               onClick={async () => {
                 try {
-                  const description = await clientProxy.modDatabase.descriptions.byFileId.query(values.current.fileId ?? ugcItem?.fileId ?? BigInt(0));
+                  const fileId = values.current.fileId ?? ugcItem?.fileId;
+                  if (fileId === undefined) {
+                    throw new Error("File Id is required");
+                  }
+
+                  const description = await clientProxy.modDatabase.descriptions.byFileId.query(fileId);
                   if (!description) {
                     throw new Error("No description found");
                   }
@@ -155,7 +171,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
         <Button auto flat color="error" onClick={() => setVisible(false)}>
           Close
         </Button>
-        <Button auto onClick={() => update()}>
+        <Button auto disabled={updateDisabled} onClick={() => update()}>
           {type === "add" ? "Add" : "Update"}
         </Button>
       </Modal.Footer>
