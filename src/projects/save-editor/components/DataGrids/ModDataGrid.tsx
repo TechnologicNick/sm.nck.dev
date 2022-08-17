@@ -102,6 +102,7 @@ const ModDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGrid
 
   const AddButton = ({ children }: { children?: ReactNode }) => {
     const modalRef: ModalProps["modalRef"] = useRef<any>();
+    const [modalKey, setModalKey] = useState(Math.random());
 
     const addUgcItem = (newUgcItem: IUserGeneratedContent) => {
       console.log("Adding new user generated content", newUgcItem);
@@ -110,9 +111,11 @@ const ModDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGrid
     return (
       <>
         <UgcDataModal
+          key={modalKey}
           onUpdate={addUgcItem}
           modalRef={modalRef}
           type="add"
+          onUnmount={() => setModalKey(Math.random())} // Reset the form when the modal is closed
         />
         <Button color="primary" onClick={() => modalRef.current.setVisible(true)}>
           {children}

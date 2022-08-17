@@ -1,5 +1,5 @@
 import { Button, Modal, Row, Spacer, Text, Tooltip, useModal } from "@nextui-org/react";
-import React, { useImperativeHandle, useRef, useState } from "react";
+import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
 import { IUserGeneratedContent } from "@/save-editor/structures/user-generated-content";
 import { ModalProps } from ".";
 import { FieldHandle, SteamWorkshopField, UuidField } from "./Fields";
@@ -14,9 +14,20 @@ export interface UgcDataModalProps<T extends IUserGeneratedContent> extends Moda
   ugcItem?: T;
   onUpdate: (newUgcItem: T) => void;
   type: "edit" | "add";
+  onUnmount?: () => void;
 }
 
-const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, modalRef, type, ...props }: UgcDataModalProps<T>) => {
+const UnmountDetector = ({ onUnmount }: { onUnmount?: () => void }) => {
+  useEffect(() => {
+    return () => {
+      onUnmount && onUnmount();
+    }
+  }, []);
+
+  return <></>;
+}
+
+const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, modalRef, type, onUnmount, ...props }: UgcDataModalProps<T>) => {
   const { setVisible, visible, bindings } = useModal();
   useImperativeHandle(modalRef, () => ({
     setVisible,
@@ -29,6 +40,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
   const [inferLocalIdDisabled, setInferLocalIdDisabled] = useState(ugcItem?.fileId === undefined);
   const fileIdField = useRef<FieldHandle<bigint>>(null);
   const localIdField = useRef<FieldHandle<Uuid>>(null);
+  const [updateDisabled, setUpdateDisabled] = useState(type === "add");
 
   const values = useRef<Partial<IUserGeneratedContent>>({});
   const setValue = <K extends keyof IUserGeneratedContent>(key: K) => {
@@ -70,6 +82,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
         <Text id="modal-title" size={18}>
           {capitalizeFirstLetter(type)} mod
         </Text>
+        <UnmountDetector onUnmount={onUnmount} />
       </Modal.Header>
       <Modal.Body>
         <SteamWorkshopField
