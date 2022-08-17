@@ -7,6 +7,7 @@ import SteamWorkshopCell from "./Cells/SteamWorkshopCell";
 import { cacheMissingDetails } from "@/save-editor/caches/workshop-details-cache";
 import Uuid from "@/save-editor/structures/uuid";
 import UgcDataModal from "@/save-editor/components/Modals/UgcDataModal";
+import { ModalProps } from "../Modals";
 
 export interface ModsDataGridProps {
   saveEditor: SaveEditor;
@@ -99,6 +100,27 @@ const ModDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGrid
   });
   const deleteButtonRef = useRef<DeleteButtonHandle>(null);
 
+  const AddButton = ({ children }: { children?: ReactNode }) => {
+    const modalRef: ModalProps["modalRef"] = useRef<any>();
+
+    const addUgcItem = (newUgcItem: IUserGeneratedContent) => {
+      console.log("Adding new user generated content", newUgcItem);
+    }
+
+    return (
+      <>
+        <UgcDataModal
+          onUpdate={addUgcItem}
+          modalRef={modalRef}
+          type="add"
+        />
+        <Button color="primary" onClick={() => modalRef.current.setVisible(true)}>
+          {children}
+        </Button>
+      </>
+    );
+  }
+
   return (<>
     <Container fluid css={{
       "@mdMax": {
@@ -113,6 +135,10 @@ const ModDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGrid
         </Row>
         <Spacer x={1} />
         <Row fluid={false}>
+          <AddButton>
+            Add
+          </AddButton>
+          <Spacer x={1} />
           <DeleteButton ref={deleteButtonRef}>
             Delete
           </DeleteButton>
@@ -169,6 +195,7 @@ const ModDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGrid
                               saveEditor.setUserGeneratedContent(newUgcItems);
                               list.update(ugcItem.identifier, newUgcItem);
                             }}
+                            type="edit"
                           />
                         }/>
                         <Action tooltip="Delete mod" icon="delete" color="error" onClick={() => {

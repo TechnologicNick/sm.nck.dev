@@ -12,9 +12,10 @@ export interface PlayerDataModalProps extends ModalProps {
 export let currentlyExpanded: number | null = 1;
 
 const PlayerDataModal = ({ player, onUpdate, modalRef, ...props }: PlayerDataModalProps) => {
-  const { setVisible, bindings } = useModal();
+  const { setVisible, visible, bindings } = useModal();
   useImperativeHandle(modalRef, () => ({
     setVisible,
+    visible,
   }));
 
   const values = useRef<Partial<IPlayer>>({});
@@ -47,7 +48,12 @@ const PlayerDataModal = ({ player, onUpdate, modalRef, ...props }: PlayerDataMod
   }
 
   return (
-    <Modal closeButton aria-labelledby="modal-title" {...props} {...bindings}>
+    <Modal
+      closeButton
+      aria-labelledby="modal-title"
+      {...bindings}
+      {...props}
+    >
       <Modal.Header>
         <Text id="modal-title" size={18}>
           Edit player

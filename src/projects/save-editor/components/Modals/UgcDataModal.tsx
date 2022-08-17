@@ -6,21 +6,27 @@ import { FieldHandle, SteamWorkshopField, UuidField } from "./Fields";
 import { clientProxy } from "utils/trpc";
 import Uuid from "@/save-editor/structures/uuid";
 
-export interface UgcDataModalProps<T extends IUserGeneratedContent> extends ModalProps {
-  ugcItem: T;
-  onUpdate: (newUgcItem: T) => void;
+const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, modalRef, ...props }: UgcDataModalProps<T>) => {
-  const { setVisible, bindings } = useModal();
+export interface UgcDataModalProps<T extends IUserGeneratedContent> extends ModalProps {
+  ugcItem?: T;
+  onUpdate: (newUgcItem: T) => void;
+  type: "edit" | "add";
+}
+
+const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, modalRef, type, ...props }: UgcDataModalProps<T>) => {
+  const { setVisible, visible, bindings } = useModal();
   useImperativeHandle(modalRef, () => ({
     setVisible,
+    visible,
   }));
 
   const [fileIdError, setFileIdError] = useState<string | null>(null);
   const [localIdError, setLocalIdError] = useState<string | null>(null);
-  const [inferFileIdDisabled, setInferFileIdDisabled] = useState(ugcItem.localId === undefined);
-  const [inferLocalIdDisabled, setInferLocalIdDisabled] = useState(ugcItem.fileId === undefined);
+  const [inferFileIdDisabled, setInferFileIdDisabled] = useState(ugcItem?.localId === undefined);
+  const [inferLocalIdDisabled, setInferLocalIdDisabled] = useState(ugcItem?.fileId === undefined);
   const fileIdField = useRef<FieldHandle<bigint>>(null);
   const localIdField = useRef<FieldHandle<Uuid>>(null);
 
@@ -51,17 +57,17 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
       closeButton
       aria-labelledby="modal-title"
       width="460px"
-      {...props}
       {...bindings}
+      {...props}
     >
       <Modal.Header>
         <Text id="modal-title" size={18}>
-          Edit mod
+          {capitalizeFirstLetter(type)} mod
         </Text>
       </Modal.Header>
       <Modal.Body>
         <SteamWorkshopField
-          initialValue={ugcItem.fileId}
+          initialValue={ugcItem?.fileId}
           onChange={(value) => {
             setFileIdError(null);
             setInferLocalIdDisabled(value === undefined);
@@ -85,7 +91,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
               disabled={inferFileIdDisabled}
               onClick={async () => {
                 try {
-                  const description = await clientProxy.modDatabase.descriptions.byLocalId.query((values.current.localId ?? ugcItem.localId).toString());
+                  const description = await clientProxy.modDatabase.descriptions.byLocalId.query((values.current.localId ?? ugcItem?.localId ?? Uuid.NIL).toString());
                   if (!description) {
                     throw new Error("No description found");
                   }
@@ -103,7 +109,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
         </SteamWorkshopField>
         <Row css={{ alignItems: "flex-end", paddingBottom: 10 }}>
           <UuidField
-            initialValue={ugcItem.localId}
+            initialValue={ugcItem?.localId}
             onChange={(value) => {
               setLocalIdError(null);
               setInferFileIdDisabled(value === undefined);
@@ -127,7 +133,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
               disabled={inferLocalIdDisabled}
               onClick={async () => {
                 try {
-                  const description = await clientProxy.modDatabase.descriptions.byFileId.query(values.current.fileId ?? ugcItem.fileId);
+                  const description = await clientProxy.modDatabase.descriptions.byFileId.query(values.current.fileId ?? ugcItem?.fileId ?? BigInt(0));
                   if (!description) {
                     throw new Error("No description found");
                   }
@@ -150,7 +156,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
           Close
         </Button>
         <Button auto onClick={() => update()}>
-          Update
+          {type === "add" ? "Add" : "Update"}
         </Button>
       </Modal.Footer>
     </Modal>
