@@ -26,10 +26,80 @@ const addIdentifier = <T,>(content: T): Identifyable<T> => {
   };
 }
 
+const getKey = (identifyable: Identifyable<any>) => identifyable.identifier;
+
+interface DeleteButtonHandle {
+  setSelection: (newSelection: "all" | Set<Key>) => void;
+}
+
+interface DeleteButtonProps {
+  saveEditor: SaveEditor;
+  list: ReturnType<typeof useAsyncList<Identifyable<IUserGeneratedContent>>>;
+  children?: ReactNode;
+}
+
+const DeleteButton = forwardRef<DeleteButtonHandle, DeleteButtonProps>(({
+  saveEditor,
+  list,
+  children,
+}, ref) => {
+  const [selection, setSelection] = useState<"all" | Set<Key>>(new Set());
+  useImperativeHandle(ref, () => ({
+    setSelection: (newSelection) => setSelection(newSelection),
+  }))
+
+  const disabled = selection === "all"
+    ? list.items.length === 0
+    : selection.size === 0;
+
+  const deleteSelectedUgcItems = () => {
+    if (selection === "all") {
+      saveEditor.setUserGeneratedContent([]);
+      const selectedUgcItemKeys = list.items.map(getKey);
+      list.remove(...selectedUgcItemKeys);
+    } else {
+      const selectedUgcItemKeys = Array.from(selection);
+      const nonSelectedUgcItems = list.items
+        .filter(ugcItem => !selectedUgcItemKeys.includes(getKey(ugcItem)));
+      saveEditor.setUserGeneratedContent(nonSelectedUgcItems);
+      list.remove(...selection);
+    }
+  }
+
+  return (
+    <Button color="error" disabled={disabled} onClick={deleteSelectedUgcItems}>
+      {children}
+    </Button>
+  );
+});
+
+const AddButton = ({ children }: { children?: ReactNode }) => {
+  const modalRef: ModalProps["modalRef"] = useRef<any>();
+  const [modalKey, setModalKey] = useState(Math.random());
+
+  const addUgcItem = (newUgcItem: IUserGeneratedContent) => {
+    console.log("Adding new user generated content", newUgcItem);
+  }
+
+  return (
+    <>
+      <UgcDataModal
+        key={modalKey}
+        onUpdate={addUgcItem}
+        modalRef={modalRef}
+        type="add"
+        onUnmount={() => setModalKey(Math.random())} // Reset the form when the modal is closed
+      />
+      <Button color="primary" onClick={() => modalRef.current.setVisible(true)}>
+        {children}
+      </Button>
+    </>
+  );
+}
+
 const ModDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGridProps) => {
   const collator = useCollator({ numeric: true });
-
-  const getKey = (identifyable: Identifyable<any>) => identifyable.identifier;
+  const deleteButtonRef = useRef<DeleteButtonHandle>(null);
 
   const list = useAsyncList<Identifyable<IUserGeneratedContent>>({
     async load({ }) {
@@ -62,68 +132,6 @@ const ModDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGrid
     console.error(list.error);
   }
 
-  type DeleteButtonHandle = {
-    setSelection: (newSelection: "all" | Set<Key>) => void;
-  }
-
-  const DeleteButton = forwardRef<DeleteButtonHandle, { children?: ReactNode }>(({ children }, ref) => {
-    const [selection, setSelection] = useState<"all" | Set<Key>>(new Set());
-    useImperativeHandle(ref, () => ({
-      setSelection: (newSelection) => setSelection(newSelection),
-    }))
-
-    const disabled = selection === "all"
-      ? list.items.length === 0
-      : selection.size === 0;
-
-    const deleteSelectedUgcItems = () => {
-      if (selection === "all") {
-        saveEditor.setUserGeneratedContent([]);
-        console.log("Deleted all user generated content");
-        console.log(saveEditor.getUserGeneratedContent());
-        const selectedUgcItemKeys = list.items.map(getKey);
-        list.remove(...selectedUgcItemKeys);
-      } else {
-        const selectedUgcItemKeys = Array.from(selection);
-        const nonSelectedUgcItems = list.items
-          .filter(ugcItem => !selectedUgcItemKeys.includes(getKey(ugcItem)));
-        saveEditor.setUserGeneratedContent(nonSelectedUgcItems);
-        list.remove(...selection);
-      }
-    }
-
-    return (
-      <Button color="error" disabled={disabled} onClick={deleteSelectedUgcItems}>
-        {children}
-      </Button>
-    );
-  });
-  const deleteButtonRef = useRef<DeleteButtonHandle>(null);
-
-  const AddButton = ({ children }: { children?: ReactNode }) => {
-    const modalRef: ModalProps["modalRef"] = useRef<any>();
-    const [modalKey, setModalKey] = useState(Math.random());
-
-    const addUgcItem = (newUgcItem: IUserGeneratedContent) => {
-      console.log("Adding new user generated content", newUgcItem);
-    }
-
-    return (
-      <>
-        <UgcDataModal
-          key={modalKey}
-          onUpdate={addUgcItem}
-          modalRef={modalRef}
-          type="add"
-          onUnmount={() => setModalKey(Math.random())} // Reset the form when the modal is closed
-        />
-        <Button color="primary" onClick={() => modalRef.current.setVisible(true)}>
-          {children}
-        </Button>
-      </>
-    );
-  }
-
   return (<>
     <Container fluid css={{
       "@mdMax": {
@@ -142,7 +150,7 @@ const ModDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGrid
             Add
           </AddButton>
           <Spacer x={1} />
-          <DeleteButton ref={deleteButtonRef}>
+          <DeleteButton ref={deleteButtonRef} saveEditor={saveEditor} list={list}>
             Delete
           </DeleteButton>
         </Row>

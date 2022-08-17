@@ -13,8 +13,54 @@ export interface PlayerDataGridProps {
   buttons?: ReactNode;
 }
 
+interface DeleteButtonHandle {
+  setSelection: (newSelection: "all" | Set<Key>) => void;
+}
+
+interface DeleteButtonProps {
+  saveEditor: SaveEditor;
+  list: ReturnType<typeof useAsyncList<Player>>;
+  children?: ReactNode;
+}
+
+const DeleteButton = forwardRef<DeleteButtonHandle, DeleteButtonProps>(({
+  saveEditor,
+  list,
+  children,
+}, ref) => {
+  const [selection, setSelection] = useState<"all" | Set<Key>>(new Set());
+  useImperativeHandle(ref, () => ({
+    setSelection: (newSelection) => setSelection(newSelection),
+  }))
+
+  const disabled = selection === "all"
+    ? list.items.length === 0
+    : selection.size === 0;
+
+  const deleteSelectedPlayers = () => {
+    if (selection === "all") {
+      saveEditor.deleteAllPlayers();
+      const selectedPlayerKeys = list.items.map(player => player.steamId64.toString());
+      list.remove(...selectedPlayerKeys);
+    } else {
+      const selectedPlayers = Array.from(selection)
+        .map(key => list.getItem(key))
+        .filter(player => player !== undefined);
+      saveEditor.deletePlayers(selectedPlayers);
+      list.remove(...selection);
+    }
+  }
+
+  return (
+    <Button color="error" disabled={disabled} onClick={deleteSelectedPlayers}>
+      {children}
+    </Button>
+  );
+});
+
 const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) => {
   const collator = useCollator({ numeric: true });
+  const deleteButtonRef = useRef<DeleteButtonHandle>(null);
 
   const list = useAsyncList<Player>({
     async load({ }) {
@@ -49,42 +95,6 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
     console.error(list.error);
   }
 
-  type DeleteButtonHandle = {
-    setSelection: (newSelection: "all" | Set<Key>) => void;
-  }
-
-  const DeleteButton = forwardRef<DeleteButtonHandle, { children?: ReactNode }>(({ children }, ref) => {
-    const [selection, setSelection] = useState<"all" | Set<Key>>(new Set());
-    useImperativeHandle(ref, () => ({
-      setSelection: (newSelection) => setSelection(newSelection),
-    }))
-
-    const disabled = selection === "all"
-      ? list.items.length === 0
-      : selection.size === 0;
-
-    const deleteSelectedPlayers = () => {
-      if (selection === "all") {
-        saveEditor.deleteAllPlayers();
-        const selectedPlayerKeys = list.items.map(player => player.steamId64.toString());
-        list.remove(...selectedPlayerKeys);
-      } else {
-        const selectedPlayers = Array.from(selection)
-          .map(key => list.getItem(key))
-          .filter(player => player !== undefined);
-        saveEditor.deletePlayers(selectedPlayers);
-        list.remove(...selection);
-      }
-    }
-
-    return (
-      <Button color="error" disabled={disabled} onClick={deleteSelectedPlayers}>
-        {children}
-      </Button>
-    );
-  });
-  const deleteButtonRef = useRef<DeleteButtonHandle>(null);
-
   return (<>
     <Container fluid css={{
       "@mdMax": {
@@ -99,7 +109,7 @@ const PlayerDataGrid = ({ saveEditor, players, buttons }: PlayerDataGridProps) =
         </Row>
         <Spacer x={1} />
         <Row fluid={false}>
-          <DeleteButton ref={deleteButtonRef}>
+          <DeleteButton ref={deleteButtonRef} list={list} saveEditor={saveEditor}>
             Delete
           </DeleteButton>
         </Row>
