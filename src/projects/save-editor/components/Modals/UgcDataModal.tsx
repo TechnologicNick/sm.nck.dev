@@ -99,7 +99,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
                   fileIdField.current?.setValue(description.fileId);
                   setValue("fileId")(description.fileId);
                 } catch (err: any) {
-                  setLocalIdError(`Inference failed: ${err.message}`);
+                  setFileIdError(`Inference failed: ${err.message}`);
                 }
               }}
             >
