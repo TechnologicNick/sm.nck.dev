@@ -32,13 +32,13 @@ interface DeleteButtonHandle {
   setSelection: (newSelection: "all" | Set<Key>) => void;
 }
 
-interface DeleteButtonProps {
+interface ButtonProps {
   saveEditor: SaveEditor;
   list: ReturnType<typeof useAsyncList<Identifyable<IUserGeneratedContent>>>;
   children?: ReactNode;
 }
 
-const DeleteButton = forwardRef<DeleteButtonHandle, DeleteButtonProps>(({
+const DeleteButton = forwardRef<DeleteButtonHandle, ButtonProps>(({
   saveEditor,
   list,
   children,
@@ -73,12 +73,13 @@ const DeleteButton = forwardRef<DeleteButtonHandle, DeleteButtonProps>(({
   );
 });
 
-const AddButton = ({ children }: { children?: ReactNode }) => {
+const AddButton = ({ saveEditor, list, children }: ButtonProps) => {
   const modalRef: ModalProps["modalRef"] = useRef<any>();
   const [modalKey, setModalKey] = useState(Math.random());
 
   const addUgcItem = (newUgcItem: IUserGeneratedContent) => {
-    console.log("Adding new user generated content", newUgcItem);
+    saveEditor.setUserGeneratedContent([...list.items, newUgcItem]);
+    list.append(addIdentifier(newUgcItem));
   }
 
   return (
@@ -146,7 +147,7 @@ const ModDataGrid = ({ saveEditor, userGeneratedContent, buttons }: ModsDataGrid
         </Row>
         <Spacer x={1} />
         <Row fluid={false}>
-          <AddButton>
+          <AddButton saveEditor={saveEditor} list={list}>
             Add
           </AddButton>
           <Spacer x={1} />
