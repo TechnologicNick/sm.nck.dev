@@ -19,7 +19,7 @@ const SteamWorkshopField = ({ label, initialValue, onChange, errorText, fieldRef
         }
       }
     }}>
-      <SteamWorkshopCell fileId={fileId} cacheMissing compact />
+      <SteamWorkshopCell fileId={fileId ?? BigInt(0)} cacheMissing compact />
     </Row>
     <Row css={{ alignItems: "flex-end" }}>
       <BigIntField

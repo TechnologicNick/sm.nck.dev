@@ -5,7 +5,7 @@ import { useNoInitialEffect } from "@/save-editor/hooks";
 import Uuid from "@/save-editor/structures/uuid";
 
 const BigIntField = ({ label, initialValue, onChange, errorText, fieldRef }: FieldProps<Uuid>) => {
-  const { value, reset, bindings, setValue } = useInput(`${initialValue}`);
+  const { value, reset, bindings, setValue } = useInput(`${initialValue ?? ""}`);
   if (fieldRef) {
     useImperativeHandle(fieldRef, () => ({
       setValue: (value) => setValue(value.toString()),

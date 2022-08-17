@@ -10,7 +10,7 @@ export interface SteamId64FieldProps extends FieldProps<bigint> {
 }
 
 const SteamId64Field = ({ label, initialValue, onChange, errorText, fieldRef, children }: SteamId64FieldProps) => {
-  const { value, reset, bindings, setValue } = useInput(`${initialValue}`);
+  const { value, reset, bindings, setValue } = useInput(`${initialValue ?? ""}`);
   if (fieldRef) {
     useImperativeHandle(fieldRef, () => ({
       setValue: (value) => setValue(`${value}`),

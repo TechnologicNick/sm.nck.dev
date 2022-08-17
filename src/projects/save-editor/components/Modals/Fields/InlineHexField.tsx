@@ -5,8 +5,12 @@ import { useNoInitialEffect } from "@/save-editor/hooks";
 
 const bufferToHex = (buffer: Buffer) => Array.from(buffer).map(byte => byte.toString(16).padStart(2, '0')).join(" ");
 
-const InlineHexField = ({ label, initialValue, onChange, errorText, fieldRef }: FieldProps<Buffer>) => {
-  const initialValueString = bufferToHex(initialValue);
+export interface InlineHexFieldProps extends FieldProps<Buffer> {
+  length: number;
+}
+
+const InlineHexField = ({ label, initialValue, onChange, errorText, fieldRef, length }: InlineHexFieldProps) => {
+  const initialValueString = bufferToHex(initialValue ?? Buffer.alloc(length));
   const { value, reset, bindings, setValue } = useInput(initialValueString);
   if (fieldRef) {
     useImperativeHandle(fieldRef, () => ({
@@ -25,13 +29,13 @@ const InlineHexField = ({ label, initialValue, onChange, errorText, fieldRef }: 
     
     if (value.length === 0) {
       return {}
-    } else if (joined.length < initialValue.length * 2) {
+    } else if (joined.length < length * 2) {
       return {
-        error: `Too short (${initialValue.length} bytes required, currently ${joined.length / 2})`,
+        error: `Too short (${length} bytes required, currently ${joined.length / 2})`,
       }
-    } else if (joined.length > initialValue.length * 2) {
+    } else if (joined.length > length * 2) {
       return {
-        error: `Too long (${initialValue.length} bytes required, currently ${joined.length / 2})`,
+        error: `Too long (${length} bytes required, currently ${joined.length / 2})`,
       }
     }
 

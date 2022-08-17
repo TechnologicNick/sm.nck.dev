@@ -11,7 +11,7 @@ export interface NumberFieldProps extends FieldProps<number> {
 }
 
 const NumberField = ({ label, initialValue, onChange, errorText, fieldRef, min, max, step, integer }: NumberFieldProps) => {
-  const { value, reset, bindings, setValue } = useInput(`${integer ? Math.round(initialValue) : initialValue}`);
+  const { value, bindings, setValue } = useInput(initialValue === undefined ? "" : `${integer ? Math.round(initialValue) : initialValue}`);
   if (fieldRef) {
     useImperativeHandle(fieldRef, () => ({
       setValue: (value) => setValue(`${value}`),

@@ -9,7 +9,7 @@ export interface BigIntFieldProps extends FieldProps<bigint> {
 }
 
 const BigIntField = ({ label, initialValue, onChange, errorText, fieldRef, min, max }: BigIntFieldProps) => {
-  const { value, reset, bindings, setValue } = useInput(`${initialValue}`);
+  const { value, reset, bindings, setValue } = useInput(`${initialValue ?? ""}`);
   if (fieldRef) {
     useImperativeHandle(fieldRef, () => ({
       setValue: (value) => setValue(`${value}`),

@@ -7,7 +7,7 @@ export { default as UuidField } from "./UuidField";
 
 export interface FieldProps<T> {
   label: string;
-  initialValue: T;
+  initialValue?: T;
   onChange: (value: T | undefined) => void;
   errorText?: string;
   fieldRef?: React.RefObject<FieldHandle<T>>;
