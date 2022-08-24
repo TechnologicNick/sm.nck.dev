@@ -25,10 +25,6 @@ module.exports = (phase, { defaultConfig }) => {
       return config
     },
 
-    publicRuntimeConfig: {
-      appUrl: process.env.APP_URL,
-    },
-
     async rewrites() {
       return {
         afterFiles: [
