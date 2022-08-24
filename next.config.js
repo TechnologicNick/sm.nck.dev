@@ -1,7 +1,7 @@
 // @ts-check
 
 /**
- * @returns {import('next').NextConfig}
+ * @returns {import("next").NextConfig}
  */
 module.exports = (phase, { defaultConfig }) => {
   return {
@@ -24,5 +24,18 @@ module.exports = (phase, { defaultConfig }) => {
       }
       return config
     },
+
+    async rewrites() {
+      return {
+        afterFiles: [
+          // These rewrites are checked after pages/public files
+          // are checked but before dynamic routes
+          {
+            source: "/save-editor/:path*",
+            destination: "/save-editor",
+          },
+        ],
+      }
+    }
   }
 }
