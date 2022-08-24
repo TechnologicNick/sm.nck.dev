@@ -7,8 +7,8 @@ import superjson from "superjson";
  * If you want to use SSR, you need to use the server's full URL
  * @link https://trpc.io/docs/ssr
  */
-const url = process.env.APP_URL
-  ? `https://${process.env.APP_URL}/api/trpc`
+const url = process.env.NEXT_PUBLIC_APP_URL
+  ? `https://${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`
   : "http://localhost:3000/api/trpc";
 
 export const trpc = setupTRPC<AppRouter>({
