@@ -4,7 +4,11 @@ import { FieldProps } from ".";
 import { useNoInitialEffect } from "@/save-editor/hooks";
 import Uuid from "@/save-editor/structures/uuid";
 
-const BigIntField = ({ label, initialValue, onChange, errorText, fieldRef }: FieldProps<Uuid>) => {
+export interface UuidFieldProps extends FieldProps<Uuid> {
+  allowUnsafe?: boolean;
+}
+
+const UuidField = ({ label, initialValue, onChange, errorText, fieldRef, allowUnsafe }: UuidFieldProps) => {
   const { value, reset, bindings, setValue } = useInput(`${initialValue ?? ""}`);
   if (fieldRef) {
     useImperativeHandle(fieldRef, () => ({
@@ -22,7 +26,7 @@ const BigIntField = ({ label, initialValue, onChange, errorText, fieldRef }: Fie
 
       // TODO: Improve Uuid error reporting
 
-      const parsedValue = Uuid.parse(value);
+      const parsedValue = Uuid.parse(value, { unsafe: allowUnsafe });
       return {
         valid: parsedValue,
       }
@@ -52,4 +56,4 @@ const BigIntField = ({ label, initialValue, onChange, errorText, fieldRef }: Fie
   </>);
 }
 
-export default BigIntField;
+export default UuidField;

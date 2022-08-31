@@ -142,6 +142,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
             label="Local Id"
             errorText={localIdError ?? undefined}
             fieldRef={localIdField}
+            allowUnsafe
           />
           <Spacer x={1} />
           <Tooltip
