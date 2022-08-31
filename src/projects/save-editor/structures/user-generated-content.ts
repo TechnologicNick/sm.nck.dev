@@ -14,7 +14,7 @@ export default class UserGeneratedContent implements IUserGeneratedContent, IDes
   static deserialize(buffer: Buffer) {
 
     const fileId = BigInt(`0x${buffer.slice(0x00, 0x00 + 8).toString("hex")}`);
-    const localId = new Uuid(buffer.slice(0x08, 0x08 + 16), true);
+    const localId = new Uuid(buffer.slice(0x08, 0x08 + 16), { reverse: true });
 
     return new UserGeneratedContent({
       fileId,
