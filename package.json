@@ -7,13 +7,14 @@
     "test:watch": "yarn node --experimental-vm-modules node_modules/jest/bin/jest.js --watch"
   },
   "dependencies": {
-    "@nextui-org/react": "^1.0.0-beta.9",
+    "@nextui-org/react": "^1.0.0-beta.10",
     "@react-aria/button": "^3.4.4",
     "@trpc/client": "^10.0.0-alpha.41",
     "@trpc/next": "^10.0.0-alpha.41",
     "@trpc/react": "^10.0.0-alpha.41",
     "@trpc/server": "^10.0.0-alpha.41",
     "next": "^12.2.2",
+    "next-themes": "^0.2.0",
     "node-cache": "^5.1.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -23,7 +24,6 @@
     "sql.js": "1.7.0",
     "steamid": "^2.0.0",
     "superjson": "^1.9.1",
-    "use-dark-mode": "^2.3.1",
     "uuid": "^8.3.2",
     "zod": "^3.17.10"
   },

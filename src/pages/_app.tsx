@@ -1,6 +1,6 @@
 import type { AppProps } from "next/app";
 import { Col, createTheme, NextUIProvider, Row } from "@nextui-org/react";
-import useDarkMode from "use-dark-mode";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { BluePinkBackground } from "components/Backgrounds";
 import { NextPage } from "next";
 import { ReactNode } from "react";
@@ -34,24 +34,31 @@ type AppPageProps = AppProps & {
 }
 
 function MyApp({ Component, pageProps }: AppPageProps) {
-  const darkMode = useDarkMode(true);
-
   const Wrapper = Component.Wrapper ?? (({ children }: { children: ReactNode }) => <>{children}</>);
 
   return (
-    <NextUIProvider theme={darkMode.value ? darkTheme : lightTheme}>
-      <BluePinkBackground />
-      <Wrapper>
-        <Row>
-          {Component.Sidebar && (
-            <Component.Sidebar />
-          )}
-          <Col>
-            <Component {...pageProps} />
-          </Col>
-        </Row>
-      </Wrapper>
-    </NextUIProvider>
+    <NextThemesProvider
+      defaultTheme="system"
+      attribute="class"
+      value={{
+        light: lightTheme.className,
+        dark: darkTheme.className
+      }}
+    >
+      <NextUIProvider>
+        <BluePinkBackground />
+        <Wrapper>
+          <Row>
+            {Component.Sidebar && (
+              <Component.Sidebar />
+            )}
+            <Col>
+              <Component {...pageProps} />
+            </Col>
+          </Row>
+        </Wrapper>
+      </NextUIProvider>
+    </NextThemesProvider>
   );
 }
 
