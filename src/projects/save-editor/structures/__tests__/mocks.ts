@@ -7,7 +7,7 @@ export const useActualUuid = () => {
 }
 
 export const useActualLz4 = () => {
-  jest.unstable_mockModule("./../../../../util/lz4.ts", () => {
+  jest.unstable_mockModule("./../../../../utils/lz4.ts", () => {
     const nextLock = "./next.lock/data/https_raw.githubusercontent.com";
     const file = readdirSync(nextLock)
         .find(file => file.match(/pierrec_node-lz4_master_lib_binding_[0-9a-f]{20}\.js/g))!;
