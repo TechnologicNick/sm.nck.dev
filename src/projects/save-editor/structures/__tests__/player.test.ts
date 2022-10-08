@@ -1,18 +1,8 @@
-import { useActualLz4, useActualUuid } from "./mocks";
-
-useActualUuid();
-useActualLz4();
-
 import Uuid from "../uuid";
-import type { IPlayer } from "./../player";
+import Player, { IPlayer } from "../player";
+import { describe, expect, test } from "vitest";
 
 describe("Player", () => {
-  let Player: typeof import("./../player").default;
-
-  beforeAll(async () => {
-    Player = (await import("./../player")).default;
-  })
-
   test("deserialize", async () => {
     const buffer = Buffer.from("67ce7fe2f7564898b8f076080146a358000401000000fffe0300000033f50200023f3851444048f5c343d258523620000100f00d3f920cf2bf529889011000010add16f30000000100000002ffffffff", "hex");
     const actual = Player.deserialize(buffer);

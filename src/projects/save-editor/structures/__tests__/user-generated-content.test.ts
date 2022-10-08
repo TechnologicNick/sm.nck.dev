@@ -1,17 +1,8 @@
-import { useActualUuid } from "./mocks";
-
-useActualUuid();
-
 import Uuid from "../uuid";
-import type { IUserGeneratedContent } from "./../user-generated-content";
+import UserGeneratedContent, { IUserGeneratedContent } from "./../user-generated-content";
+import { describe, expect, test } from "vitest";
 
 describe("UserGeneratedContent", () => {
-  let UserGeneratedContent: typeof import("./../user-generated-content").default;
-
-  beforeAll(async () => {
-    UserGeneratedContent = (await import("./../user-generated-content")).default;
-  })
-
   test("deserialize", async () => {
     const buffer = Buffer.from("00000000a7cba862947ea54da01a2da59840c81a1722c8f9", "hex");
     const actual = UserGeneratedContent.deserialize(buffer);
