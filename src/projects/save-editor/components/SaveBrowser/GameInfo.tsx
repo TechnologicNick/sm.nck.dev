@@ -1,20 +1,25 @@
 import { useNoInitialEffect } from "@/save-editor/hooks";
 import SaveEditor from "@/save-editor/save-editor";
-import { Container, Input, Row, Spacer, Table, Text, useInput } from "@nextui-org/react";
+import GameMode, { GameModeDescriptions } from "@/save-editor/types/game-mode";
+import { Container, Dropdown, Input, Row, Spacer, Table, Text, useInput } from "@nextui-org/react";
 import { ReactNode, useId, useMemo, useRef, useState } from "react";
 
 export interface NumberFieldProps {
-  ariaLabelledby: string;
+  ariaLabelledby?: string;
+  ariaLabel?: string;
   initialValue: number;
-  onChange: (value: number) => void;
+  onChange?: (value: number) => void;
+  onBlur?: (value: number) => void;
+  min?: number;
+  max?: number;
 }
 
-const NumberField = ({ ariaLabelledby, initialValue, onChange }: NumberFieldProps) => {
+const NumberField = ({ ariaLabelledby, ariaLabel, initialValue, onChange, onBlur, min: propMin, max: propMax }: NumberFieldProps) => {
   const initialValueRef = useRef(initialValue);
   const { value, bindings } = useInput(`${initialValueRef.current}`);
 
-  const min = 0;
-  const max = 0xFFFFFFFF;
+  const min = propMin ?? 0;
+  const max = propMax ?? 0xFFFFFFFF;
 
   const helper = useMemo(() => {
     try {
@@ -44,7 +49,7 @@ const NumberField = ({ ariaLabelledby, initialValue, onChange }: NumberFieldProp
   }, [value]);
 
   useNoInitialEffect(() => {
-    onChange(helper.valid ?? initialValueRef.current);
+    onChange?.(helper.valid ?? initialValueRef.current);
   }, [helper.valid]);
 
   return (
@@ -55,7 +60,9 @@ const NumberField = ({ ariaLabelledby, initialValue, onChange }: NumberFieldProp
       helperColor={"error"}
       helperText={helper.error ?? ""}
       aria-labelledby={ariaLabelledby}
+      aria-label={ariaLabel}
       onMouseDown={(e) => e.stopPropagation()}
+      onBlur={() => onBlur?.(helper.valid ?? initialValueRef.current)}
     />
   );
 }
@@ -66,8 +73,8 @@ export interface GameInfoProps {
 }
 
 const GameInfo = ({ saveEditor, buttons }: GameInfoProps) => {
-
   const versionId = useId();
+  const gameModeId = useId();
   const seedId = useId();
   const gametickId = useId();
 
@@ -118,6 +125,73 @@ const GameInfo = ({ saveEditor, buttons }: GameInfoProps) => {
                 initialValue={`${saveEditor.getVersion()}`}
                 aria-labelledby={versionId}
               />
+            </Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>
+              <Text as={"label"} id={gameModeId}>Game mode</Text>
+            </Table.Cell>
+            <Table.Cell>
+              {(() => {
+                const [gameMode, setGameMode] = useState(saveEditor.getGameMode());
+
+                return (
+                  <Row align="center">
+                    <Dropdown>
+                      <Dropdown.Button flat color="secondary">
+                        {GameMode[gameMode]?.replaceAll("_", " ") ?? "Unlisted"}
+                      </Dropdown.Button>
+                      <Dropdown.Menu
+                        color="secondary"
+                        aria-label="Select game mode"
+                        css={{ $$dropdownMenuWidth: "420px" }}
+                        onAction={(action) => {
+                          setGameMode(action as GameMode);
+                          saveEditor.setGameMode(action as GameMode);
+                        }}
+                      >
+                        <Dropdown.Section title="Valid game modes">
+                          {Object.keys(GameMode).filter(gameMode => isNaN(parseInt(gameMode))).map((gameMode) => (
+                            <Dropdown.Item
+                              key={GameMode[gameMode as keyof typeof GameMode]}
+                              command={`${GameMode[gameMode as keyof typeof GameMode]}`}
+                              description={GameModeDescriptions[gameMode as keyof typeof GameMode]}
+                              
+                            >
+                              {gameMode.replaceAll("_", " ")}
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown.Section>
+                        <Dropdown.Section>
+                          <Dropdown.Item
+                            key={9}
+                            color="error"
+                            command="other"
+                            description="Invalid game mode"
+                          >
+                            Unlisted
+                          </Dropdown.Item>
+                        </Dropdown.Section>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                    {!GameMode[gameMode] && (
+                      <>
+                        <Spacer x={1} />
+                        <NumberField
+                          ariaLabel="Unlisted game mode id"
+                          initialValue={gameMode}
+                          onBlur={(newGameMode) => {
+                            setGameMode(newGameMode);
+                            saveEditor.setGameMode(newGameMode);
+                          }}
+                          min={0}
+                          max={0xFF}
+                        />
+                      </>
+                    )}
+                  </Row>
+                );
+              })()}
             </Table.Cell>
           </Table.Row>
           <Table.Row>
