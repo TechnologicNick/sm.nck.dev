@@ -1,7 +1,7 @@
 import { useNoInitialEffect } from "@/save-editor/hooks";
 import SaveEditor from "@/save-editor/save-editor";
 import { Container, Input, Row, Spacer, Table, Text, useInput } from "@nextui-org/react";
-import { ReactNode, useId, useMemo, useRef } from "react";
+import { ReactNode, useId, useMemo, useRef, useState } from "react";
 
 export interface NumberFieldProps {
   ariaLabelledby: string;
@@ -137,11 +137,36 @@ const GameInfo = ({ saveEditor, buttons }: GameInfoProps) => {
               <Text as={"label"} id={gametickId}>Game tick</Text>
             </Table.Cell>
             <Table.Cell>
-              <NumberField
-                ariaLabelledby={gametickId}
-                initialValue={saveEditor.getGametick()}
-                onChange={(gametick) => saveEditor.setGametick(gametick)}
-              />
+              {(() => {
+                const [gametick, setGametick] = useState(saveEditor.getGametick());
+                const totalSeconds = Math.floor(gametick / 40);
+
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+
+                return (
+                  <Row align="center">
+                    <NumberField
+                      ariaLabelledby={gametickId}
+                      initialValue={saveEditor.getGametick()}
+                      onChange={(newGametick) => {
+                        saveEditor.setGametick(newGametick);
+                        setGametick(newGametick);
+                      }}
+                    />
+                    <Spacer x={1} />
+                    <Text css={{ minWidth: "100px" }}>
+                      {hours}
+                      <Text span small>h </Text>
+                      {`${minutes}`.padStart(2, "0")}
+                      <Text span small>m </Text>
+                      {`${seconds}`.padStart(2, "0")}
+                      <Text span small>s</Text>
+                    </Text>
+                  </Row>
+                );
+              })()}
             </Table.Cell>
           </Table.Row>
         </Table.Body>
