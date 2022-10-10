@@ -4,6 +4,7 @@ import SaveEditor from "@/save-editor/save-editor";
 import PlayerDataGrid from "./DataGrids/PlayerDataGrid";
 import ModDataGrid from "./DataGrids/ModDataGrid";
 import { Route, Routes } from "react-router-dom";
+import GameInfo from "./SaveBrowser/GameInfo";
 
 export interface SaveBrowserProps {
   saveEditor: SaveEditor;
@@ -14,6 +15,7 @@ const SaveBrowser = ({ saveEditor, buttons }: SaveBrowserProps) => {
   return (
     <Container fluid>
       <Routes>
+        <Route path="game" element={<GameInfo saveEditor={saveEditor} buttons={buttons} />} />
         <Route path="players" element={<PlayerDataGrid saveEditor={saveEditor} buttons={buttons} />} />
         <Route path="mods" element={<ModDataGrid saveEditor={saveEditor} buttons={buttons} />} />
       </Routes>

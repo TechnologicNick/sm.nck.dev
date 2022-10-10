@@ -135,4 +135,37 @@ export default class SaveEditor {
 
     return modified;
   }
+
+  getSeed() {
+    return this.db.exec("SELECT seed FROM Game")[0].values[0][0] as number;
+  }
+
+  setSeed(seed: number) {
+    console.log("setting seed", seed);
+    this.db.exec("UPDATE Game SET seed = ?", [ seed ]);
+
+    const modified = this.db.getRowsModified();
+
+    if (modified === 0) {
+      throw new Error(`Failed to set seed`);
+    }
+
+    return modified;
+  }
+
+  getGametick() {
+    return this.db.exec("SELECT gametick FROM Game")[0].values[0][0] as number;
+  }
+
+  setGametick(gametick: number) {
+    this.db.exec("UPDATE Game SET gametick = ?", [ gametick ]);
+
+    const modified = this.db.getRowsModified();
+
+    if (modified === 0) {
+      throw new Error(`Failed to set gametick`);
+    }
+
+    return modified;
+  }
 }
