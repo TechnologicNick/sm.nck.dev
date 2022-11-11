@@ -1,4 +1,5 @@
 import initSqlJs, { Database, SqlJsStatic } from "sql.js";
+import SqlJsPackageJson from "sql.js/package.json" ;
 import GenericData from "./structures/generic-data";
 import Mods from "./structures/mods";
 import Player from "./structures/player";
@@ -8,9 +9,11 @@ import GameMode from "./types/game-mode";
 
 export let SQL: SqlJsStatic;
 
+const sqlJsVersion = SqlJsPackageJson.version;
+
 export const initSql = async () => {
   return SQL ??= await initSqlJs({
-    locateFile: (file: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.7.0/${file}`
+    locateFile: (file: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/${sqlJsVersion}/${file}`
   });
 }
 

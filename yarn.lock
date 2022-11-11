@@ -2563,10 +2563,10 @@ sourcemap-codec@^1.4.8:
   resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
   integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
 
-sql.js@1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/sql.js/-/sql.js-1.7.0.tgz#cadfed9773b643fbba0fc1ed1847e3a647e1fcb9"
-  integrity sha512-qAfft3xkSgHqmmfNugWTp/59PsqIw8gbeao5TZmpmzQQsAJ49de3iDDKuxVixidYs6dkHNksY8m27v2dZNn2jw==
+sql.js@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/sql.js/-/sql.js-1.8.0.tgz#cb45d957e17a2239662fe2f614c9b678990867a6"
+  integrity sha512-3HD8pSkZL+5YvYUI8nlvNILs61ALqq34xgmF+BHpqxe68yZIJ1H+sIVIODvni25+CcxHUxDyrTJUL0lE/m7afw==
 
 steamid@^2.0.0:
   version "2.0.0"

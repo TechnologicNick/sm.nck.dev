@@ -21,7 +21,7 @@
     "react-icons": "^4.4.0",
     "react-query": "3",
     "react-router-dom": "^6.3.0",
-    "sql.js": "1.7.0",
+    "sql.js": "^1.8.0",
     "steamid": "^2.0.0",
     "superjson": "^1.9.1",
     "uuid": "^8.3.2",
