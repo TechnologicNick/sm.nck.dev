@@ -5,7 +5,7 @@ import NextLink from "next/link";
 
 export const SaveEditorProject = () => {
   return (
-    <NextLink href="/save-editor" passHref>
+    <NextLink href="/save-editor" passHref legacyBehavior>
       <Button
         as="a"
         color="gradient"
