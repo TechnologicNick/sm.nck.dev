@@ -3,7 +3,7 @@ import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
 import { IUserGeneratedContent } from "@/save-editor/structures/user-generated-content";
 import { ModalProps } from ".";
 import { FieldHandle, SteamWorkshopField, UuidField } from "./Fields";
-import { clientProxy } from "utils/trpc";
+import { client } from "utils/trpc";
 import Uuid from "@/save-editor/structures/uuid";
 
 const capitalizeFirstLetter = (string: string) => {
@@ -115,7 +115,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
                     throw new Error("Local Id is required");
                   }
 
-                  const description = await clientProxy.modDatabase.descriptions.byLocalId.query(localId.toString());
+                  const description = await client.modDatabase.descriptions.byLocalId.query(localId.toString());
                   if (!description) {
                     throw new Error("No description found");
                   }
@@ -163,7 +163,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
                     throw new Error("File Id is required");
                   }
 
-                  const description = await clientProxy.modDatabase.descriptions.byFileId.query(fileId);
+                  const description = await client.modDatabase.descriptions.byFileId.query(fileId);
                   if (!description) {
                     throw new Error("No description found");
                   }
