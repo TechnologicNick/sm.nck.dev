@@ -1,5 +1,6 @@
-import { Button, Input } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { ChangeEvent, MutableRefObject, useRef } from "react";
+import { initSql } from "../save-editor";
 
 const OpenLocalSave = ({ onOpen }: { onOpen: (file: File) => void }) => {
   const onSelectFile = (event: ChangeEvent<HTMLInputElement>) => {
@@ -18,7 +19,12 @@ const OpenLocalSave = ({ onOpen }: { onOpen: (file: File) => void }) => {
         onChange={onSelectFile}
         style={{ display: "none" }}
       />
-      <Button onClick={() => ref.current.click()}>Open local save</Button>
+      <Button onClick={() => {
+        ref.current?.click();
+        initSql(); // Prefetch the SQL WASM module
+      }}>
+        Open Local Save
+      </Button>
     </>
   );
 }

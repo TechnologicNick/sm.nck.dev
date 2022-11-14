@@ -5,8 +5,6 @@
  */
 module.exports = (phase, { defaultConfig }) => {
   return {
-    ...defaultConfig,
-
     output: "standalone",
 
     experimental: {
@@ -27,6 +25,7 @@ module.exports = (phase, { defaultConfig }) => {
 
     async rewrites() {
       return {
+        beforeFiles: [],
         afterFiles: [
           // These rewrites are checked after pages/public files
           // are checked but before dynamic routes
@@ -35,6 +34,7 @@ module.exports = (phase, { defaultConfig }) => {
             destination: "/save-editor",
           },
         ],
+        fallback: [],
       }
     }
   }

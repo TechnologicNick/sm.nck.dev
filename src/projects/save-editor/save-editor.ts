@@ -1,4 +1,5 @@
 import initSqlJs, { Database, SqlJsStatic } from "sql.js";
+import SqlJsPackageJson from "sql.js/package.json" ;
 import GenericData from "./structures/generic-data";
 import Mods from "./structures/mods";
 import Player from "./structures/player";
@@ -8,9 +9,11 @@ import GameMode from "./types/game-mode";
 
 export let SQL: SqlJsStatic;
 
+const sqlJsVersion = SqlJsPackageJson.version;
+
 export const initSql = async () => {
   return SQL ??= await initSqlJs({
-    locateFile: (file: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.7.0/${file}`
+    locateFile: (file: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/${sqlJsVersion}/${file}`
   });
 }
 
@@ -131,6 +134,39 @@ export default class SaveEditor {
 
     if (modified === 0) {
       throw new Error(`Failed to set user generated content`);
+    }
+
+    return modified;
+  }
+
+  getSeed() {
+    return this.db.exec("SELECT seed FROM Game")[0].values[0][0] as number;
+  }
+
+  setSeed(seed: number) {
+    console.log("setting seed", seed);
+    this.db.exec("UPDATE Game SET seed = ?", [ seed ]);
+
+    const modified = this.db.getRowsModified();
+
+    if (modified === 0) {
+      throw new Error(`Failed to set seed`);
+    }
+
+    return modified;
+  }
+
+  getGametick() {
+    return this.db.exec("SELECT gametick FROM Game")[0].values[0][0] as number;
+  }
+
+  setGametick(gametick: number) {
+    this.db.exec("UPDATE Game SET gametick = ?", [ gametick ]);
+
+    const modified = this.db.getRowsModified();
+
+    if (modified === 0) {
+      throw new Error(`Failed to set gametick`);
     }
 
     return modified;

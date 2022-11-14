@@ -64,6 +64,7 @@ const SaveEditorPage: Page = () => {
 SaveEditorPage.Sidebar = () => {
   return (
     <Sidebar title="Save Editor">
+      <SidebarLink to={"game"}>Game</SidebarLink>
       <SidebarLink to={"players"}>Players</SidebarLink>
       <SidebarLink to={"mods"}>Mods</SidebarLink>
     </Sidebar>

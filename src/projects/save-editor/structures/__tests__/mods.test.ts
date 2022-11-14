@@ -1,17 +1,8 @@
-import { useActualUuid } from "./mocks";
-
-useActualUuid();
-
 import Uuid from "../uuid";
-import type { IMods } from "./../mods";
+import Mods, { IMods } from "./../mods";
+import { describe, expect, test } from "vitest";
 
 describe("Mods", () => {
-  let Mods: typeof import("./../mods").default;
-
-  beforeAll(async () => {
-    Mods = (await import("./../mods")).default;
-  })
-
   test("deserialize", async () => {
     const buffer = Buffer.from("0000000300000000341239a07e4259a3e692afaa544d323d268393400000000033eca23ec63fdbdeded36d883948e244361ba8de00000000a7cba862947ea54da01a2da59840c81a1722c8f9", "hex");
     const actual = Mods.deserialize(buffer);

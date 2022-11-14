@@ -1,18 +1,8 @@
-import { useActualLz4, useActualUuid } from "./mocks";
-
-useActualUuid();
-useActualLz4();
-
 import Uuid from "../uuid";
-import type { IGenericData } from "./../generic-data";
+import GenericData, { IGenericData } from "./../generic-data";
+import { describe, expect, test } from "vitest";
 
 describe("GenericData", () => {
-  let GenericData: typeof import("./../generic-data").default;
-
-  beforeAll(async () => {
-    GenericData = (await import("./../generic-data")).default;
-  })
-
   test("deserialize", async () => {
     const buffer = Buffer.from("67ce7fe2f7564898b8f076080146a358000401000000fffe03000000307300023f3851ea0001002336200900f0100000003f920d28bf529608011000010add16f30000000100000002ffffffff", "hex");
     const actual = GenericData.deserialize(buffer);
