@@ -6,15 +6,18 @@ import NextLink from "next/link";
 export const SaveEditorProject = () => {
   return (
     <NextLink href="/save-editor" passHref legacyBehavior>
-      <Button
-        as="a"
-        color="gradient"
-        size="xl"
-        css={{ w: "100%" }}
-        icon={<TbFileDatabase size={40} />}
-      >
-        Save Editor
-      </Button>
+      <a style={{ width: "100%" }}>
+        <Button
+          color="gradient"
+          size="xl"
+          css={{ w: "100%" }}
+          icon={<TbFileDatabase size={40} />}
+          tabIndex={-1}
+          role={"none"}
+        >
+          Save Editor
+        </Button>
+      </a>
     </NextLink>
   );
 }
