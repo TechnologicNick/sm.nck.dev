@@ -67,6 +67,7 @@ SaveEditorPage.Sidebar = () => {
       <SidebarLink to={"game"}>Game</SidebarLink>
       <SidebarLink to={"players"}>Players</SidebarLink>
       <SidebarLink to={"mods"}>Mods</SidebarLink>
+      <SidebarLink to={"worlds"}>Worlds</SidebarLink>
     </Sidebar>
   );
 }

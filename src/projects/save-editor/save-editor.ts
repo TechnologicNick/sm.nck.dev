@@ -5,6 +5,7 @@ import Mods from "./structures/mods";
 import Player from "./structures/player";
 import { IUserGeneratedContent } from "./structures/user-generated-content";
 import Uuid from "./structures/uuid";
+import World, { IWorld } from "./structures/world";
 import GameMode from "./types/game-mode";
 
 export let SQL: SqlJsStatic;
@@ -170,5 +171,24 @@ export default class SaveEditor {
     }
 
     return modified;
+  }
+
+  getWorlds() {
+    return this.db.exec("SELECT data FROM GenericData WHERE uid = x'5297769df4514e5e9a388b0f95e2edad' AND flags = 3 ORDER BY worldId ASC")
+      .flatMap(result => result.values.map(value => World.deserialize(Buffer.from(value[0] as Uint8Array))));
+  }
+
+  deleteWorlds(worlds: IWorld[]) {
+    this.db.exec(`DELETE FROM GenericData WHERE uid = x'5297769df4514e5e9a388b0f95e2edad' AND flags = 3 AND worldId IN (${parameters(worlds.length)})`,
+      worlds.map(world => world.worldId)
+    );
+
+    return this.db.getRowsModified();
+  }
+
+  deleteAllWorlds() {
+    this.db.exec("DELETE FROM GenericData WHERE uid = x'5297769df4514e5e9a388b0f95e2edad' AND flags = 3");
+
+    return this.db.getRowsModified();
   }
 }
