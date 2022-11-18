@@ -2,9 +2,10 @@ import { Button, Container, Row, Spacer, Table, useAsyncList, useCollator } from
 import { forwardRef, Key, ReactNode, useImperativeHandle, useRef, useState } from "react";
 import SaveEditor from "@/save-editor/save-editor";
 import ActionsCell, { Action } from "./Cells/ActionsCell";
-import { IWorld } from "@/save-editor/structures/world";
+import World, { IWorld } from "@/save-editor/structures/world";
 import Uuid from "@/save-editor/structures/uuid";
 import { ModalProps } from "../Modals";
+import WorldDataModal from "../Modals/WorldDataModal";
 
 export interface WorldDataGridProps {
   saveEditor: SaveEditor;
@@ -164,8 +165,17 @@ const WorldDataGrid = ({ saveEditor, worlds, buttons }: WorldDataGridProps) => {
         <Table.Column key="worldId">
           World Id
         </Table.Column>
-        <Table.Column key="data">
-          Data
+        <Table.Column key="filename">
+          Script Filename
+        </Table.Column>
+        <Table.Column key="classname">
+          Script Classname
+        </Table.Column>
+        <Table.Column key="seed">
+          Seed
+        </Table.Column>
+        <Table.Column key="terrainParams">
+          Script Data
         </Table.Column>
         <Table.Column key="actions" hideHeader align="center">
           Actions
@@ -179,25 +189,30 @@ const WorldDataGrid = ({ saveEditor, worlds, buttons }: WorldDataGridProps) => {
 
               switch(columnKey) {
                 case "worldId":
-                case "data":
+                case "filename":
+                case "classname":
+                case "seed":
+                case "terrainParams":
                   return <Table.Cell>{`${value}`}</Table.Cell>
                 case "actions":
                   return (
                     <Table.Cell>
                       <ActionsCell>
-                        <Action tooltip="Edit mod" icon="edit" /*modal={
-                          <UgcDataModal
-                            ugcItem={ugcItem}
-                            onUpdate={(newUgcItem) => {
-                              const newUgcItems = list.items
-                                .map(item => getKey(item) === getKey(ugcItem) ? newUgcItem : item)
-                              saveEditor.setUserGeneratedContent(newUgcItems);
-                              list.update(ugcItem.identifier, newUgcItem);
+                        <Action tooltip="Edit world" icon="edit" modal={
+                          <WorldDataModal
+                            world={world}
+                            onUpdate={(newWorld) => {
+                              const newIdentifyableWorld: Identifyable<IWorld> = {
+                                identifier: world.identifier,
+                                ...newWorld,
+                              }
+                              saveEditor.updateWorld(world, new World(newWorld));
+                              list.update(world.identifier, newIdentifyableWorld);
                             }}
                             type="edit"
                           />
-                        }*//>
-                        <Action tooltip="Delete mod" icon="delete" color="error" onClick={() => {
+                        }/>
+                        <Action tooltip="Delete world" icon="delete" color="error" onClick={() => {
                           saveEditor.deleteWorlds([world]) && list.remove(getKey(world));
                         }}/>
                       </ActionsCell>
