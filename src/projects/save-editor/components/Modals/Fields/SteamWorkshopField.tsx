@@ -17,7 +17,10 @@ const SteamWorkshopField = ({ label, initialValue, onChange, errorText, fieldRef
         "& > *": {
           "width": "100%",
         }
-      }
+      },
+      "> *": {
+        "width": "100%",
+      },
     }}>
       <SteamWorkshopCell fileId={fileId ?? BigInt(0)} cacheMissing compact />
     </Row>
