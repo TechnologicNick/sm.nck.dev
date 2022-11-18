@@ -6,15 +6,18 @@ import NextLink from "next/link";
 export const SaveEditorProject = () => {
   return (
     <NextLink href="/save-editor" passHref legacyBehavior>
-      <Button
-        as="a"
-        color="gradient"
-        size="xl"
-        css={{ w: "100%" }}
-        icon={<TbFileDatabase size={40} />}
-      >
-        Save Editor
-      </Button>
+      <a style={{ width: "100%" }}>
+        <Button
+          color="gradient"
+          size="xl"
+          css={{ w: "100%" }}
+          icon={<TbFileDatabase size={40} />}
+          tabIndex={-1}
+          role={"none"}
+        >
+          Save Editor
+        </Button>
+      </a>
     </NextLink>
   );
 }
@@ -24,7 +27,7 @@ export default function Home() {
     <div>
       <Head>
         <title>Scrap Mechanic Projects - nck.dev</title>
-        <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="Projects I've made related to the 2016 videogame Scrap Mechanic" />
       </Head>
       <Container sm display="flex" justify="center" alignItems="center" direction="column" css={{ pt: "$10" }}>
         <Text h1>

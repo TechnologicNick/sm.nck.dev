@@ -18,7 +18,10 @@ const SteamWorkshopCell = ({ fileId, cacheMissing = false, compact = false }: St
       width: "unset",
       minWidth: `${60 * 16 / 9}px`,
       "--nextui-radii-squared": `${36 * 0.33}px`,
-    }
+    },
+    ".nextui-user-name": {
+      textTransform: "none",
+    },
   };
 
   if (details === "loading") {

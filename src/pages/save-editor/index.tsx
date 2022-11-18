@@ -8,6 +8,7 @@ import type { Page } from "pages/_app";
 import { Sidebar, SidebarLink } from "components/navigation/Sidebar";
 import NoSsr from "utils/NoSsr";
 import { BrowserRouter, useMatch, useNavigate } from "react-router-dom";
+import Head from "next/head";
 
 const SaveEditorPage: Page = () => {
   const [saveEditor, setSaveEditor] = useState<SaveEditor>();
@@ -17,7 +18,7 @@ const SaveEditorPage: Page = () => {
   const onOpen = async (file: File) => {
     // Make sure we don't stay on the root page
     if (isRoot) {
-      navigate("/players", { replace: true });
+      navigate("/game", { replace: true });
     }
 
     console.log(`Opening local save file "${file.name}" (${file.size} bytes)`);
@@ -34,6 +35,10 @@ const SaveEditorPage: Page = () => {
 
   return (
     <Container css={{ pt: "$10" }}>
+      <Head>
+        <title>Save Editor - nck.dev</title>
+        <meta name="description" content="Modify your Scrap Mechanic save files in the browser!" />
+      </Head>
       {saveEditor ? (
         <SaveBrowser
           key={saveEditor.uuid.toString()}
@@ -67,6 +72,7 @@ SaveEditorPage.Sidebar = () => {
       <SidebarLink to={"game"}>Game</SidebarLink>
       <SidebarLink to={"players"}>Players</SidebarLink>
       <SidebarLink to={"mods"}>Mods</SidebarLink>
+      <SidebarLink to={"worlds"}>Worlds</SidebarLink>
     </Sidebar>
   );
 }

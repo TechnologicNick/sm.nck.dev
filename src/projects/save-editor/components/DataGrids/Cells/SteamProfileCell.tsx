@@ -9,6 +9,12 @@ export interface SteamProfileCellProps {
 const SteamProfileCell = ({ steamId64, cacheMissing = false }: SteamProfileCellProps) => {
   const summary = usePlayerSummary(steamId64, cacheMissing);
 
+  const userCss: React.ComponentProps<typeof User>["css"] = {
+    ".nextui-user-name": {
+      textTransform: "none",
+    },
+  };
+
   if (summary === "loading") {
     return <Loading />
   } else if (summary === "error") {
@@ -18,6 +24,7 @@ const SteamProfileCell = ({ steamId64, cacheMissing = false }: SteamProfileCellP
         text="?"
         squared
         bordered
+        css={userCss}
       />
     )
   }
@@ -28,6 +35,7 @@ const SteamProfileCell = ({ steamId64, cacheMissing = false }: SteamProfileCellP
       src={summary.avatarMedium}
       squared
       bordered
+      css={userCss}
     >
       <Link href={summary.profileUrl} target="_blank" css={{
         whiteSpace: "nowrap",

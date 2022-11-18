@@ -4,7 +4,6 @@ import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "server/routers/_app";
 import superjson from "superjson";
 
-
 const getBaseUrl = () => {
   // Browser should use relative url
   if (typeof window !== "undefined") {
@@ -55,6 +54,14 @@ export const client = createTRPCProxyClient<AppRouter>({
   ],
 });
 
-
+/**
+ * Inference helper for inputs
+ * @example type HelloInput = RouterInputs['example']['hello']
+ **/
 export type RouterInputs = inferRouterInputs<AppRouter>;
+
+/**
+ * Inference helper for outputs
+ * @example type HelloOutput = RouterOutputs['example']['hello']
+ **/
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
