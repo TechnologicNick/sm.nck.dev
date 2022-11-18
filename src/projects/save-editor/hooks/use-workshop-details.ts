@@ -12,13 +12,15 @@ const useWorkshopDetails = (publishedFileId: bigint | string, requestMissing = f
       setDetails("error");
     } else if (cached) {
       setDetails(cached);
-    } else if (requestMissing && publishedFileId) {
+    } else if (requestMissing && publishedFileId !== "") {
       setDetails("loading");
       cacheMissingDetails([ publishedFileId ]).then((cachedDetails) => {
         setDetails(cachedDetails[`${publishedFileId}`] ?? "error");
       });
+    } else {
+      setDetails("error");
     }
-  }, [publishedFileId])
+  }, [publishedFileId, requestMissing])
 
   useEffect(() => {
     const listener = (keyPublishedFileId: string, valueWorkshopDetails: WorkshopDetails) => {
