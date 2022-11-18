@@ -17,7 +17,7 @@ const SaveEditorPage: Page = () => {
   const onOpen = async (file: File) => {
     // Make sure we don't stay on the root page
     if (isRoot) {
-      navigate("/players", { replace: true });
+      navigate("/game", { replace: true });
     }
 
     console.log(`Opening local save file "${file.name}" (${file.size} bytes)`);
