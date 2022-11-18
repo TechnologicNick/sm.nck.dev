@@ -8,6 +8,7 @@ import type { Page } from "pages/_app";
 import { Sidebar, SidebarLink } from "components/navigation/Sidebar";
 import NoSsr from "utils/NoSsr";
 import { BrowserRouter, useMatch, useNavigate } from "react-router-dom";
+import Head from "next/head";
 
 const SaveEditorPage: Page = () => {
   const [saveEditor, setSaveEditor] = useState<SaveEditor>();
@@ -34,6 +35,10 @@ const SaveEditorPage: Page = () => {
 
   return (
     <Container css={{ pt: "$10" }}>
+      <Head>
+        <title>Save Editor - nck.dev</title>
+        <meta name="description" content="Modify your Scrap Mechanic save files in the browser!" />
+      </Head>
       {saveEditor ? (
         <SaveBrowser
           key={saveEditor.uuid.toString()}

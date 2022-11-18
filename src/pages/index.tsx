@@ -27,7 +27,7 @@ export default function Home() {
     <div>
       <Head>
         <title>Scrap Mechanic Projects - nck.dev</title>
-        <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="Projects I've made related to the 2016 videogame Scrap Mechanic" />
       </Head>
       <Container sm display="flex" justify="center" alignItems="center" direction="column" css={{ pt: "$10" }}>
         <Text h1>
