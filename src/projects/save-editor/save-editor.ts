@@ -1,6 +1,6 @@
 import initSqlJs, { Database, SqlJsStatic } from "sql.js";
 import SqlJsPackageJson from "sql.js/package.json" ;
-import GenericData from "./structures/generic-data";
+import type { IGenericData } from "./structures/generic-data";
 import Mods from "./structures/mods";
 import Player from "./structures/player";
 import { IUserGeneratedContent } from "./structures/user-generated-content";
@@ -66,7 +66,7 @@ export default class SaveEditor {
     return this.db.getRowsModified();
   }
 
-  updatePlayer(oldGenericData: GenericData, newPlayer: Player) {
+  updatePlayer(oldGenericData: IGenericData, newPlayer: Player) {
     this.db.exec(
       "UPDATE GenericData SET "+
         "uid = $newUid, " +
@@ -190,5 +190,41 @@ export default class SaveEditor {
     this.db.exec("DELETE FROM GenericData WHERE uid = x'5297769df4514e5e9a388b0f95e2edad' AND flags = 3");
 
     return this.db.getRowsModified();
+  }
+
+  updateWorld(oldGenericData: IGenericData, newWorld: World) {
+    this.db.exec(
+      "UPDATE GenericData SET "+
+        "uid = $newUid, " +
+        "key = $newKey, " +
+        "worldId = $newWorldId, " +
+        "flags = $newFlags, " +
+        "data = $newData " +
+      "WHERE " +
+        "uid = $oldUid AND " +
+        "key = $oldKey AND " +
+        "worldId = $oldWorldId AND " +
+        "flags = $oldFlags",
+      {
+        $newUid: newWorld.uid.blob,
+        $newKey: toUInt32LE(newWorld.key),
+        $newWorldId: newWorld.worldId,
+        $newFlags: newWorld.flags,
+        $newData: newWorld.serialize(),
+
+        $oldUid: oldGenericData.uid.blob,
+        $oldKey: toUInt32LE(oldGenericData.key),
+        $oldWorldId: oldGenericData.worldId,
+        $oldFlags: oldGenericData.flags,
+      }
+    );
+
+    const modified = this.db.getRowsModified();
+
+    if (modified === 0) {
+      throw new Error(`Failed to find oldGenericData ${JSON.stringify(oldGenericData)}`);
+    }
+
+    return modified;
   }
 }
