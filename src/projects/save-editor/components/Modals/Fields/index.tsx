@@ -4,6 +4,7 @@ export { default as InlineHexField } from "./InlineHexField";
 export { default as BigIntField } from "./BigIntField";
 export { default as SteamWorkshopField } from "./SteamWorkshopField";
 export { default as UuidField } from "./UuidField";
+export { default as StringField } from "./StringField";
 
 export interface FieldProps<T> {
   label: string;
