@@ -3,8 +3,21 @@ import { useTheme as useNextTheme } from "next-themes";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { FaDiscord, FaGithub, FaMoon, FaSun } from "react-icons/fa";
+import { useInRouterContext, useNavigate } from "react-router-dom";
 
 const SaveEditorDropdown = ({ isActive }: { isActive: boolean }) => {
+  const isInRouterContext = useInRouterContext();
+  const navigate = isInRouterContext ? useNavigate() : () => {};
+  const router = useRouter();
+
+  const handleNavigate = (key: string | number) => {
+    if (isInRouterContext) {
+      navigate(`${key}`);
+    } else {
+      router.push(`/save-editor/${key}`);
+    }
+  }
+
   return (
     <Dropdown isBordered>
       <Navbar.Item>
@@ -24,6 +37,7 @@ const SaveEditorDropdown = ({ isActive }: { isActive: boolean }) => {
       </Navbar.Item>
       <Dropdown.Menu
         aria-label="Save Editor features"
+        onAction={handleNavigate}
         css={{
           $$dropdownMenuWidth: "340px",
           $$dropdownItemHeight: "70px",
