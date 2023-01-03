@@ -79,25 +79,25 @@ const SaveEditorDropdown = ({ isActive }: { isActive: boolean }) => {
           },
         }}
       >
-        <Dropdown.Item key="game">
+        <Dropdown.Item key="game" textValue="Game">
           <NextLink href="/save-editor/game" passHref>
             <Text b>Game</Text>
             <Text className="description">The game mode, seed, game tick and general information about the save file.</Text>
           </NextLink>
         </Dropdown.Item>
-        <Dropdown.Item key="players">
+        <Dropdown.Item key="players" textValue="Players">
           <NextLink href="/save-editor/players" passHref>
             <Text b>Players</Text>
             <Text className="description">List of players in the save file, including their name, ID, and position.</Text>
           </NextLink>
         </Dropdown.Item>
-        <Dropdown.Item key="mods">
+        <Dropdown.Item key="mods" textValue="Mods">
           <NextLink href="/save-editor/mods" passHref>
             <Text b>Mods</Text>
             <Text className="description">All mods and custom game dependencies used in the save file.</Text>
           </NextLink>
         </Dropdown.Item>
-        <Dropdown.Item key="worlds">
+        <Dropdown.Item key="worlds" textValue="Worlds">
           <NextLink href="/save-editor/worlds" passHref>
             <Text b>Worlds</Text>
             <Text className="description">Table of worlds in the save file, their scripts and script data.</Text>
