@@ -57,7 +57,7 @@ const SaveEditorPage: Page = () => {
           fd: "column",
           position: "absolute",
           inset: 0,
-          h: "100vh",
+          minHeight: "calc(100vh - $$navbarHeight)",
         }}>
           <OpenLocalSave onOpen={onOpen} />
         </Container>
