@@ -14,7 +14,7 @@ export interface SaveBrowserProps {
 
 const SaveBrowser = ({ saveEditor, buttons }: SaveBrowserProps) => {
   return (
-    <Container fluid>
+    <Container xl>
       <Routes>
         <Route path="game" element={<GameInfo saveEditor={saveEditor} buttons={buttons} />} />
         <Route path="players" element={<PlayerDataGrid saveEditor={saveEditor} buttons={buttons} />} />

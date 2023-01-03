@@ -34,7 +34,7 @@ const SaveEditorPage: Page = () => {
   }
 
   return (
-    <Container css={{ pt: "$10" }}>
+    <Container fluid css={{ pt: "$10" }}>
       <Head>
         <title>Save Editor - nck.dev</title>
         <meta name="description" content="Modify your Scrap Mechanic save files in the browser!" />
@@ -68,7 +68,11 @@ const SaveEditorPage: Page = () => {
 
 SaveEditorPage.Sidebar = () => {
   return (
-    <Sidebar title="Save Editor">
+    <Sidebar title="Save Editor" css={{
+      "@mdMax": {
+        display: "none",
+      },
+    }}>
       <SidebarLink to={"game"}>Game</SidebarLink>
       <SidebarLink to={"players"}>Players</SidebarLink>
       <SidebarLink to={"mods"}>Mods</SidebarLink>

@@ -1,17 +1,19 @@
-import { Container, Link, Text } from "@nextui-org/react";
+import { Container, CSS, Link, Text } from "@nextui-org/react";
 import React, { ReactNode } from "react";
 import { useHref, useLinkClickHandler, useLocation, useResolvedPath } from "react-router-dom";
 
 export interface SidebarProps {
   title: ReactNode;
   children?: ReactNode;
+  css?: CSS;
 }
 
-export const Sidebar = ({ title, children }: SidebarProps) => {
+export const Sidebar = ({ title, children, css }: SidebarProps) => {
   return (
     <Container as="aside" css={{
       w: 250,
       pt: "$10",
+      ...css,
     }}>
       <Text h2>{title}</Text>
       <div>
