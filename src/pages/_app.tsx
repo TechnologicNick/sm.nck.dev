@@ -5,6 +5,7 @@ import { BluePinkBackground } from "components/Backgrounds";
 import { NextPage } from "next";
 import { ReactNode } from "react";
 import { trpc } from "utils/trpc";
+import Navbar from "components/navigation/Navbar";
 
 const lightTheme = createTheme({
   type: "light",
@@ -48,6 +49,7 @@ function MyApp({ Component, pageProps }: AppPageProps) {
       <NextUIProvider>
         <BluePinkBackground />
         <Wrapper>
+          <Navbar />
           <Row>
             {Component.Sidebar && (
               <Component.Sidebar />
