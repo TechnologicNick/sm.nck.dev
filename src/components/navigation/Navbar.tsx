@@ -108,6 +108,57 @@ const SaveEditorDropdown = ({ isActive }: { isActive: boolean }) => {
   );
 }
 
+const Collapse = () => {
+  const NestedCollapseLink = ({ children, href, nested, routerPath }: { children: React.ReactNode, href: string, nested?: boolean, routerPath?: string }) => {
+    const isInRouterContext = useInRouterContext() && !!routerPath;
+    const navigate = isInRouterContext ? useNavigate() : () => {};
+    const router = useRouter();
+    const isActive = router.asPath === href;
+
+    console.log("isInRouterContext", isInRouterContext);
+
+    return (
+      <Navbar.CollapseItem
+        className={[nested && "nested", isActive && "active"].filter(Boolean).join(" ")}
+        css={{
+          "&:not(.nested):has(+ li.nested), &.nested:has(+ li.nested)": {
+            paddingBottom: "$3",
+          },
+          "&.nested > a": {
+            paddingLeft: "$10",
+            minWidth: "100%",
+          },
+        }}
+      >
+        <NextLink href={href} passHref legacyBehavior>
+          <Link
+            color={isActive ? "default" : "inherit"}
+            href={href}
+            onClick={() => {
+              if (isInRouterContext) {
+                navigate(routerPath);
+                document.querySelector<HTMLButtonElement>(".nextui-navbar-toggle")!.click();
+              }
+            }}
+          >
+            {children}
+          </Link>
+        </NextLink>
+      </Navbar.CollapseItem>
+    );
+  }
+
+  return (
+    <Navbar.Collapse >
+      <NestedCollapseLink href="/save-editor">Save Editor</NestedCollapseLink>
+      <NestedCollapseLink href="/save-editor/game" routerPath="game" nested>Game</NestedCollapseLink>
+      <NestedCollapseLink href="/save-editor/players" routerPath="players" nested>Players</NestedCollapseLink>
+      <NestedCollapseLink href="/save-editor/mods" routerPath="mods" nested>Mods</NestedCollapseLink>
+      <NestedCollapseLink href="/save-editor/worlds" routerPath="worlds" nested>Worlds</NestedCollapseLink>
+    </Navbar.Collapse>
+  );
+}
+
 const MyNavbar = () => {
   const { asPath } = useRouter();
   const { isDark } = useTheme();
@@ -152,7 +203,6 @@ const MyNavbar = () => {
       </Navbar.Content>
       <Navbar.Content
         enableCursorHighlight
-        hideIn="xs"
         css={{
           gap: "$6",
           "svg": {
@@ -179,6 +229,7 @@ const MyNavbar = () => {
           {isDark ? <FaSun /> : <FaMoon />}
         </Navbar.Link>
       </Navbar.Content>
+      <Collapse />
     </Navbar>
   );
 }

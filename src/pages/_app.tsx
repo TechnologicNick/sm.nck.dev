@@ -50,7 +50,11 @@ function MyApp({ Component, pageProps }: AppPageProps) {
         <BluePinkBackground />
         <Wrapper>
           <Navbar />
-          <Row>
+          <Row css={{
+            ".nextui-button-text": {
+              zIndex: "$1" // Fix button text rendering over the navbar collapse content https://github.com/nextui-org/nextui/issues/724
+            },
+          }}>
             {Component.Sidebar && (
               <Component.Sidebar />
             )}
