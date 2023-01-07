@@ -2,23 +2,24 @@ import { Container, Spacer } from "@nextui-org/react";
 import { useState } from "react";
 import DownloadSave from "@/save-editor/components/DownloadSave";
 import OpenLocalSave from "@/save-editor/components/OpenLocalSave";
-import SaveBrowser from "@/save-editor/components/SaveBrowser";
+import SaveBrowser, { isSaveBrowserPath } from "@/save-editor/components/SaveBrowser";
 import SaveEditor from "@/save-editor/save-editor";
 import type { Page } from "pages/_app";
 import { Sidebar, SidebarLink } from "components/navigation/Sidebar";
-import NoSsr from "utils/NoSsr";
-import { BrowserRouter, useMatch, useNavigate } from "react-router-dom";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 const SaveEditorPage: Page = () => {
   const [saveEditor, setSaveEditor] = useState<SaveEditor>();
-  const isRoot = useMatch("/");
-  const navigate = useNavigate();
+  const router = useRouter();
+  const isRoot = router.asPath === "/save-editor";
+  const subPath = ((router.query.page ?? []) as string[]).join("/");
+  const saveBrowserPath = isSaveBrowserPath(subPath) ? subPath : "game";
 
   const onOpen = async (file: File) => {
     // Make sure we don't stay on the root page
     if (isRoot) {
-      navigate("/game", { replace: true });
+      router.replace("/save-editor/game");
     }
 
     console.log(`Opening local save file "${file.name}" (${file.size} bytes)`);
@@ -34,7 +35,7 @@ const SaveEditorPage: Page = () => {
   }
 
   return (
-    <Container css={{ pt: "$10" }}>
+    <Container fluid css={{ pt: "$10" }}>
       <Head>
         <title>Save Editor - nck.dev</title>
         <meta name="description" content="Modify your Scrap Mechanic save files in the browser!" />
@@ -43,6 +44,7 @@ const SaveEditorPage: Page = () => {
         <SaveBrowser
           key={saveEditor.uuid.toString()}
           saveEditor={saveEditor}
+          path={saveBrowserPath}
           buttons={<>
             <OpenLocalSave onOpen={onOpen} />
             <Spacer />
@@ -57,7 +59,8 @@ const SaveEditorPage: Page = () => {
           fd: "column",
           position: "absolute",
           inset: 0,
-          h: "100vh",
+          minHeight: "calc(100vh - $$navbarHeight)",
+          pointerEvents: "none",
         }}>
           <OpenLocalSave onOpen={onOpen} />
         </Container>
@@ -68,22 +71,16 @@ const SaveEditorPage: Page = () => {
 
 SaveEditorPage.Sidebar = () => {
   return (
-    <Sidebar title="Save Editor">
-      <SidebarLink to={"game"}>Game</SidebarLink>
-      <SidebarLink to={"players"}>Players</SidebarLink>
-      <SidebarLink to={"mods"}>Mods</SidebarLink>
-      <SidebarLink to={"worlds"}>Worlds</SidebarLink>
+    <Sidebar title="Save Editor" css={{
+      "@mdMax": {
+        display: "none",
+      },
+    }}>
+      <SidebarLink href={"/save-editor/game"}>Game</SidebarLink>
+      <SidebarLink href={"/save-editor/players"}>Players</SidebarLink>
+      <SidebarLink href={"/save-editor/mods"}>Mods</SidebarLink>
+      <SidebarLink href={"/save-editor/worlds"}>Worlds</SidebarLink>
     </Sidebar>
-  );
-}
-
-SaveEditorPage.Wrapper = ({ children }) => {
-  return (
-    <NoSsr>
-      <BrowserRouter basename="/save-editor">
-        {children}
-      </BrowserRouter>
-    </NoSsr>
   );
 }
 
