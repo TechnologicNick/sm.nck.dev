@@ -10,7 +10,10 @@ export const SaveEditorProject = () => {
         <Button
           color="gradient"
           size="xl"
-          css={{ w: "100%" }}
+          css={{
+            w: "100%",
+            minWidth: "unset",
+          }}
           icon={<TbFileDatabase size={40} />}
           tabIndex={-1}
           role={"none"}
