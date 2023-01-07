@@ -3,19 +3,12 @@ import { useTheme as useNextTheme } from "next-themes";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { FaDiscord, FaGithub, FaMoon, FaSun } from "react-icons/fa";
-import { useInRouterContext, useNavigate } from "react-router-dom";
 
 const SaveEditorDropdown = ({ isActive }: { isActive: boolean }) => {
-  const isInRouterContext = useInRouterContext();
-  const navigate = isInRouterContext ? useNavigate() : () => {};
   const router = useRouter();
 
   const handleNavigate = (key: string | number) => {
-    if (isInRouterContext) {
-      navigate(`${key}`);
-    } else {
-      router.push(`/save-editor/${key}`);
-    }
+    router.push(`/save-editor/${key}`);
   }
 
   return (
@@ -110,12 +103,8 @@ const SaveEditorDropdown = ({ isActive }: { isActive: boolean }) => {
 
 const Collapse = () => {
   const NestedCollapseLink = ({ children, href, nested, routerPath }: { children: React.ReactNode, href: string, nested?: boolean, routerPath?: string }) => {
-    const isInRouterContext = useInRouterContext() && !!routerPath;
-    const navigate = isInRouterContext ? useNavigate() : () => {};
     const router = useRouter();
     const isActive = router.asPath === href;
-
-    console.log("isInRouterContext", isInRouterContext);
 
     return (
       <Navbar.CollapseItem
@@ -135,10 +124,7 @@ const Collapse = () => {
             color={isActive ? "default" : "inherit"}
             href={href}
             onClick={() => {
-              if (isInRouterContext) {
-                navigate(routerPath);
-                document.querySelector<HTMLButtonElement>(".nextui-navbar-toggle")!.click();
-              }
+              document.querySelector<HTMLButtonElement>(".nextui-navbar-toggle")!.click();
             }}
           >
             {children}

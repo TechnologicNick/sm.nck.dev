@@ -22,20 +22,5 @@ module.exports = (phase, { defaultConfig }) => {
       }
       return config
     },
-
-    async rewrites() {
-      return {
-        beforeFiles: [],
-        afterFiles: [
-          // These rewrites are checked after pages/public files
-          // are checked but before dynamic routes
-          {
-            source: "/save-editor/:path*",
-            destination: "/save-editor",
-          },
-        ],
-        fallback: [],
-      }
-    }
   }
 }

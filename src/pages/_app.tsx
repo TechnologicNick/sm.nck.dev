@@ -34,8 +34,10 @@ type AppPageProps = AppProps & {
   Component: Page
 }
 
+const NoWrapper = ({ children }: { children: ReactNode }) => <>{children}</>;
+
 function MyApp({ Component, pageProps }: AppPageProps) {
-  const Wrapper = Component.Wrapper ?? (({ children }: { children: ReactNode }) => <>{children}</>);
+  const Wrapper = Component.Wrapper ?? NoWrapper;
 
   return (
     <NextThemesProvider

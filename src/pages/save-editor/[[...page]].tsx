@@ -2,23 +2,24 @@ import { Container, Spacer } from "@nextui-org/react";
 import { useState } from "react";
 import DownloadSave from "@/save-editor/components/DownloadSave";
 import OpenLocalSave from "@/save-editor/components/OpenLocalSave";
-import SaveBrowser from "@/save-editor/components/SaveBrowser";
+import SaveBrowser, { isSaveBrowserPath } from "@/save-editor/components/SaveBrowser";
 import SaveEditor from "@/save-editor/save-editor";
 import type { Page } from "pages/_app";
 import { Sidebar, SidebarLink } from "components/navigation/Sidebar";
-import NoSsr from "utils/NoSsr";
-import { BrowserRouter, useMatch, useNavigate } from "react-router-dom";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 const SaveEditorPage: Page = () => {
   const [saveEditor, setSaveEditor] = useState<SaveEditor>();
-  const isRoot = useMatch("/");
-  const navigate = useNavigate();
+  const router = useRouter();
+  const isRoot = router.asPath === "/save-editor";
+  const subPath = ((router.query.page ?? []) as string[]).join("/");
+  const saveBrowserPath = isSaveBrowserPath(subPath) ? subPath : "game";
 
   const onOpen = async (file: File) => {
     // Make sure we don't stay on the root page
     if (isRoot) {
-      navigate("/game", { replace: true });
+      router.replace("/save-editor/game");
     }
 
     console.log(`Opening local save file "${file.name}" (${file.size} bytes)`);
@@ -43,6 +44,7 @@ const SaveEditorPage: Page = () => {
         <SaveBrowser
           key={saveEditor.uuid.toString()}
           saveEditor={saveEditor}
+          path={saveBrowserPath}
           buttons={<>
             <OpenLocalSave onOpen={onOpen} />
             <Spacer />
@@ -58,6 +60,7 @@ const SaveEditorPage: Page = () => {
           position: "absolute",
           inset: 0,
           minHeight: "calc(100vh - $$navbarHeight)",
+          pointerEvents: "none",
         }}>
           <OpenLocalSave onOpen={onOpen} />
         </Container>
@@ -73,21 +76,11 @@ SaveEditorPage.Sidebar = () => {
         display: "none",
       },
     }}>
-      <SidebarLink to={"game"}>Game</SidebarLink>
-      <SidebarLink to={"players"}>Players</SidebarLink>
-      <SidebarLink to={"mods"}>Mods</SidebarLink>
-      <SidebarLink to={"worlds"}>Worlds</SidebarLink>
+      <SidebarLink href={"/save-editor/game"}>Game</SidebarLink>
+      <SidebarLink href={"/save-editor/players"}>Players</SidebarLink>
+      <SidebarLink href={"/save-editor/mods"}>Mods</SidebarLink>
+      <SidebarLink href={"/save-editor/worlds"}>Worlds</SidebarLink>
     </Sidebar>
-  );
-}
-
-SaveEditorPage.Wrapper = ({ children }) => {
-  return (
-    <NoSsr>
-      <BrowserRouter basename="/save-editor">
-        {children}
-      </BrowserRouter>
-    </NoSsr>
   );
 }
 
