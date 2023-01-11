@@ -1,0 +1,23 @@
+import { FileId, LocalId } from "../types";
+
+export type Description = {
+  localId: LocalId;
+  fileId: FileId
+  name?: string;
+  description?: string;
+  type?: "Blocks and Parts" | "Custom Game" | Omit<string, "Blocks and Parts" | "Custom Game">;
+  [key: string]: unknown;
+}
+
+export const descriptions: Record<LocalId, Description> = {};
+
+export const reloadDescriptions = async () => {
+  const response = await fetch("https://raw.githubusercontent.com/TechnologicNick/scrap-mechanic-mod-scraper/master/mod/Scripts/data/descriptions.json");
+  const data: Record<LocalId, Description> = await response.json();
+  Object.keys(data).forEach((key) => delete descriptions[key as keyof typeof descriptions]);
+  Object.assign(descriptions, data);
+}
+
+export const findFileIdByLocalId = (localId: LocalId): FileId | null => {
+  return descriptions[localId]?.fileId ?? null;
+}
