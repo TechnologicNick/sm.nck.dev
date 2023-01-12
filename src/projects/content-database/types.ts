@@ -13,3 +13,34 @@ export const fileIdSchema = z.number().min(0).max(0xffffffff);
 export type Uuid = z.infer<typeof uuidSchema>;
 export type LocalId = Uuid;
 export type FileId = z.infer<typeof fileIdSchema>;
+
+export type SteamCdnChunk = {
+  sha: string;
+  crc: number;
+  offset: `${number}`;
+  cb_original: number;
+  cb_compressed: number;
+}
+
+export type SteamCdnFile = {
+  chunks: SteamCdnChunk[];
+  filename: string; // Path separator is always backward slash
+  size: `${number}`;
+  flags: number;
+  sha_filename: string;
+  sha_content: string;
+  linktarget: null;
+}
+
+export type SteamCdnManifest = {
+  files: SteamCdnFile[];
+  depot_id: number;
+  gid_manifest: `${number}`;
+  creation_time: number;
+  filenames_encrypted: boolean;
+  cb_disk_original: `${number}`;
+  cb_disk_compressed: `${number}`;
+  unique_chunks: number;
+  crc_encrypted: number;
+  crc_clear: number;
+}
