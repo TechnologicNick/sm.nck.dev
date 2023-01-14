@@ -81,15 +81,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  const json = await getIconMap(description.fileId);
-  if (!json) {
-    res.status(404).json({ error: "IconMap.xml not found" });
-    return;
+  try {
+    const json = await getIconMap(description.fileId);
+    if (!json) {
+      res.status(404).json({ error: "IconMap.xml not found" });
+      return;
+    }
+  
+    res.status(200)
+      .setHeader("Cache-Control", "public, max-age=3600")
+      .json(json);
+  } catch (error) {
+    if (error instanceof Error && error.message.startsWith("Failed to parse IconMap.xml:")) {
+      res.status(500).json({ error: error.message });
+    }
   }
-
-  res.status(200)
-    .setHeader("Cache-Control", "public, max-age=3600")
-    .json(json);
 }
 
 export default handler;
