@@ -1,17 +1,13 @@
 import { XMLParser } from 'fast-xml-parser';
 import { NextApiRequest, NextApiResponse } from 'next'
-import NodeCache from 'node-cache';
 import { getManifestByFileId, ensureDatabaseLoaded, getFileFromManifest } from 'projects/content-database/content-database';
 import { descriptions } from 'projects/content-database/databases/descriptions';
 import { FileId, localIdSchema } from 'projects/content-database/types';
+import withCache from 'utils/with-cache';
 import { z } from 'zod';
 
 const querySchema = z.object({
   localId: localIdSchema,
-});
-
-const iconMapCache = new NodeCache({
-  stdTTL: 60 * 60,
 });
 
 const parser = new XMLParser({
@@ -26,12 +22,7 @@ export type Bounds = {
   h: number;
 }
 
-export const getIconMap = async (fileId: FileId) => {
-  const cached = iconMapCache.get<Record<string, Bounds>>(fileId);
-  if (cached) {
-    return cached;
-  }
-
+export const getIconMap = withCache(async (fileId: FileId) => {
   const manifest = await getManifestByFileId(fileId);
 
   const xml = await getFileFromManifest(manifest, "Gui\\IconMap.xml");
@@ -58,13 +49,11 @@ export const getIconMap = async (fileId: FileId) => {
       }
     }
 
-    iconMapCache.set(fileId, icons);
-    
     return icons;
   } catch (error) {
     throw new Error(`Failed to parse IconMap.xml: ${error}`);
   }
-}
+}, (fileId) => fileId);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const query = querySchema.safeParse(req.query);
