@@ -17,7 +17,7 @@ export let loggedOn: Promise<void> | null = null;
 const login = () => {
   loggedOn = new Promise<void>((resolve, reject) => {
     user.once("loggedOn", async (details, parental) => {
-      console.log(`Logged on to Steam as ${user.steamID?.getSteamID64()}`, { details, parental });
+      console.log(`Logged on to Steam as ${user.steamID?.getSteamID64()} (${config.STEAM_USERNAME})`);
 
       try {
         const manifestId = (await user.getProductInfo([APP_ID], [], true)).apps[APP_ID].appinfo.depots[DATA_DEPOT].manifests.public;
