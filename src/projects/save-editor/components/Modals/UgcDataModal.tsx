@@ -115,13 +115,13 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
                     throw new Error("Local Id is required");
                   }
 
-                  const description = await client.modDatabase.descriptions.byLocalId.query(localId.toString());
+                  const description = await client.contentDatabase.descriptions.byLocalId.query(localId.toString());
                   if (!description) {
                     throw new Error("No description found");
                   }
 
-                  fileIdField.current?.setValue(description.fileId);
-                  setValue("fileId")(description.fileId);
+                  fileIdField.current?.setValue(BigInt(description.fileId));
+                  setValue("fileId")(BigInt(description.fileId));
                 } catch (err: any) {
                   setFileIdError(`Inference failed: ${err.message}`);
                 }
@@ -163,7 +163,7 @@ const UgcDataModal = <T extends IUserGeneratedContent,>({ ugcItem, onUpdate, mod
                     throw new Error("File Id is required");
                   }
 
-                  const description = await client.modDatabase.descriptions.byFileId.query(fileId);
+                  const description = await client.contentDatabase.descriptions.byFileId.query(Number(fileId));
                   if (!description) {
                     throw new Error("No description found");
                   }
