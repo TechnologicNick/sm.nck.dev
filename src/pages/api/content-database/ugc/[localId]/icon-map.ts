@@ -64,7 +64,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   await ensureDatabaseLoaded();
 
-  const description = descriptions[query.data.localId];
+  const description = descriptions.get(query.data.localId);
   if (!description) {
     res.status(404).json({ error: "LocalId not found" });
     return;
