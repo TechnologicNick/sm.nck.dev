@@ -3,12 +3,18 @@ import { descriptions, findLocalIdByFileId } from "projects/content-database/dat
 import { fileIdSchema, localIdSchema } from "projects/content-database/types";
 import { t } from "server/trpc";
 
+const databaseMiddleware = t.middleware(async ({ ctx, next }) => {
+  await ensureDatabaseLoaded();
+  
+  return next();
+});
+
+const databaseProcedure = t.procedure.use(databaseMiddleware);
+
 const descriptionsRouter = t.router({
-  byFileId: t.procedure
+  byFileId: databaseProcedure
     .input(fileIdSchema)
     .query(async ({ input }) => {
-      await ensureDatabaseLoaded();
-
       const localId = findLocalIdByFileId(input);
       if (!localId) {
         return null;
@@ -16,11 +22,9 @@ const descriptionsRouter = t.router({
 
       return descriptions.get(localId) ?? null;
     }),
-  byLocalId: t.procedure
+  byLocalId: databaseProcedure
     .input(localIdSchema)
     .query(async ({ input }) => {
-      await ensureDatabaseLoaded();
-
       return descriptions.get(input) ?? null;
     }),
 });
