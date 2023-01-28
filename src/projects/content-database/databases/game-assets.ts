@@ -123,11 +123,7 @@ const inventoryDescriptionPath = {
   challenge: "ChallengeData\\Gui\\Language\\English\\inventoryDescriptions.json",
 } as const satisfies Record<GameMode, string>;
 
-const inventoryDescriptions = {
-  creative: new Map<Uuid, InventoryDescription>(),
-  survival: new Map<Uuid, InventoryDescription>(),
-  challenge: new Map<Uuid, InventoryDescription>(),
-} as const satisfies Record<GameMode, Record<string, any>>;
+export const inventoryDescriptions = new Map<Uuid, InventoryDescription>();
 
 const reloadItemDescriptions = async () => {
   const [
@@ -140,20 +136,18 @@ const reloadItemDescriptions = async () => {
     getInventoryDescriptions("challenge"),
   ]);
 
-  inventoryDescriptions.creative.clear();
-  inventoryDescriptions.survival.clear();
-  inventoryDescriptions.challenge.clear();
+  inventoryDescriptions.clear();
 
   for (const [key, value] of entries(creativeDescriptions)) {
-    inventoryDescriptions.creative.set(key, value);
+    inventoryDescriptions.set(key, value);
   }
 
   for (const [key, value] of entries(survivalDescriptions)) {
-    inventoryDescriptions.survival.set(key, value);
+    inventoryDescriptions.set(key, value);
   }
 
   for (const [key, value] of entries(challengeDescriptions)) {
-    inventoryDescriptions.challenge.set(key, value);
+    inventoryDescriptions.set(key, value);
   }
 }
 
@@ -177,9 +171,9 @@ const getInventoryDescriptions = async (gameMode: GameMode) => {
 }
 
 export const getInventoryDescription = async (gameMode: GameMode, uuid: Uuid) => {
-  const inventoryDescription = inventoryDescriptions[gameMode].get(uuid);
+  const inventoryDescription = inventoryDescriptions.get(uuid);
   if (!inventoryDescription) {
-    throw new NotFoundError(`UUID not found in ${inventoryDescriptionPath[gameMode]}`);
+    throw new NotFoundError("UUID not found in inventory descriptions");
   }
 
   return inventoryDescription;
