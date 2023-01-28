@@ -1,6 +1,7 @@
 import stripJsonComments from "strip-json-comments";
+import { InternalServerError, NotFoundError } from "utils/errors";
 import { entries, entryNotNullish } from "utils/type-helpers";
-import { getFilesFromManifest, getManifestByDepot, getManifestIdByDepot } from "../content-database";
+import { getFileFromManifest, getFilesFromManifest, getManifestByDepot, getManifestIdByDepot } from "../content-database";
 import { GameMode, Uuid } from "../types";
 
 export type Shapeset = Map<`$${"GAME_DATA" | "SURVIVAL_DATA" | "CHALLENGE_DATA"}/Objects/Database/ShapeSets/${string}`, Set<Uuid>>;
@@ -20,7 +21,10 @@ export const reloadGameAssets = async () => {
     return;
   }
 
-  await reloadGameShapesets();
+  await Promise.all([
+    reloadGameShapesets(),
+    reloadItemDescriptions(),
+  ]);
 }
 
 const reloadGameShapesets = async () => {
@@ -93,7 +97,6 @@ export const parseShapesetsJson = async (file: Buffer) => {
   return shapesets;
 }
 
-
 export const findModeByUuid = (uuid: Uuid) => {
   const gameModes = new Set<GameMode>();
 
@@ -106,4 +109,78 @@ export const findModeByUuid = (uuid: Uuid) => {
   }
 
   return gameModes;
+}
+
+export type InventoryDescription = {
+  title?: string;
+  description?: string;
+  keywords?: string[];
+}
+
+const inventoryDescriptionPath = {
+  creative: "Data\\Gui\\Language\\English\\InventoryItemDescriptions.json",
+  survival: "Survival\\Gui\\Language\\English\\inventoryDescriptions.json",
+  challenge: "ChallengeData\\Gui\\Language\\English\\inventoryDescriptions.json",
+} as const satisfies Record<GameMode, string>;
+
+const inventoryDescriptions = {
+  creative: new Map<Uuid, InventoryDescription>(),
+  survival: new Map<Uuid, InventoryDescription>(),
+  challenge: new Map<Uuid, InventoryDescription>(),
+} as const satisfies Record<GameMode, Record<string, any>>;
+
+const reloadItemDescriptions = async () => {
+  const [
+    creativeDescriptions,
+    survivalDescriptions,
+    challengeDescriptions,
+  ] = await Promise.all([
+    getInventoryDescriptions("creative"),
+    getInventoryDescriptions("survival"),
+    getInventoryDescriptions("challenge"),
+  ]);
+
+  inventoryDescriptions.creative.clear();
+  inventoryDescriptions.survival.clear();
+  inventoryDescriptions.challenge.clear();
+
+  for (const [key, value] of entries(creativeDescriptions)) {
+    inventoryDescriptions.creative.set(key, value);
+  }
+
+  for (const [key, value] of entries(survivalDescriptions)) {
+    inventoryDescriptions.survival.set(key, value);
+  }
+
+  for (const [key, value] of entries(challengeDescriptions)) {
+    inventoryDescriptions.challenge.set(key, value);
+  }
+}
+
+const getInventoryDescriptions = async (gameMode: GameMode) => {
+  const manifest = await getManifestByDepot(DEPOT_DATA);
+
+  const path = inventoryDescriptionPath[gameMode];
+  const buffer = await getFileFromManifest(manifest, path);
+  if (!buffer) {
+    throw new NotFoundError(`${path} not found`);
+  }
+
+  let inventoryDescriptions: Record<Uuid, any>;
+  try {
+    inventoryDescriptions = JSON.parse(stripJsonComments(buffer.toString()));
+  } catch (error) {
+    throw new InternalServerError(`${path} is not valid JSON`);
+  }
+
+  return inventoryDescriptions;
+}
+
+export const getInventoryDescription = async (gameMode: GameMode, uuid: Uuid) => {
+  const inventoryDescription = inventoryDescriptions[gameMode].get(uuid);
+  if (!inventoryDescription) {
+    throw new NotFoundError(`UUID not found in ${inventoryDescriptionPath[gameMode]}`);
+  }
+
+  return inventoryDescription;
 }
