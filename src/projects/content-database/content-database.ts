@@ -1,6 +1,7 @@
 import { EResult } from "steam-user";
 import withCache from "utils/with-cache";
 import { reloadDescriptions } from "./databases/descriptions";
+import { reloadGameAssets } from "./databases/game-assets";
 import { reloadPublishedFileDetails } from "./databases/published-file-details";
 import { reloadShapesets } from "./databases/shapesets";
 import { loggedOn, user } from "./steam-client";
@@ -15,6 +16,7 @@ export const reloadDatabase = async () => {
   await Promise.allSettled([
     reloadDescriptions().then(() => reloadPublishedFileDetails()),
     reloadShapesets(),
+    reloadGameAssets(),
   ]);
 
   console.log("Database reloaded");
@@ -39,6 +41,20 @@ export const getManifestByFileId = withCache(async (publishedFileId: FileId) => 
   const manifest = (await (user as any).getManifest(APP_ID, WORKSHOP_DEPOT, hcontent_file, "public")).manifest as SteamCdnManifest;
   return manifest;
 }, (publishedFileId) => publishedFileId);
+
+export const getManifestIdByDepot = withCache(async (depotId: number) => {
+  await loggedOn;
+  const manifestId = (await user.getProductInfo([APP_ID], [], true)).apps[APP_ID].appinfo.depots[depotId].manifests.public as `${number}`;
+  return manifestId;
+}, (depotId) => depotId);
+
+export const getManifestByDepot = withCache(async (depotId: number) => {
+  await loggedOn;
+  const manifestId = await getManifestIdByDepot(depotId);
+
+  const manifest = (await (user as any).getManifest(APP_ID, depotId, manifestId, "public")).manifest as SteamCdnManifest;
+  return manifest;
+}, (depotId) => depotId);
 
 const downloadFile = withCache(async (depotId: number, file: SteamCdnFile) => {
   await loggedOn;

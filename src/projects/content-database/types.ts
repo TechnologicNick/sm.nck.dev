@@ -9,10 +9,12 @@ export const localIdSchema = z.custom<`${string}-${string}-${string}-${string}-$
   (val) => ({ message: `${val} is not a valid LocalId` }),
 );
 export const fileIdSchema = z.number().min(0).max(0xffffffff);
+export const gameModeSchema = z.union([z.literal("creative"), z.literal("survival"), z.literal("challenge")]);
 
 export type Uuid = z.infer<typeof uuidSchema>;
 export type LocalId = Uuid;
 export type FileId = z.infer<typeof fileIdSchema>;
+export type GameMode = z.infer<typeof gameModeSchema>;
 
 export type SteamCdnChunk = {
   sha: string;
