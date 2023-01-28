@@ -1,8 +1,10 @@
-import { reloadDescriptions } from "./databases/descriptions";
 import { EResult } from "steam-user";
-import { FileId, SteamCdnFile, SteamCdnManifest } from "./types";
-import { loggedOn, user } from "./steam-client";
 import withCache from "utils/with-cache";
+import { reloadDescriptions } from "./databases/descriptions";
+import { reloadPublishedFileDetails } from "./databases/published-file-details";
+import { reloadShapesets } from "./databases/shapesets";
+import { loggedOn, user } from "./steam-client";
+import { FileId, SteamCdnFile, SteamCdnManifest } from "./types";
 
 const APP_ID = 387990;
 const WORKSHOP_DEPOT = 387990;
@@ -10,8 +12,9 @@ const DATABASE_RELOAD_INTERVAL = 1 * 60 * 60 * 1000; // 1 hour
 let lastDatabaseReload = 0;
 
 export const reloadDatabase = async () => {
-  await Promise.all([
-    reloadDescriptions(),
+  await Promise.allSettled([
+    reloadDescriptions().then(() => reloadPublishedFileDetails()),
+    reloadShapesets(),
   ]);
 
   console.log("Database reloaded");
