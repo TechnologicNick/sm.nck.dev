@@ -3,6 +3,7 @@ import { InternalServerError, NotFoundError } from "utils/errors";
 import { entries, entryNotNullish } from "utils/type-helpers";
 import { getFileFromManifest, getFilesFromManifest, getManifestByDepot, getManifestIdByDepot } from "../content-database";
 import { GameMode, Uuid } from "../types";
+import { Bounds, parseResourceImageSet } from "../utils/mygui/resource-image-set";
 
 export type Shapeset = Map<`$${"GAME_DATA" | "SURVIVAL_DATA" | "CHALLENGE_DATA"}/Objects/Database/ShapeSets/${string}`, Set<Uuid>>;
 
@@ -24,8 +25,11 @@ export const reloadGameAssets = async () => {
   await Promise.all([
     reloadGameShapesets(),
     reloadItemDescriptions(),
+    reloadIconMapBounds(),
   ]);
 }
+
+/* Shapesets */
 
 const reloadGameShapesets = async () => {
   const manifest = await getManifestByDepot(DEPOT_DATA);
@@ -111,6 +115,8 @@ export const findModeByUuid = (uuid: Uuid) => {
   return gameModes;
 }
 
+/* Inventory descriptions */
+
 export type InventoryDescription = {
   title?: string;
   description?: string;
@@ -177,4 +183,61 @@ export const getInventoryDescription = async (uuid: Uuid) => {
   }
 
   return inventoryDescription;
+}
+
+/* Icons */
+
+const iconMapXmlPath = {
+  creative: "Data\\Gui\\IconMap.xml",
+  survival: "Survival\\Gui\\IconMapSurvival.xml",
+  challenge: "ChallengeData\\Gui\\IconMapChallenge.xml",
+} as const satisfies Record<GameMode, string>;
+
+export const gameIconMapBounds = {
+  creative: new Map<Uuid, Bounds>(),
+  survival: new Map<Uuid, Bounds>(),
+  challenge: new Map<Uuid, Bounds>(),
+} as const satisfies Record<GameMode, Map<Uuid, Bounds>>;
+
+const reloadIconMapBounds = async () => {
+  const [
+    creativeIconMapBounds,
+    survivalIconMapBounds,
+    challengeIconMapBounds,
+  ] = await Promise.all([
+    getIconMapBounds("creative"),
+    getIconMapBounds("survival"),
+    getIconMapBounds("challenge"),
+  ]);
+
+  gameIconMapBounds.creative.clear();
+  gameIconMapBounds.survival.clear();
+  gameIconMapBounds.challenge.clear();
+
+  for (const [key, value] of entries(creativeIconMapBounds)) {
+    gameIconMapBounds.creative.set(key as Uuid, value);
+  }
+
+  for (const [key, value] of entries(survivalIconMapBounds)) {
+    gameIconMapBounds.survival.set(key as Uuid, value);
+  }
+
+  for (const [key, value] of entries(challengeIconMapBounds)) {
+    gameIconMapBounds.challenge.set(key as Uuid, value);
+  }
+}
+
+const getIconMapBounds = async (gameMode: GameMode) => {
+  const manifest = await getManifestByDepot(DEPOT_DATA);
+
+  const xml = await getFileFromManifest(manifest, iconMapXmlPath[gameMode]);
+  if (!xml) {
+    throw new NotFoundError(`${iconMapXmlPath[gameMode]} not found`);
+  }
+
+  try {
+    return parseResourceImageSet(xml);
+  } catch (error) {
+    throw new Error(`Failed to parse ${iconMapXmlPath[gameMode]}: ${error}`);
+  }
 }

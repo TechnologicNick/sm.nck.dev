@@ -3,11 +3,12 @@ import { ensureDatabaseLoaded } from 'projects/content-database/content-database
 import { descriptions } from 'projects/content-database/databases/descriptions';
 import { FileId, localIdSchema, Uuid, uuidSchema } from 'projects/content-database/types';
 import { z } from 'zod';
-import { Bounds, getIconMap } from '../../icon-map';
+import { getIconMap } from '../../icon-map';
 import { getIconMapPng } from '../../icon-map.png';
 import { PNG } from 'pngjs';
 import NodeCache from 'node-cache';
 import withCache from 'utils/with-cache';
+import { Bounds } from 'projects/content-database/utils/mygui/resource-image-set';
 
 const querySchema = z.object({
   localId: localIdSchema,
