@@ -17,7 +17,7 @@ export const gameShapesets = {
 let depotDataManifestId: Awaited<ReturnType<typeof getManifestIdByDepot>> | null = null;
 
 export const reloadGameAssets = async () => {
-  if (depotDataManifestId == await getManifestIdByDepot(DEPOT_DATA)) {
+  if (depotDataManifestId === await getManifestIdByDepot(DEPOT_DATA)) {
     return;
   }
 
@@ -30,9 +30,9 @@ export const reloadGameAssets = async () => {
 const reloadGameShapesets = async () => {
   const manifest = await getManifestByDepot(DEPOT_DATA);
   const shapesetFiles = await getFilesFromManifest(manifest, [
-    "Data\\Objects\\Database\\ShapeSets\\shapesets.json",
-    "Survival\\Objects\\Database\\ShapeSets\\shapesets.json",
-    "ChallengeData\\Objects\\Database\\ShapeSets\\shapesets.json",
+    "Data\\Objects\\Database\\shapesets.json",
+    "Survival\\Objects\\Database\\shapesets.json",
+    "ChallengeData\\Objects\\Database\\shapesets.json",
   ] as const);
 
   const [
@@ -40,9 +40,9 @@ const reloadGameShapesets = async () => {
     survivalShapesets,
     challengeShapesets,
   ] = await Promise.all([
-    parseShapesetsJson(shapesetFiles["Data\\Objects\\Database\\ShapeSets\\shapesets.json"]!),
-    parseShapesetsJson(shapesetFiles["Survival\\Objects\\Database\\ShapeSets\\shapesets.json"]!),
-    parseShapesetsJson(shapesetFiles["ChallengeData\\Objects\\Database\\ShapeSets\\shapesets.json"]!),
+    parseShapesetsJson(shapesetFiles["Data\\Objects\\Database\\shapesets.json"]!),
+    parseShapesetsJson(shapesetFiles["Survival\\Objects\\Database\\shapesets.json"]!),
+    parseShapesetsJson(shapesetFiles["ChallengeData\\Objects\\Database\\shapesets.json"]!),
   ]);
 
   gameShapesets.creative.clear();
