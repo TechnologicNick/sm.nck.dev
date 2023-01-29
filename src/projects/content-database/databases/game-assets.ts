@@ -88,7 +88,7 @@ export const parseShapesetsJson = async (file: Buffer) => {
     const shapeset = JSON.parse(stripJsonComments(shapesetFile.toString()));
     for (const listName of ["partList", "blockList"]) {
       if (shapeset[listName]) {
-        const uuids = (shapeset[listName] as any[]).map((shape: any) => shape.uuid);
+        const uuids = (shapeset[listName] as any[]).map((shape) => shape.uuid);
         shapesets.set(contentPath as any, new Set(uuids));
       }
     }
@@ -170,7 +170,7 @@ const getInventoryDescriptions = async (gameMode: GameMode) => {
   return inventoryDescriptions;
 }
 
-export const getInventoryDescription = async (gameMode: GameMode, uuid: Uuid) => {
+export const getInventoryDescription = async (uuid: Uuid) => {
   const inventoryDescription = inventoryDescriptions.get(uuid);
   if (!inventoryDescription) {
     throw new NotFoundError("UUID not found in inventory descriptions");

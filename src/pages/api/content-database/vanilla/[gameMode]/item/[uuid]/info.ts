@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { ensureDatabaseLoaded } from 'projects/content-database/content-database';
-import { getInventoryDescription } from 'projects/content-database/databases/game-assets';
+import { findModeByUuid, getInventoryDescription } from 'projects/content-database/databases/game-assets';
 import { GameMode, gameModeSchema, Uuid, uuidSchema } from 'projects/content-database/types';
-import { handleHttpError } from 'utils/errors';
+import { handleHttpError, NotFoundError } from 'utils/errors';
 import { z } from 'zod';
 
 const querySchema = z.object({
@@ -11,13 +11,17 @@ const querySchema = z.object({
 });
 
 export const getInfo = async (gameMode: GameMode, uuid: Uuid) => {
+  if (!findModeByUuid(uuid).has(gameMode)) {
+    throw new NotFoundError("Item not found in game mode");
+  }
+
   return {
     origin: {
       vanilla: {
         gameMode: gameMode,
       },
     },
-    inventoryDescription: await getInventoryDescription(gameMode, uuid),
+    inventoryDescription: await getInventoryDescription(uuid),
   }
 }
 
