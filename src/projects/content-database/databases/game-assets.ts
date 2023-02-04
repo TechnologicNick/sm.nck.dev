@@ -26,6 +26,7 @@ export const reloadGameAssets = async () => {
     reloadGameShapesets(),
     reloadItemDescriptions(),
     reloadIconMapBounds(),
+    reloadIconMapPngs(),
   ]);
 }
 
@@ -240,4 +241,43 @@ const getIconMapBounds = async (gameMode: GameMode) => {
   } catch (error) {
     throw new Error(`Failed to parse ${iconMapXmlPath[gameMode]}: ${error}`);
   }
+}
+
+const iconMapPngPath = {
+  creative: "Data\\Gui\\IconMap.png",
+  survival: "Survival\\Gui\\IconMapSurvival.png",
+  challenge: "ChallengeData\\Gui\\IconMapChallenge.png",
+} as const satisfies Record<GameMode, string>;
+
+export const gameIconMapPngs = {
+  creative: Buffer.alloc(0),
+  survival: Buffer.alloc(0),
+  challenge: Buffer.alloc(0),
+} satisfies Record<GameMode, Buffer>;
+
+const reloadIconMapPngs = async () => {
+  const [
+    creativeIconMapPng,
+    survivalIconMapPng,
+    challengeIconMapPng,
+  ] = await Promise.all([
+    getIconMapPng("creative"),
+    getIconMapPng("survival"),
+    getIconMapPng("challenge"),
+  ]);
+
+  gameIconMapPngs.creative = creativeIconMapPng;
+  gameIconMapPngs.survival = survivalIconMapPng;
+  gameIconMapPngs.challenge = challengeIconMapPng;
+}
+
+const getIconMapPng = async (gameMode: GameMode) => {
+  const manifest = await getManifestByDepot(DEPOT_DATA);
+
+  const png = await getFileFromManifest(manifest, iconMapPngPath[gameMode]);
+  if (!png) {
+    throw new NotFoundError(`${iconMapPngPath[gameMode]} not found`);
+  }
+
+  return png;
 }
