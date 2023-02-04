@@ -2,17 +2,18 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { getManifestByFileId, ensureDatabaseLoaded, getFileFromManifest } from 'projects/content-database/content-database';
 import { descriptions } from 'projects/content-database/databases/descriptions';
 import { FileId, localIdSchema } from 'projects/content-database/types';
+import withCache from 'utils/with-cache';
 import { z } from 'zod';
 
 const querySchema = z.object({
   localId: localIdSchema,
 });
 
-export const getIconMapPng = async (fileId: FileId) => {
+export const getIconMapPng = withCache(async (fileId: FileId) => {
   const manifest = await getManifestByFileId(fileId);
 
   return await getFileFromManifest(manifest, "Gui\\IconMap.png");
-}
+}, (fileId) => fileId);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const query = querySchema.safeParse(req.query);
