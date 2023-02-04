@@ -68,7 +68,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const info = await getInfo(description, query.data.uuid);
     
-    res.status(200).json(info);
+    res.status(200)
+      .setHeader("Cache-Control", "public, max-age=3600")
+      .json(info);
   } catch (error) {
     return handleHttpError(error, res);
   }

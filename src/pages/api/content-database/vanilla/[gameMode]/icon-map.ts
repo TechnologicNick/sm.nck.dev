@@ -20,7 +20,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const boundsMap = gameIconMapBounds[query.data.gameMode];
   const boundsObject = Object.fromEntries(boundsMap);
 
-  res.status(200).json(boundsObject);
+  res.status(200)
+      .setHeader("Cache-Control", "public, max-age=3600")
+      .json(boundsObject);
 }
 
 export default handler;
