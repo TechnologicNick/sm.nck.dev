@@ -1,4 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
+import { PNG } from "pngjs";
 
 const parser = new XMLParser({
   ignoreAttributes: false,
@@ -32,4 +33,11 @@ export const parseResourceImageSet = (xml: Buffer) => {
   }
 
   return imageBounds;
+}
+
+export const cropResourceImage = (parsedResourceImageSetPng: PNG, bounds: Bounds) => {
+  const image = new PNG({ width: bounds.w, height: bounds.h });
+  PNG.bitblt(parsedResourceImageSetPng, image, bounds.x, bounds.y, bounds.w, bounds.h, 0, 0);
+
+  return PNG.sync.write(image);
 }

@@ -1,9 +1,10 @@
+import { PNG } from "pngjs";
 import stripJsonComments from "strip-json-comments";
 import { InternalServerError, NotFoundError } from "utils/errors";
 import { entries, entryNotNullish } from "utils/type-helpers";
 import { getFileFromManifest, getFilesFromManifest, getManifestByDepot, getManifestIdByDepot } from "../content-database";
 import { GameMode, Uuid } from "../types";
-import { Bounds, parseResourceImageSet } from "../utils/mygui/resource-image-set";
+import { Bounds, cropResourceImage, parseResourceImageSet } from "../utils/mygui/resource-image-set";
 
 export type Shapeset = Map<`$${"GAME_DATA" | "SURVIVAL_DATA" | "CHALLENGE_DATA"}/Objects/Database/ShapeSets/${string}`, Set<Uuid>>;
 
@@ -25,8 +26,12 @@ export const reloadGameAssets = async () => {
   await Promise.all([
     reloadGameShapesets(),
     reloadItemDescriptions(),
-    reloadIconMapBounds(),
-    reloadIconMapPngs(),
+    Promise.all([
+      reloadIconMapBounds(),
+      reloadIconMapPngs(),
+    ]).then(() => {
+      reloadIconPngs();
+    })
   ]);
 }
 
@@ -280,4 +285,27 @@ const getIconMapPng = async (gameMode: GameMode) => {
   }
 
   return png;
+}
+
+export const gameIconPngs = {
+  creative: new Map<Uuid, Buffer>(),
+  survival: new Map<Uuid, Buffer>(),
+  challenge: new Map<Uuid, Buffer>(),
+} as const satisfies Record<GameMode, Map<Uuid, Buffer>>;
+
+const reloadIconPngs = async () => {
+  for (const [gameMode, icons] of entries(gameIconPngs)) {
+    const parsedIconMapPng = PNG.sync.read(gameIconMapPngs[gameMode]);
+
+    icons.clear();
+
+    for (const [uuid, bounds] of gameIconMapBounds[gameMode]) {
+      const png = cropResourceImage(parsedIconMapPng, bounds);
+      icons.set(uuid, png);
+    }
+  }
+}
+
+export const getIconPng = async (gameMode: GameMode, uuid: Uuid) => {
+  return gameIconPngs[gameMode].get(uuid) ?? null;
 }

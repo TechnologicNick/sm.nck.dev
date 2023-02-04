@@ -8,7 +8,7 @@ import { getIconMapPng } from '../../icon-map.png';
 import { PNG } from 'pngjs';
 import NodeCache from 'node-cache';
 import withCache from 'utils/with-cache';
-import { Bounds } from 'projects/content-database/utils/mygui/resource-image-set';
+import { cropResourceImage } from 'projects/content-database/utils/mygui/resource-image-set';
 
 const querySchema = z.object({
   localId: localIdSchema,
@@ -38,13 +38,6 @@ const getParsedIconMapPng = async (fileId: FileId) => {
   return png;
 }
 
-const cropIcon = (parsedIconMapPng: PNG, bounds: Bounds) => {
-  const icon = new PNG({ width: bounds.w, height: bounds.h });
-  PNG.bitblt(parsedIconMapPng, icon, bounds.x, bounds.y, bounds.w, bounds.h, 0, 0);
-
-  return PNG.sync.write(icon);
-}
-
 export const getIconPng = withCache(async (fileId: FileId, uuid: Uuid) => {
   const [
     parsedIconMapPng,
@@ -59,7 +52,7 @@ export const getIconPng = withCache(async (fileId: FileId, uuid: Uuid) => {
   }
 
   const bounds = iconMap[uuid];
-  return cropIcon(parsedIconMapPng, bounds);
+  return cropResourceImage(parsedIconMapPng, bounds);
 }, (fileId, uuid) => `${fileId}/${uuid}`);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
