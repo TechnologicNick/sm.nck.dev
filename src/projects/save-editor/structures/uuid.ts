@@ -7,6 +7,8 @@ interface UuidOptions {
 
 export default class Uuid {
 
+  static readonly sizeof = 0x10;
+
   blob: Uint8Array;
   #options: UuidOptions = {
     reverse: false,
