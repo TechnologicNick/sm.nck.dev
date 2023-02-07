@@ -1,5 +1,6 @@
 import initSqlJs, { Database, SqlJsStatic } from "sql.js";
 import SqlJsPackageJson from "sql.js/package.json" ;
+import Container, { IContainer } from "./structures/container";
 import type { IGenericData } from "./structures/generic-data";
 import Mods from "./structures/mods";
 import Player from "./structures/player";
@@ -226,5 +227,38 @@ export default class SaveEditor {
     }
 
     return modified;
+  }
+
+  getAllContainers() {
+    return this.db.exec("SELECT data FROM Container ORDER BY id ASC")
+      .flatMap(result => result.values.map(value => Container.deserialize(Buffer.from(value[0] as Uint8Array))));
+  }
+
+  getContainer(id: number) {
+    const blob = (this.db.exec("SELECT data FROM Container WHERE id = ?", [ id ])[0]?.values[0][0] as Uint8Array | undefined) ?? null;
+
+    if (blob === null) {
+      return null;
+    }
+
+    return Container.deserialize(Buffer.from(blob));
+  }
+
+  updateContainer(container: Container) {
+    this.db.exec("UPDATE Container SET data = ? WHERE id = ?", [ container.serialize(), container.id ]);
+
+    const modified = this.db.getRowsModified();
+
+    if (modified === 0) {
+      throw new Error(`Failed to find container ${container.id}`);
+    }
+
+    return modified;
+  }
+
+  deleteContainers(containerIds: IContainer["id"][]) {
+    this.db.exec(`DELETE FROM Container WHERE id IN (${parameters(containerIds.length)})`, containerIds);
+
+    return this.db.getRowsModified();
   }
 }
