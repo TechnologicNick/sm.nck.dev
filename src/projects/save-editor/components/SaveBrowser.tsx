@@ -5,13 +5,15 @@ import PlayerDataGrid from "./DataGrids/PlayerDataGrid";
 import ModDataGrid from "./DataGrids/ModDataGrid";
 import GameInfo from "./SaveBrowser/GameInfo";
 import WorldDataGrid from "./DataGrids/WorldDataGrid";
+import Containers from "./SaveBrowser/Containers";
 import { z } from "zod";
 
 const saveBrowserPathSchema = z.union([
   z.literal("game"),
   z.literal("players"),
   z.literal("mods"),
-  z.literal("worlds")
+  z.literal("worlds"),
+  z.literal("containers"),
 ]);
 
 export type SaveBrowserPath = z.infer<typeof saveBrowserPathSchema>;
@@ -31,6 +33,7 @@ const SaveBrowser = ({ saveEditor, path, buttons }: SaveBrowserProps) => {
       {path === "players" && <PlayerDataGrid saveEditor={saveEditor} buttons={buttons} />}
       {path === "mods" && <ModDataGrid saveEditor={saveEditor} buttons={buttons} />}
       {path === "worlds" && <WorldDataGrid saveEditor={saveEditor} buttons={buttons} />}
+      {path === "containers" && <Containers saveEditor={saveEditor} buttons={buttons} />}
     </Container>
   );
 }

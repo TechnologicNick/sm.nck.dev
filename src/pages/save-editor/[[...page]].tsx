@@ -80,6 +80,7 @@ SaveEditorPage.Sidebar = () => {
       <SidebarLink href={"/save-editor/players"}>Players</SidebarLink>
       <SidebarLink href={"/save-editor/mods"}>Mods</SidebarLink>
       <SidebarLink href={"/save-editor/worlds"}>Worlds</SidebarLink>
+      <SidebarLink href={"/save-editor/containers"}>Containers</SidebarLink>
     </Sidebar>
   );
 }

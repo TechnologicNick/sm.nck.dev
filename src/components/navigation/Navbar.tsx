@@ -96,13 +96,19 @@ const SaveEditorDropdown = ({ isActive }: { isActive: boolean }) => {
             <Text className="description">Table of worlds in the save file, their scripts and script data.</Text>
           </NextLink>
         </Dropdown.Item>
+        <Dropdown.Item key="containers" textValue="Containers">
+          <NextLink href="/save-editor/containers" passHref>
+            <Text b>Containers</Text>
+            <Text className="description">Inventories and items of all parts and players.</Text>
+          </NextLink>
+        </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );
 }
 
 const Collapse = () => {
-  const NestedCollapseLink = ({ children, href, nested, routerPath }: { children: React.ReactNode, href: string, nested?: boolean, routerPath?: string }) => {
+  const NestedCollapseLink = ({ children, href, nested }: { children: React.ReactNode, href: string, nested?: boolean }) => {
     const router = useRouter();
     const isActive = router.asPath === href;
 
@@ -137,10 +143,11 @@ const Collapse = () => {
   return (
     <Navbar.Collapse >
       <NestedCollapseLink href="/save-editor">Save Editor</NestedCollapseLink>
-      <NestedCollapseLink href="/save-editor/game" routerPath="game" nested>Game</NestedCollapseLink>
-      <NestedCollapseLink href="/save-editor/players" routerPath="players" nested>Players</NestedCollapseLink>
-      <NestedCollapseLink href="/save-editor/mods" routerPath="mods" nested>Mods</NestedCollapseLink>
-      <NestedCollapseLink href="/save-editor/worlds" routerPath="worlds" nested>Worlds</NestedCollapseLink>
+      <NestedCollapseLink href="/save-editor/game" nested>Game</NestedCollapseLink>
+      <NestedCollapseLink href="/save-editor/players" nested>Players</NestedCollapseLink>
+      <NestedCollapseLink href="/save-editor/mods" nested>Mods</NestedCollapseLink>
+      <NestedCollapseLink href="/save-editor/worlds" nested>Worlds</NestedCollapseLink>
+      <NestedCollapseLink href="/save-editor/containers" nested>Containers</NestedCollapseLink>
     </Navbar.Collapse>
   );
 }
