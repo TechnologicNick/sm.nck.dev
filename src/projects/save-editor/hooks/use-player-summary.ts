@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import type { PlayerSummary } from "pages/api/save-editor/player-summaries";
 import { cacheMissingSummaries, summaryCache } from "@/save-editor/caches/player-summary-cache";
 
-const usePlayerSummary = (steamId: bigint | string, requestMissing = false) => {
+const usePlayerSummary = (steamId: bigint | string | null, requestMissing = false) => {
   const [summary, setSummary] = useState<PlayerSummary | "loading" | "error">("loading");
 
   useEffect(() => {
+    if (steamId === null) {
+      setSummary("error");
+      return;
+    }
+
     const cached = summaryCache.get<PlayerSummary | null>(`${steamId}`);
 
     if (cached === null) {
@@ -21,6 +26,10 @@ const usePlayerSummary = (steamId: bigint | string, requestMissing = false) => {
   }, [steamId])
 
   useEffect(() => {
+    if (steamId === null) {
+      return;
+    }
+
     const listener = (keySteamId: string, valuePlayerSummary: PlayerSummary) => {
       if (keySteamId === `${steamId}`) {
         setSummary(valuePlayerSummary ?? "error");

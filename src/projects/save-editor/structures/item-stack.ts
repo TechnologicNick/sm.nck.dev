@@ -44,4 +44,10 @@ export default class ItemStack implements IItemStack, IDeserializable<IItemStack
 
     return buffer;
   }
+
+  static EMPTY = new ItemStack({});
+
+  isEmpty() {
+    return this.uuid.blob.every(byte => byte === 0) && this.instanceId === 0xFFFFFFFF && this.quantity === 0;
+  }
 }

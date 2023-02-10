@@ -8,7 +8,7 @@ export interface IContainer {
   id: number;
   size: number;
   stackSize: number;
-  items: IItemStack[];
+  items: ItemStack[];
   filterCount: number;
   filterUuids: Uuid[];
 }
@@ -20,7 +20,7 @@ export default class Container implements IContainer, IDeserializable<IContainer
   id: number = 0;
   size: number = 0;
   stackSize: number = 0xFFFF;
-  items: IItemStack[] = [];
+  items: ItemStack[] = [];
   filterCount: number = 0;
   filterUuids: Uuid[] = [];
   
@@ -31,7 +31,7 @@ export default class Container implements IContainer, IDeserializable<IContainer
     const id = buffer.readUInt32BE(0x03);
     const size = buffer.readUInt16BE(0x07);
     const stackSize = buffer.readUInt16BE(0x09);
-    const items: IItemStack[] = [];
+    const items: ItemStack[] = [];
     for (let index = 0x0B, i = 0; i < size; index += ItemStack.sizeof, i++) {
       const item = ItemStack.deserialize(buffer.slice(index, index + ItemStack.sizeof));
       items.push(item);
