@@ -24,8 +24,14 @@ export const reloadDatabase = async () => {
 
 export const ensureDatabaseLoaded = async () => {
   if (lastDatabaseReload < Date.now() - DATABASE_RELOAD_INTERVAL) {
-    await reloadDatabase();
-    lastDatabaseReload = Date.now();
+    const previousDatabaseReload = lastDatabaseReload;
+    try {
+      lastDatabaseReload = Date.now();
+      await reloadDatabase();
+    } catch (error) {
+      lastDatabaseReload = previousDatabaseReload;
+      throw error;
+    }
   }
 }
 
