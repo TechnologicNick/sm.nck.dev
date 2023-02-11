@@ -4,7 +4,8 @@ import SaveEditor from "@/save-editor/save-editor";
 import ContainerStructure from "@/save-editor/structures/container";
 import ItemStack from "@/save-editor/structures/item-stack";
 import Player from "@/save-editor/structures/player";
-import { Card, Collapse, Container, Row, Spacer, Text } from "@nextui-org/react";
+import { Card, Collapse, Container, Loading, Row, Spacer, Text } from "@nextui-org/react";
+import Image from "next/image";
 import { GameMode, LocalId } from "projects/content-database/types";
 import { ReactNode } from "react";
 import { trpc } from "utils/trpc";
@@ -54,10 +55,34 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
         borderTop: "1px solid $border !important",
       }}
     >
-      <Card.Body>
+      <Card.Body css={{
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 0,
+        paddingBlockStart: "$5",
+      }}>
+        {info.isLoading && (
+          <Loading size="xl" />
+        )}
+        {info.data && (
+          <Image
+            unoptimized
+            src={info.data.icon}
+            alt={`${info.data.inventoryDescription.title} icon`}
+            width={96}
+            height={96}
+            style={{
+              objectFit: "contain",
+            }}
+          />
+        )}
       </Card.Body>
-      <Card.Footer>
-        <Text>{(info.data && info.data.inventoryDescription.title) ?? uuid}</Text>
+      <Card.Footer css={{
+        flexDirection: "column",
+        textAlign: "center",
+      }}>
+        <Text>{(info.data && info.data.inventoryDescription.title) ?? "???"}</Text>
+        <Text small color="$accents7">{uuid}</Text>
       </Card.Footer>
     </Card>
   );
@@ -81,9 +106,15 @@ export const ContainerDisplay = ({ container, owner, mods, gameMode }: Container
       expanded={owner !== undefined}
     >
       <Container fluid css={{
+        $$maxColumns: 10,
+        $$itemMinWidth: "8rem",
+        $$gap: "$space$md",
+        $$gapCount: "calc($$maxColumns - 1)",
+        $$totalGap: "calc($$gap * $$gapCount)",
+        $$itemMaxWidth: "calc((100% - $$totalGap) / $$maxColumns)",
         display: "grid",
-        gridTemplateColumns: "repeat(10, 1fr)",
-        gap: "$md",
+        gridTemplateColumns: "repeat(auto-fill, minmax(max($$itemMinWidth, $$itemMaxWidth), 1fr))",
+        gap: "$$gap",
       }}>
         {container.items.map((item, slot) => (
           <ContainerSlot key={slot} slot={slot} item={item} mods={mods} gameMode={gameMode} />
