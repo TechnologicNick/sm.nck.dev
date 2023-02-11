@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { getInfo as getUgcInfo } from "pages/api/content-database/ugc/[localId]/item/[uuid]/info";
 import { getInfo as getVanillaInfo } from "pages/api/content-database/vanilla/[gameMode]/item/[uuid]/info";
 import { ensureDatabaseLoaded } from "projects/content-database/content-database";
@@ -6,6 +7,7 @@ import { findIconMapByUuid } from "projects/content-database/databases/game-asse
 import { findLocalIdByUuid } from "projects/content-database/databases/shapesets";
 import { fileIdSchema, gameModeSchema, localIdSchema, uuidSchema } from "projects/content-database/types";
 import { t } from "server/trpc";
+import { rethrowAsTRPCError } from "utils/errors";
 import { z } from "zod";
 
 const databaseMiddleware = t.middleware(async ({ ctx, next }) => {
@@ -46,17 +48,17 @@ const itemsRouter = t.router({
       if (localId) {
         const modDescription = descriptions.get(localId);
         if (!modDescription) {
-          return null;
+          throw new TRPCError({ code: "NOT_FOUND", message: "Mod description not found"});
         }
   
-        return await getUgcInfo(modDescription, input.uuid);
+        return await getUgcInfo(modDescription, input.uuid).catch(rethrowAsTRPCError);
       } else {
         const gameMode = input.gameMode ?? findIconMapByUuid(input.uuid);
         if (!gameMode) {
-          return null;
+          throw new TRPCError({ code: "NOT_FOUND", message: "UUID not found in vanilla or mods" });
         }
 
-        return await getVanillaInfo(gameMode, input.uuid);
+        return await getVanillaInfo(gameMode, input.uuid).catch(rethrowAsTRPCError);
       }
     }),
 });
