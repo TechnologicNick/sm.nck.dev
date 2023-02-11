@@ -104,6 +104,11 @@ export const ContainerDisplay = ({ container, owner, mods, gameMode }: Container
       title={`Container #${container.id}`}
       subtitle={owner ? `${ownerName}'s inventory` : undefined}
       expanded={owner !== undefined}
+      css={{
+        "& > *:last-child": {
+          overflow: "visible",
+        },
+      }}
     >
       <Container fluid css={{
         $$maxColumns: 10,
