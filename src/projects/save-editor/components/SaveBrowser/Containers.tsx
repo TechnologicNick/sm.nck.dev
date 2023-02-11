@@ -105,7 +105,7 @@ export const ContainerDisplay = ({ container, owner, mods, gameMode }: Container
       subtitle={owner ? `${ownerName}'s inventory` : undefined}
       expanded={owner !== undefined}
       css={{
-        "& > *:last-child": {
+        [`&:has(> [aria-expanded="true"]) > *:last-child`]: {
           overflow: "visible",
         },
       }}
