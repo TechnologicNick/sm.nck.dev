@@ -31,6 +31,7 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
     gameMode,
   }, {
     enabled: !isEmpty,
+    staleTime: Infinity,
   });
 
   if (isEmpty) {
