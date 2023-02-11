@@ -5,7 +5,9 @@ import ContainerStructure from "@/save-editor/structures/container";
 import ItemStack from "@/save-editor/structures/item-stack";
 import Player from "@/save-editor/structures/player";
 import { Card, Collapse, Container, Row, Spacer, Text } from "@nextui-org/react";
+import { GameMode, LocalId } from "projects/content-database/types";
 import { ReactNode } from "react";
+import { trpc } from "utils/trpc";
 
 export interface ContainersProps {
   saveEditor: SaveEditor;
@@ -15,10 +17,22 @@ export interface ContainersProps {
 export interface ContainerSlotProps {
   slot: number;
   item: ItemStack;
+  mods: LocalId[];
+  gameMode?: GameMode;
 }
 
-export const ContainerSlot = ({ slot, item }: ContainerSlotProps) => {
+export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps) => {
   const isEmpty = item.isEmpty();
+  const uuid = item.uuid.toString();
+
+  const info = trpc.contentDatabase.items.info.useQuery({
+    uuid,
+    mods,
+    gameMode,
+  }, {
+    enabled: !isEmpty,
+  });
+
   if (isEmpty) {
     return (
       <Card variant="bordered" css={{
@@ -42,7 +56,7 @@ export const ContainerSlot = ({ slot, item }: ContainerSlotProps) => {
       <Card.Body>
       </Card.Body>
       <Card.Footer>
-        <Text>{item.uuid.toString()}</Text>
+        <Text>{(info.data && info.data.inventoryDescription.title) ?? uuid}</Text>
       </Card.Footer>
     </Card>
   );
@@ -51,9 +65,11 @@ export const ContainerSlot = ({ slot, item }: ContainerSlotProps) => {
 export interface ContainerDisplayProps {
   container: ContainerStructure;
   owner?: Player;
+  mods: LocalId[];
+  gameMode?: GameMode;
 }
 
-export const ContainerDisplay = ({ container, owner }: ContainerDisplayProps) => {
+export const ContainerDisplay = ({ container, owner, mods, gameMode }: ContainerDisplayProps) => {
   const summary = usePlayerSummary(owner?.steamId64 ?? null);
   const ownerName = summary !== "loading" && summary !== "error" ? summary.personaName : owner?.steamId64 ?? null;
 
@@ -69,7 +85,7 @@ export const ContainerDisplay = ({ container, owner }: ContainerDisplayProps) =>
         gap: "$md",
       }}>
         {container.items.map((item, slot) => (
-          <ContainerSlot key={slot} slot={slot} item={item} />
+          <ContainerSlot key={slot} slot={slot} item={item} mods={mods} gameMode={gameMode} />
         ))}
       </Container>
     </Collapse>
@@ -88,6 +104,8 @@ const Containers = ({ saveEditor, buttons }: ContainersProps) => {
   } catch (error) {
     console.error("Failed to get player inventories:", error);
   }
+
+  const mods = saveEditor.getUserGeneratedContent().map(mod => mod.localId.toString());
 
   return (
     <>
@@ -122,6 +140,7 @@ const Containers = ({ saveEditor, buttons }: ContainersProps) => {
               key={container.id}
               container={container}
               owner={player}
+              mods={mods}
             />
           );
         })}

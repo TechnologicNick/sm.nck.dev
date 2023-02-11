@@ -118,6 +118,8 @@ export const findModeByUuid = (uuid: Uuid) => {
     }
   }
 
+  // TODO: Check for other game assets (tools, harvestables, etc.)
+
   return gameModes;
 }
 
@@ -246,6 +248,17 @@ const getIconMapBounds = async (gameMode: GameMode) => {
   } catch (error) {
     throw new Error(`Failed to parse ${iconMapXmlPath[gameMode]}: ${error}`);
   }
+}
+
+// TODO: Add function to get game mode by UUID for icon map
+export const findIconMapByUuid = (uuid: Uuid) => {
+  for (const [gameMode, iconMap] of entries(gameIconMapBounds)) {
+    if (iconMap.has(uuid)) {
+      return gameMode;
+    }
+  }
+
+  return null;
 }
 
 const iconMapPngPath = {

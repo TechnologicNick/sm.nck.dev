@@ -1,8 +1,10 @@
-import { getInfo } from "pages/api/content-database/ugc/[localId]/item/[uuid]/info";
+import { getInfo as getUgcInfo } from "pages/api/content-database/ugc/[localId]/item/[uuid]/info";
+import { getInfo as getVanillaInfo } from "pages/api/content-database/vanilla/[gameMode]/item/[uuid]/info";
 import { ensureDatabaseLoaded } from "projects/content-database/content-database";
 import { descriptions, findLocalIdByFileId } from "projects/content-database/databases/descriptions";
+import { findIconMapByUuid } from "projects/content-database/databases/game-assets";
 import { findLocalIdByUuid } from "projects/content-database/databases/shapesets";
-import { fileIdSchema, localIdSchema, uuidSchema } from "projects/content-database/types";
+import { fileIdSchema, gameModeSchema, localIdSchema, uuidSchema } from "projects/content-database/types";
 import { t } from "server/trpc";
 import { z } from "zod";
 
@@ -37,19 +39,25 @@ const itemsRouter = t.router({
     .input(z.object({
       uuid: uuidSchema,
       mods: z.array(localIdSchema),
+      gameMode: gameModeSchema.optional(),
     }))
     .query(async ({ input }) => {
-      const localId = await findLocalIdByUuid(input.uuid);
-      if (!localId) {
-        return null;
-      }
+      const localId = await findLocalIdByUuid(input.uuid, new Set(input.mods));
+      if (localId) {
+        const modDescription = descriptions.get(localId);
+        if (!modDescription) {
+          return null;
+        }
+  
+        return await getUgcInfo(modDescription, input.uuid);
+      } else {
+        const gameMode = input.gameMode ?? findIconMapByUuid(input.uuid);
+        if (!gameMode) {
+          return null;
+        }
 
-      const modDescription = descriptions.get(localId);
-      if (!modDescription) {
-        return null;
+        return await getVanillaInfo(gameMode, input.uuid);
       }
-
-      return getInfo(modDescription, input.uuid);
     }),
 });
 

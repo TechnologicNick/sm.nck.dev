@@ -16,10 +16,15 @@ export const reloadShapesets = async () => {
   }
 }
 
-export const findLocalIdsByUuid = (uuid: Uuid) => {
+export const findLocalIdsByUuid = (uuid: Uuid, allowedLocalIds?: Set<LocalId>) => {
   const localIds: LocalId[] = [];
 
-  for (const [localId, shapeset] of shapesets) {
+  for (const localId of (allowedLocalIds ?? shapesets.keys())) {
+    const shapeset = shapesets.get(localId);
+    if (!shapeset) {
+      continue;
+    }
+    
     for (const [key, value] of Object.entries(shapeset)) {
       if (value.includes(uuid)) {
         localIds.push(localId);
@@ -30,8 +35,8 @@ export const findLocalIdsByUuid = (uuid: Uuid) => {
   return localIds;
 }
 
-export const findLocalIdByUuid = async (uuid: Uuid) => {
-  const localIds = findLocalIdsByUuid(uuid);
+export const findLocalIdByUuid = async (uuid: Uuid, allowedLocalIds?: Set<LocalId>) => {
+  let localIds = findLocalIdsByUuid(uuid, allowedLocalIds);
   if (localIds.length <= 1) {
     return localIds[0] ?? null;
   }
