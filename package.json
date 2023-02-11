@@ -9,11 +9,11 @@
   "dependencies": {
     "@nextui-org/react": "^1.0.0-beta.12",
     "@react-aria/button": "^3.6.2",
-    "@tanstack/react-query": "^4.14.6",
-    "@trpc/client": "^10.0.0-rc.7",
-    "@trpc/next": "^10.0.0-rc.7",
-    "@trpc/react-query": "^10.0.0-rc.5",
-    "@trpc/server": "^10.0.0-rc.7",
+    "@tanstack/react-query": "^4.24.4",
+    "@trpc/client": "^10.11.0",
+    "@trpc/next": "^10.11.0",
+    "@trpc/react-query": "^10.11.0",
+    "@trpc/server": "^10.11.0",
     "fast-xml-parser": "^4.0.13",
     "next": "^13.1.1",
     "next-themes": "^0.2.1",
@@ -29,7 +29,7 @@
     "strip-json-comments": "^5.0.0",
     "superjson": "^1.11.0",
     "uuid": "^9.0.0",
-    "zod": "^3.19.1"
+    "zod": "^3.20.6"
   },
   "devDependencies": {
     "@testing-library/react": "^13.4.0",
