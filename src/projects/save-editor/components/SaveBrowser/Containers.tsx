@@ -126,11 +126,6 @@ export const ContainerDisplay = ({ container, owner, mods, gameMode }: Container
       title={`Container #${container.id}`}
       subtitle={owner ? `${ownerName}'s inventory` : undefined}
       expanded={owner !== undefined}
-      css={{
-        [`&:has(> [aria-expanded="true"]) > *:last-child`]: {
-          overflow: "visible",
-        },
-      }}
     >
       <Container fluid css={{
         $$maxColumns: 10,
@@ -142,6 +137,7 @@ export const ContainerDisplay = ({ container, owner, mods, gameMode }: Container
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(max($$itemMinWidth, $$itemMaxWidth), 1fr))",
         gap: "$$gap",
+        paddingTop: "2px",
       }}>
         {container.items.map((item, slot) => (
           <ContainerSlot key={slot} slot={slot} item={item} mods={mods} gameMode={gameMode} />
