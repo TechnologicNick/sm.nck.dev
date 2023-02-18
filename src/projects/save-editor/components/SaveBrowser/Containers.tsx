@@ -7,7 +7,7 @@ import Player from "@/save-editor/structures/player";
 import { Card, Collapse, Container, CSS, Loading, Row, Spacer, Text } from "@nextui-org/react";
 import Image from "next/image";
 import { GameMode, LocalId } from "projects/content-database/types";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { trpc } from "utils/trpc";
 
 export interface ContainersProps {
@@ -25,6 +25,8 @@ export interface ContainerSlotProps {
 export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps) => {
   const isEmpty = item.isEmpty();
   const uuid = item.uuid.toString();
+
+  const [hideIcon, setHideIcon] = useState(false);
 
   const info = trpc.contentDatabase.items.info.useQuery({
     uuid,
@@ -68,12 +70,14 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
           <Image
             unoptimized
             src={info.data.icon}
-            alt={`${info.data.inventoryDescription.title} icon`}
+            alt={(info.data && info.data.inventoryDescription.title) ? `Icon of ${info.data.inventoryDescription.title}` : "Icon"}
             width={96}
             height={96}
             style={{
               objectFit: "contain",
+              display: hideIcon ? "none" : "block",
             }}
+            onError={() => setHideIcon(true)}
           />
         )}
       </Card.Body>
