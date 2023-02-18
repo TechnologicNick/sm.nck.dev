@@ -5,6 +5,7 @@ import ContainerStructure from "@/save-editor/structures/container";
 import ItemStack from "@/save-editor/structures/item-stack";
 import Player from "@/save-editor/structures/player";
 import { Card, Collapse, Container, CSS, Loading, Row, Spacer, Text } from "@nextui-org/react";
+import Stack from "components/Stack";
 import Image from "next/image";
 import { GameMode, LocalId } from "projects/content-database/types";
 import { ReactNode, useState } from "react";
@@ -27,6 +28,7 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
   const uuid = item.uuid.toString();
 
   const [hideIcon, setHideIcon] = useState(false);
+  const [iconLoading, setIconLoading] = useState(false);
 
   const info = trpc.contentDatabase.items.info.useQuery({
     uuid,
@@ -63,23 +65,39 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
         padding: 0,
         paddingBlockStart: "$5",
       }}>
-        {info.isLoading && (
-          <Loading size="xl" />
-        )}
-        {info.data && (
-          <Image
-            unoptimized
-            src={info.data.icon}
-            alt={(info.data && info.data.inventoryDescription.title) ? `Icon of ${info.data.inventoryDescription.title}` : "Icon"}
-            width={96}
-            height={96}
-            style={{
-              objectFit: "contain",
-              display: hideIcon ? "none" : "block",
-            }}
-            onError={() => setHideIcon(true)}
-          />
-        )}
+        <Stack streched css={{
+          $$minHeight: "96px",
+        }}>
+          {(info.isLoading || iconLoading) && (
+            <Loading size="xl" />
+          )}
+          {info.data && (
+            <Image
+              unoptimized
+              src={info.data.icon}
+              alt={(info.data && info.data.inventoryDescription.title) ? `Icon of ${info.data.inventoryDescription.title}` : "Icon"}
+              width={96}
+              height={96}
+              style={{
+                objectFit: "contain",
+                display: hideIcon ? "none" : "block",
+              }}
+              onLoadStart={() => setIconLoading(true)}
+              onLoadingComplete={() => {
+                setHideIcon(false);
+                setIconLoading(false);
+              }}
+              onError={() => {
+                setHideIcon(true);
+                setIconLoading(false);
+              }}
+            />
+          )}
+          <Text title="Quantity" css={{
+            placeSelf: "end end",
+            paddingInlineEnd: "$sm",
+          }}>{item.quantity}</Text>
+        </Stack>
       </Card.Body>
       <Card.Footer css={{
         flexDirection: "column",
