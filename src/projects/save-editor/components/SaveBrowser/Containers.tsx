@@ -4,7 +4,7 @@ import SaveEditor from "@/save-editor/save-editor";
 import ContainerStructure from "@/save-editor/structures/container";
 import ItemStack from "@/save-editor/structures/item-stack";
 import Player from "@/save-editor/structures/player";
-import { Card, Collapse, Container, Loading, Row, Spacer, Text } from "@nextui-org/react";
+import { Card, Collapse, Container, CSS, Loading, Row, Spacer, Text } from "@nextui-org/react";
 import Image from "next/image";
 import { GameMode, LocalId } from "projects/content-database/types";
 import { ReactNode } from "react";
@@ -35,11 +35,14 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
     staleTime: Infinity,
   });
 
+  const cardCss: CSS = {
+    borderTop: "1px solid $border !important",
+    minHeight: "$48",
+  }
+
   if (isEmpty) {
     return (
-      <Card variant="bordered" css={{
-        borderTop: "1px solid $border !important",
-      }}>
+      <Card variant="bordered" css={cardCss}>
         <Card.Body>
         </Card.Body>
       </Card>
@@ -48,12 +51,9 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
 
   return (
     <Card
-      isPressable={!isEmpty}
       isHoverable={!isEmpty}
       variant="bordered"
-      css={{
-        borderTop: "1px solid $border !important",
-      }}
+      css={cardCss}
     >
       <Card.Body css={{
         alignItems: "center",
