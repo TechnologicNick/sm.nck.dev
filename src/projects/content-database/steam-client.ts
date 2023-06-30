@@ -20,7 +20,7 @@ const login = () => {
       console.log(`Logged on to Steam as ${user.steamID?.getSteamID64()} (${config.STEAM_USERNAME})`);
 
       try {
-        const manifestId = (await user.getProductInfo([APP_ID], [], true)).apps[APP_ID].appinfo.depots[DATA_DEPOT].manifests.public;
+        const manifestId = (await user.getProductInfo([APP_ID], [], true)).apps[APP_ID].appinfo.depots[DATA_DEPOT].manifests.public.gid;
         await (user as any).getManifest(APP_ID, DATA_DEPOT, manifestId, "public");
       } catch (error) {
         reject(new Error(`Failed to validate game ownership: ${error}`));

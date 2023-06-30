@@ -50,7 +50,7 @@ export const getManifestByFileId = withCache(async (publishedFileId: FileId) => 
 
 export const getManifestIdByDepot = withCache(async (depotId: number) => {
   await loggedOn;
-  const manifestId = (await user.getProductInfo([APP_ID], [], true)).apps[APP_ID].appinfo.depots[depotId].manifests.public as `${number}`;
+  const manifestId = (await user.getProductInfo([APP_ID], [], true)).apps[APP_ID].appinfo.depots[depotId].manifests.public.gid as `${number}`;
   return manifestId;
 }, (depotId) => depotId);
 
