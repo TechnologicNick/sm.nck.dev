@@ -4,7 +4,7 @@ import { reloadDescriptions } from "./databases/descriptions";
 import { reloadGameAssets } from "./databases/game-assets";
 import { reloadPublishedFileDetails } from "./databases/published-file-details";
 import { reloadShapesets } from "./databases/shapesets";
-import { loggedOn, user } from "./steam-client";
+import { connectToSteam, getSteamUser } from "./steam-client";
 import { FileId, SteamCdnFile, SteamCdnManifest } from "./types";
 
 const APP_ID = 387990;
@@ -36,40 +36,40 @@ export const ensureDatabaseLoaded = async () => {
 }
 
 export const getManifestByFileId = withCache(async (publishedFileId: FileId) => {
-  await loggedOn;
-  const publishedFileDetails = await user.getPublishedFileDetails(publishedFileId);
+  await connectToSteam();
+  const publishedFileDetails = await getSteamUser().getPublishedFileDetails(publishedFileId);
   const { result, hcontent_file } = publishedFileDetails.files[publishedFileId];
 
   if (result !== EResult.OK) {
     throw new Error(`Could not get published file details: ${EResult[result]}`);
   }
 
-  const manifest = (await (user as any).getManifest(APP_ID, WORKSHOP_DEPOT, hcontent_file, "public")).manifest as SteamCdnManifest;
+  const manifest = (await (getSteamUser() as any).getManifest(APP_ID, WORKSHOP_DEPOT, hcontent_file, "public")).manifest as SteamCdnManifest;
   return manifest;
 }, (publishedFileId) => publishedFileId);
 
 export const getManifestIdByDepot = withCache(async (depotId: number) => {
-  await loggedOn;
-  const manifestId = (await user.getProductInfo([APP_ID], [], true)).apps[APP_ID].appinfo.depots[depotId].manifests.public.gid as `${number}`;
+  await connectToSteam();
+  const manifestId = (await getSteamUser().getProductInfo([APP_ID], [], true)).apps[APP_ID].appinfo.depots[depotId].manifests.public.gid as `${number}`;
   return manifestId;
 }, (depotId) => depotId);
 
 export const getManifestByDepot = withCache(async (depotId: number) => {
-  await loggedOn;
+  await connectToSteam();
   const manifestId = await getManifestIdByDepot(depotId);
 
-  const manifest = (await (user as any).getManifest(APP_ID, depotId, manifestId, "public")).manifest as SteamCdnManifest;
+  const manifest = (await (getSteamUser() as any).getManifest(APP_ID, depotId, manifestId, "public")).manifest as SteamCdnManifest;
   return manifest;
 }, (depotId) => depotId);
 
 const downloadFile = withCache(async (depotId: number, file: SteamCdnFile) => {
-  await loggedOn;
-  const downloadedFile = (await (user as any).downloadFile(APP_ID, depotId, file)).file as Buffer;
+  await connectToSteam();
+  const downloadedFile = (await (getSteamUser() as any).downloadFile(APP_ID, depotId, file)).file as Buffer;
   return downloadedFile;
 }, (depotId, file) => file.sha_content);
 
 export const getFileFromManifest = async (manifest: SteamCdnManifest, filename: string) => {
-  await loggedOn;
+  await connectToSteam();
 
   const file = manifest.files.find(file => file.filename === filename);
   if (!file) {
@@ -80,7 +80,7 @@ export const getFileFromManifest = async (manifest: SteamCdnManifest, filename: 
 }
 
 export const getFilesFromManifest = async <T extends Readonly<string[]>>(manifest: SteamCdnManifest, files?: T | ((file: SteamCdnFile) => boolean)) => {
-  await loggedOn;
+  await connectToSteam();
 
   let filesToDownload = manifest.files;
   if (files) {
