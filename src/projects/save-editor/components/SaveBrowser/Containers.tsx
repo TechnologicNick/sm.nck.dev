@@ -1,5 +1,4 @@
 import { cacheMissingSummaries } from "@/save-editor/caches/player-summary-cache";
-import { usePlayerSummary } from "@/save-editor/hooks";
 import SaveEditor from "@/save-editor/save-editor";
 import ContainerStructure from "@/save-editor/structures/container";
 import ItemStack from "@/save-editor/structures/item-stack";
@@ -9,7 +8,7 @@ import Stack from "components/Stack";
 import Image from "next/image";
 import { PlayerSummary } from "pages/api/save-editor/player-summaries";
 import { GameMode, LocalId } from "projects/content-database/types";
-import { ReactNode, useMemo, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { trpc } from "utils/trpc";
 
 export interface ContainersProps {
@@ -161,7 +160,7 @@ const Containers = ({ saveEditor, buttons }: ContainersProps) => {
     console.error("Failed to get player inventories:", error);
   }
 
-  useMemo(() => {
+  useEffect(() => {
     cacheMissingSummaries(players.map(player => player.steamId64))
       .then(summaries => {
         setPlayerSummaries(new Map(Object.entries(summaries).map(([steamId, summary]) => [BigInt(steamId), summary])));
