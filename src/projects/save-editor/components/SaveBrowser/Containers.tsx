@@ -149,12 +149,13 @@ export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, g
 
 const Containers = ({ saveEditor, buttons }: ContainersProps) => {
   const containers = saveEditor.getAllContainers();
-  const playerInventories = new Map<number, Player>();
+  const owners = new Map<number, Player>();
   let players: Player[] = [];
   try {
     players = saveEditor.getAllPlayers();
     for (const player of players) {
-      playerInventories.set(player.inventoryContainerId, player);
+      owners.set(player.carryContainerId, player);
+      owners.set(player.inventoryContainerId, player);
     }
   } catch (error) {
     console.error("Failed to get player inventories:", error);
@@ -200,12 +201,16 @@ const Containers = ({ saveEditor, buttons }: ContainersProps) => {
           let subtitle: ReactNode;
           let expanded = container.items.findIndex(item => !item.isEmpty()) !== -1;
 
-          const player = playerInventories.get(container.id);
+          const player = owners.get(container.id);
           const summary = player ? playerSummaries.get(player.steamId64) : null;
           
           if (player) {
-            subtitle = `${summary?.personaName ?? player.steamId64}'s inventory`;
-            expanded = true;
+            if (container.id === player.inventoryContainerId) {
+              subtitle = `${summary?.personaName ?? player.steamId64}'s inventory`;
+              expanded = true;
+            } else if (container.id === player.carryContainerId) {
+              subtitle = `${summary?.personaName ?? player.steamId64}'s carry container`;
+            }
           }
 
           return (
