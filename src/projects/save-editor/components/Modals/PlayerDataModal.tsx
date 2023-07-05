@@ -106,9 +106,9 @@ const PlayerDataModal = ({ player, onUpdate, modalRef, ...props }: PlayerDataMod
           <Collapse title="Ids" expanded={currentlyExpanded === 2}>
             <NumberField {...getFieldProps("characterWorldId")} label="World Id" {...uint32} />
             <NumberField {...getFieldProps("inventoryContainerId")} label="Inventory Container Id" {...uint32} />
+            <NumberField {...getFieldProps("carryContainerId")} label="Carry Container Id" {...uint32} />
           </Collapse>
           <Collapse title="Unidentified" expanded={currentlyExpanded === 3}>
-            <NumberField {...getFieldProps("unknown0x2E")} label="Inventory Container Id +1 (bytes 0x2E-0x31)" {...uint32} />
             <NumberField {...getFieldProps("unknown0x32")} label="Always 0xFFFFFFFF (bytes 0x32-0x35)" {...uint32} />
             <InlineHexField {...getFieldProps("unknown0x0E")} label="Unknown (bytes 0x0E - 0x19)" length={12} />
           </Collapse>
