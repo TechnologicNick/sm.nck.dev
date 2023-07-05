@@ -7,8 +7,9 @@ import Player from "@/save-editor/structures/player";
 import { Card, Collapse, Container, CSS, Loading, Row, Spacer, Text } from "@nextui-org/react";
 import Stack from "components/Stack";
 import Image from "next/image";
+import { PlayerSummary } from "pages/api/save-editor/player-summaries";
 import { GameMode, LocalId } from "projects/content-database/types";
-import { ReactNode, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import { trpc } from "utils/trpc";
 
 export interface ContainersProps {
@@ -112,20 +113,19 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
 
 export interface ContainerDisplayProps {
   container: ContainerStructure;
-  owner?: Player;
+  title?: ReactNode;
+  subtitle?: ReactNode;
+  expanded?: boolean;
   mods: LocalId[];
   gameMode?: GameMode;
 }
 
-export const ContainerDisplay = ({ container, owner, mods, gameMode }: ContainerDisplayProps) => {
-  const summary = usePlayerSummary(owner?.steamId64 ?? null);
-  const ownerName = summary !== "loading" && summary !== "error" ? summary.personaName : owner?.steamId64 ?? null;
-
+export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, gameMode }: ContainerDisplayProps) => {
   return (
     <Collapse
-      title={`Container #${container.id}`}
-      subtitle={owner ? `${ownerName}'s inventory` : undefined}
-      expanded={owner !== undefined}
+      title={title ?? `Container #${container.id}`}
+      subtitle={subtitle}
+      expanded={expanded ?? true}
     >
       <Container fluid css={{
         $$maxColumns: 10,
@@ -150,15 +150,24 @@ export const ContainerDisplay = ({ container, owner, mods, gameMode }: Container
 const Containers = ({ saveEditor, buttons }: ContainersProps) => {
   const containers = saveEditor.getAllContainers();
   const playerInventories = new Map<number, Player>();
+  let players: Player[] = [];
   try {
-    const players = saveEditor.getAllPlayers();
+    players = saveEditor.getAllPlayers();
     for (const player of players) {
       playerInventories.set(player.inventoryContainerId, player);
     }
-    cacheMissingSummaries(players.map(player => player.steamId64));
   } catch (error) {
     console.error("Failed to get player inventories:", error);
   }
+
+  useMemo(() => {
+    cacheMissingSummaries(players.map(player => player.steamId64))
+      .then(summaries => {
+        setPlayerSummaries(new Map(Object.entries(summaries).map(([steamId, summary]) => [BigInt(steamId), summary])));
+      });
+  }, [saveEditor]);
+
+  const [playerSummaries, setPlayerSummaries] = useState(new Map(players.map(player => [player.steamId64, null as PlayerSummary | null])));
 
   const mods = saveEditor.getUserGeneratedContent().map(mod => mod.localId.toString());
 
@@ -188,13 +197,23 @@ const Containers = ({ saveEditor, buttons }: ContainersProps) => {
       </Container>
       <Collapse.Group splitted>
         {containers.map((container) => {
+          let subtitle: ReactNode;
+          let expanded = container.items.findIndex(item => !item.isEmpty()) !== -1;
+
           const player = playerInventories.get(container.id);
+          const summary = player ? playerSummaries.get(player.steamId64) : null;
+          
+          if (player) {
+            subtitle = `${summary?.personaName ?? player.steamId64}'s inventory`;
+            expanded = true;
+          }
 
           return (
             <ContainerDisplay
               key={container.id}
               container={container}
-              owner={player}
+              subtitle={subtitle}
+              expanded={expanded}
               mods={mods}
             />
           );
