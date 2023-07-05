@@ -6,6 +6,7 @@ import { reloadPublishedFileDetails } from "./databases/published-file-details";
 import { reloadShapesets } from "./databases/shapesets";
 import { connectToSteam, getSteamUser } from "./steam-client";
 import { FileId, SteamCdnFile, SteamCdnManifest } from "./types";
+import asGlobalService from "utils/as-global-service";
 
 const APP_ID = 387990;
 const WORKSHOP_DEPOT = 387990;
@@ -35,7 +36,7 @@ export const ensureDatabaseLoaded = async () => {
   }
 }
 
-export const getManifestByFileId = withCache(async (publishedFileId: FileId) => {
+export const getManifestByFileId = asGlobalService(() => withCache(async (publishedFileId: FileId) => {
   await connectToSteam();
   const publishedFileDetails = await getSteamUser().getPublishedFileDetails(publishedFileId);
   const { result, hcontent_file } = publishedFileDetails.files[publishedFileId];
@@ -46,27 +47,27 @@ export const getManifestByFileId = withCache(async (publishedFileId: FileId) => 
 
   const manifest = (await (getSteamUser() as any).getManifest(APP_ID, WORKSHOP_DEPOT, hcontent_file, "public")).manifest as SteamCdnManifest;
   return manifest;
-}, (publishedFileId) => publishedFileId);
+}, (publishedFileId) => publishedFileId), `${__filename}/getManifestByFileId`);
 
-export const getManifestIdByDepot = withCache(async (depotId: number) => {
+export const getManifestIdByDepot = asGlobalService(() => withCache(async (depotId: number) => {
   await connectToSteam();
   const manifestId = (await getSteamUser().getProductInfo([APP_ID], [], true)).apps[APP_ID].appinfo.depots[depotId].manifests.public.gid as `${number}`;
   return manifestId;
-}, (depotId) => depotId);
+}, (depotId) => depotId), `${__filename}/getManifestIdByDepot`);
 
-export const getManifestByDepot = withCache(async (depotId: number) => {
+export const getManifestByDepot = asGlobalService(() => withCache(async (depotId: number) => {
   await connectToSteam();
   const manifestId = await getManifestIdByDepot(depotId);
 
   const manifest = (await (getSteamUser() as any).getManifest(APP_ID, depotId, manifestId, "public")).manifest as SteamCdnManifest;
   return manifest;
-}, (depotId) => depotId);
+}, (depotId) => depotId), `${__filename}/getManifestByDepot`);
 
-const downloadFile = withCache(async (depotId: number, file: SteamCdnFile) => {
+const downloadFile = asGlobalService(() => withCache(async (depotId: number, file: SteamCdnFile) => {
   await connectToSteam();
   const downloadedFile = (await (getSteamUser() as any).downloadFile(APP_ID, depotId, file)).file as Buffer;
   return downloadedFile;
-}, (depotId, file) => file.sha_content);
+}, (depotId, file) => file.sha_content), `${__filename}/downloadFile`);
 
 export const getFileFromManifest = async (manifest: SteamCdnManifest, filename: string) => {
   await connectToSteam();

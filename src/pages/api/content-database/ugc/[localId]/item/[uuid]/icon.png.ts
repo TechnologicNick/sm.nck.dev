@@ -9,6 +9,7 @@ import { PNG } from 'pngjs';
 import NodeCache from 'node-cache';
 import withCache from 'utils/with-cache';
 import { cropResourceImage } from 'projects/content-database/utils/mygui/resource-image-set';
+import asGlobalService from 'utils/as-global-service';
 
 const querySchema = z.object({
   localId: localIdSchema,
@@ -38,7 +39,7 @@ const getParsedIconMapPng = async (fileId: FileId) => {
   return png;
 }
 
-export const getIconPng = withCache(async (fileId: FileId, uuid: Uuid) => {
+export const getIconPng = asGlobalService(() => withCache(async (fileId: FileId, uuid: Uuid) => {
   const [
     parsedIconMapPng,
     iconMap,
@@ -53,7 +54,7 @@ export const getIconPng = withCache(async (fileId: FileId, uuid: Uuid) => {
 
   const bounds = iconMap[uuid];
   return cropResourceImage(parsedIconMapPng, bounds);
-}, (fileId, uuid) => `${fileId}/${uuid}`);
+}, (fileId, uuid) => `${fileId}/${uuid}`), `${__filename}/getIconPng`);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const query = querySchema.safeParse(req.query);
