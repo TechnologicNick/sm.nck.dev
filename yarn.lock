@@ -1975,6 +1975,11 @@ electron-to-chromium@^1.4.431:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.447.tgz#ac69d3a7b3713e9ae94bb30ba65c3114e4d76a38"
   integrity sha512-sxX0LXh+uL41hSJsujAN86PjhrV/6c79XmpY0TvjZStV6VxIgarf8SRkUoUTuYmFcZQTemsoqo8qXOGw5npWfw==
 
+emittery@^0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.9.2.tgz#0a57c40773c6da380115c85bd67d381dd9e22f6f"
+  integrity sha512-sweWHu3j4dQm+NjLPu17pv+m5lCeK7g4Ov0NgfbRUEyzLc59DYDeRYXqlxEvuolaToI0VR3ThjFAghzl7Acjfw==
+
 emojis-list@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
@@ -3059,6 +3064,13 @@ stackback@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/stackback/-/stackback-0.0.2.tgz#1ac8a0d9483848d1695e418b6d031a3c3ce68e3b"
   integrity sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==
+
+stale-while-revalidate-cache@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/stale-while-revalidate-cache/-/stale-while-revalidate-cache-3.1.3.tgz#22c5d1ee75f8be077c4e812eb41a1053cced3b93"
+  integrity sha512-OLk3cge818nF9xhbeXV+SXNk5861DV5k5GR4x76bCRisjgUBrXCuFoVivxMLEyy2wdx9BVDjuMjRIwTmbU63hg==
+  dependencies:
+    emittery "^0.9.2"
 
 std-env@^3.3.2:
   version "3.3.3"
