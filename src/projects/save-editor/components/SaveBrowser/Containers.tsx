@@ -103,6 +103,7 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
         flexDirection: "column",
         textAlign: "center",
         gap: "$xs",
+        textWrap: "balance",
       }}>
         <Text css={{ lineHeight: "normal" }}>{(info.data && info.data.inventoryDescription.title) ?? "???"}</Text>
         <Text small color="$accents7">{uuid}</Text>
