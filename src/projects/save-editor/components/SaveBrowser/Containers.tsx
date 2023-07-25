@@ -102,8 +102,9 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
       <Card.Footer css={{
         flexDirection: "column",
         textAlign: "center",
+        gap: "$xs",
       }}>
-        <Text>{(info.data && info.data.inventoryDescription.title) ?? "???"}</Text>
+        <Text css={{ lineHeight: "normal" }}>{(info.data && info.data.inventoryDescription.title) ?? "???"}</Text>
         <Text small color="$accents7">{uuid}</Text>
       </Card.Footer>
     </Card>
