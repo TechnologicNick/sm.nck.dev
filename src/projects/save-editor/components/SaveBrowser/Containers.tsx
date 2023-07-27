@@ -64,6 +64,7 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
         justifyContent: "center",
         padding: 0,
         paddingBlockStart: "$5",
+        overflowY: "visible",
       }}>
         <Stack streched css={{
           $$minHeight: "96px",
@@ -93,10 +94,18 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
               }}
             />
           )}
+          {item.instanceId !== 0xFFFFFFFF && (
+            <Text title="Instance ID" css={{
+              placeSelf: "end start",
+              paddingInlineStart: "$sm",
+              translate: "0px $space$md",
+            }}>{item.instanceId} <Text small color="$accents7">ID</Text></Text>
+          )}
           <Text title="Quantity" css={{
             placeSelf: "end end",
             paddingInlineEnd: "$sm",
-          }}>{item.quantity}</Text>
+            translate: "0px $space$md",
+          }}><Text small color="$accents7">QT</Text> {item.quantity}</Text>
         </Stack>
       </Card.Body>
       <Card.Footer css={{
