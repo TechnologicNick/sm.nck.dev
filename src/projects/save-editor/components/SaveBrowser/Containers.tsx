@@ -3,13 +3,14 @@ import SaveEditor from "@/save-editor/save-editor";
 import ContainerStructure from "@/save-editor/structures/container";
 import ItemStack from "@/save-editor/structures/item-stack";
 import Player from "@/save-editor/structures/player";
-import { Card, Collapse, Container, CSS, Loading, Row, Spacer, Text } from "@nextui-org/react";
+import { Button, Card, Collapse, Container, CSS, Loading, Row, Spacer, Text } from "@nextui-org/react";
 import Stack from "components/Stack";
 import Image from "next/image";
 import { PlayerSummary } from "pages/api/save-editor/player-summaries";
 import { GameMode, LocalId } from "projects/content-database/types";
 import { ReactNode, useEffect, useState } from "react";
 import { trpc } from "utils/trpc";
+import { EditIcon } from "../DataGrids/Cells/Icons";
 
 export interface ContainersProps {
   saveEditor: SaveEditor;
@@ -42,6 +43,11 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
   const cardCss: CSS = {
     borderTop: "1px solid $border !important",
     minHeight: "$48",
+    "&:hover": {
+      ".card-hover-opacity": {
+        opacity: 1,
+      },
+    },
   }
 
   if (isEmpty) {
@@ -65,7 +71,27 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
         padding: 0,
         paddingBlockStart: "$5",
         overflowY: "visible",
+        position: "relative",
       }}>
+        <Button
+          auto
+          flat
+          color="primary"
+          className="card-hover-opacity"
+          css={{
+            position: "absolute",
+            top: "$xs",
+            right: "$xs",
+            paddingInline: 0,
+            aspectRatio: "1",
+            opacity: 0,
+            "&:hover, &:focus, &:active": {
+              opacity: 1,
+            },
+          }
+        }>
+          <EditIcon color="currentColor" />
+        </Button>
         <Stack streched css={{
           $$minHeight: "96px",
         }}>
