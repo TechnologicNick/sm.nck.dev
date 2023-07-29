@@ -3,14 +3,16 @@ import SaveEditor from "@/save-editor/save-editor";
 import ContainerStructure from "@/save-editor/structures/container";
 import ItemStack from "@/save-editor/structures/item-stack";
 import Player from "@/save-editor/structures/player";
-import { Button, Card, Collapse, Container, CSS, Loading, Row, Spacer, Text } from "@nextui-org/react";
+import { Card, Collapse, Container, CSS, Loading, Row, Spacer, Text } from "@nextui-org/react";
 import Stack from "components/Stack";
 import Image from "next/image";
 import { PlayerSummary } from "pages/api/save-editor/player-summaries";
 import { GameMode, LocalId } from "projects/content-database/types";
 import { ReactNode, useEffect, useState } from "react";
 import { trpc } from "utils/trpc";
-import { EditIcon } from "../DataGrids/Cells/Icons";
+import { Action } from "../DataGrids/Cells/ActionsCell";
+import ItemStackDataModal from "../Modals/ItemStackDataModal";
+import Div from "components/Div";
 
 export interface ContainersProps {
   saveEditor: SaveEditor;
@@ -43,11 +45,6 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
   const cardCss: CSS = {
     borderTop: "1px solid $border !important",
     minHeight: "$48",
-    "&:hover": {
-      ".card-hover-opacity": {
-        opacity: 1,
-      },
-    },
   }
 
   if (isEmpty) {
@@ -65,33 +62,30 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
       variant="bordered"
       css={cardCss}
     >
+      <Card.Header css={{
+        padding: "$xs",
+        paddingBlockEnd: "$1",
+        "& > *": {
+          justifyContent: "flex-end",
+        },
+      }}>
+        <Action tooltip="Edit item stack" icon="edit" modal={
+          <ItemStackDataModal
+            itemStack={item}
+            type="edit"
+            onUpdate={(newPlayer) => {
+              console.log({ newPlayer });
+            }}
+          />
+        }/>
+      </Card.Header>
       <Card.Body css={{
         alignItems: "center",
         justifyContent: "center",
         padding: 0,
-        paddingBlockStart: "$5",
         overflowY: "visible",
         position: "relative",
       }}>
-        <Button
-          auto
-          flat
-          color="primary"
-          className="card-hover-opacity"
-          css={{
-            position: "absolute",
-            top: "$xs",
-            right: "$xs",
-            paddingInline: 0,
-            aspectRatio: "1",
-            opacity: 0,
-            "&:hover, &:focus, &:active": {
-              opacity: 1,
-            },
-          }
-        }>
-          <EditIcon color="currentColor" />
-        </Button>
         <Stack streched css={{
           $$minHeight: "96px",
         }}>
@@ -120,21 +114,25 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
               }}
             />
           )}
+        </Stack>
+        <Div css={{
+          width: "100%",
+          paddingInline: "$sm",
+        }}>
           {item.instanceId !== 0xFFFFFFFF && (
             <Text title="Instance ID" css={{
-              placeSelf: "end start",
-              paddingInlineStart: "$sm",
-              translate: "0px $space$md",
+              float: "left",
+              lineHeight: "normal",
             }}>{item.instanceId} <Text small color="$accents7">ID</Text></Text>
           )}
           <Text title="Quantity" css={{
-            placeSelf: "end end",
-            paddingInlineEnd: "$sm",
-            translate: "0px $space$md",
+            float: "right",
+            lineHeight: "normal",
           }}><Text small color="$accents7">QT</Text> {item.quantity}</Text>
-        </Stack>
+        </Div>
       </Card.Body>
       <Card.Footer css={{
+        paddingBlockStart: "$1",
         flexDirection: "column",
         textAlign: "center",
         gap: "$xs",
