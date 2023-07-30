@@ -160,6 +160,20 @@ export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, g
       title={title ?? `Container #${container.id}`}
       subtitle={subtitle}
       expanded={expanded ?? true}
+      css={{
+        "*:has(> .nextui-expand-content)": {
+          height: "unset", // Disable fixed height set by javascript
+          display: "grid",
+          gridTemplateRows: "0fr",
+          transition: "grid-template-rows 200ms ease 0ms, opacity 300ms ease 0ms",
+          ".nextui-expand-content": {
+            overflow: "hidden",
+          }
+        },
+        "&[data-state='open'] *:has(> .nextui-expand-content)": {
+          gridTemplateRows: "1fr",
+        },
+      }}
     >
       <Container fluid css={{
         $$maxColumns: 10,
