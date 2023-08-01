@@ -1,7 +1,7 @@
 import { cacheMissingSummaries } from "@/save-editor/caches/player-summary-cache";
 import SaveEditor from "@/save-editor/save-editor";
 import ContainerStructure from "@/save-editor/structures/container";
-import ItemStack from "@/save-editor/structures/item-stack";
+import ItemStack, { IItemStack } from "@/save-editor/structures/item-stack";
 import Player from "@/save-editor/structures/player";
 import { Card, Collapse, Container, CSS, Loading, Row, Spacer, Text } from "@nextui-org/react";
 import Stack from "components/Stack";
@@ -20,13 +20,13 @@ export interface ContainersProps {
 }
 
 export interface ContainerSlotProps {
-  slot: number;
   item: ItemStack;
   mods: LocalId[];
   gameMode?: GameMode;
+  onUpdate?: (newItemStack: IItemStack) => void;
 }
 
-export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps) => {
+export const ContainerSlot = ({ item, mods, gameMode, onUpdate }: ContainerSlotProps) => {
   const isEmpty = item.isEmpty();
   const uuid = item.uuid.toString();
 
@@ -69,15 +69,15 @@ export const ContainerSlot = ({ slot, item, mods, gameMode }: ContainerSlotProps
           justifyContent: "flex-end",
         },
       }}>
-        <Action tooltip="Edit item stack" icon="edit" modal={
-          <ItemStackDataModal
-            itemStack={item}
-            type="edit"
-            onUpdate={(newPlayer) => {
-              console.log({ newPlayer });
-            }}
-          />
-        }/>
+        {onUpdate && (
+          <Action tooltip="Edit item stack" icon="edit" modal={
+            <ItemStackDataModal
+              itemStack={item}
+              type="edit"
+              onUpdate={onUpdate}
+            />
+          }/>
+        )}
       </Card.Header>
       <Card.Body css={{
         alignItems: "center",
@@ -152,9 +152,12 @@ export interface ContainerDisplayProps {
   expanded?: boolean;
   mods: LocalId[];
   gameMode?: GameMode;
+  saveEditor?: SaveEditor;
 }
 
-export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, gameMode }: ContainerDisplayProps) => {
+export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, gameMode, saveEditor }: ContainerDisplayProps) => {
+  const [lastUpdatedItem, setLastUpdatedItem] = useState<ItemStack | null>(null);
+
   return (
     <Collapse
       title={title ?? `Container #${container.id}`}
@@ -188,7 +191,17 @@ export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, g
         paddingTop: "2px",
       }}>
         {container.items.map((item, slot) => (
-          <ContainerSlot key={slot} slot={slot} item={item} mods={mods} gameMode={gameMode} />
+          <ContainerSlot
+            key={slot}
+            item={item}
+            mods={mods}
+            gameMode={gameMode}
+            onUpdate={saveEditor && ((newItemStack) => {
+              container.items[slot] = new ItemStack(newItemStack);
+              saveEditor.updateContainer(container);
+              setLastUpdatedItem(container.items[slot]);
+            })}
+          />
         ))}
       </Container>
     </Collapse>
@@ -268,6 +281,7 @@ const Containers = ({ saveEditor, buttons }: ContainersProps) => {
               subtitle={subtitle}
               expanded={expanded}
               mods={mods}
+              saveEditor={saveEditor}
             />
           );
         })}
