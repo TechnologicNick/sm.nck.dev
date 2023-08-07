@@ -3,7 +3,7 @@ import SaveEditor from "@/save-editor/save-editor";
 import ContainerStructure from "@/save-editor/structures/container";
 import ItemStack, { IItemStack } from "@/save-editor/structures/item-stack";
 import Player from "@/save-editor/structures/player";
-import { Card, Collapse, Container, CSS, Loading, Row, Spacer, Text } from "@nextui-org/react";
+import { Card, Collapse, Container, CSS, Input, Loading, Row, Spacer, Text } from "@nextui-org/react";
 import Stack from "components/Stack";
 import Image from "next/image";
 import { PlayerSummary } from "pages/api/save-editor/player-summaries";
@@ -171,13 +171,54 @@ export interface ContainerDisplayProps {
 }
 
 export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, gameMode, saveEditor }: ContainerDisplayProps) => {
-  const [lastUpdatedItem, setLastUpdatedItem] = useState<ItemStack | null>(null);
+  const [lastUpdatedItem, setLastUpdatedItem] = useState<IItemStack | null>(null);
+
+  const setSize = (size: number) => {
+    if (!saveEditor) {
+      return;
+    }
+
+    while (container.items.length < size) {
+      container.items.push(new ItemStack({}));
+    }
+
+    container.size = size;
+    setLastUpdatedItem(container.items[size - 1]);
+  }
 
   return (
     <Collapse
       title={title ?? `Container #${container.id}`}
       subtitle={subtitle}
       expanded={expanded ?? true}
+      arrowIcon={saveEditor && (
+        <Div>
+          <Input
+            aria-label={`Size of container #${container.id}`}
+            type="number"
+            min={0}
+            max={0xFFFF}
+            step={1}
+            bordered
+            initialValue={`${container.size}`}
+            onClick={(e) => e.stopPropagation()}
+            onBlur={(e) => {
+              const size = parseInt(e.target.value);
+              if (isNaN(size)) {
+                return;
+              }
+              setSize(size);
+            }}
+            onChange={(e) => {
+              const size = parseInt(e.target.value);
+              if (isNaN(size) || Math.abs(size - container.size) > 1) {
+                return;
+              }
+              setSize(size);
+            }}
+          />
+        </Div>
+      )}
       css={{
         "*:has(> .nextui-expand-content)": {
           height: "unset", // Disable fixed height set by javascript
@@ -205,7 +246,7 @@ export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, g
         gap: "$$gap",
         paddingTop: "2px",
       }}>
-        {container.items.map((item, slot) => (
+        {container.items.slice(0, container.size).map((item, slot) => (
           <ContainerSlot
             key={slot}
             item={item}
