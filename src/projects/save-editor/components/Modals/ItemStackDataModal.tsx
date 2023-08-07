@@ -1,6 +1,6 @@
 import { Button, Modal, Row, Text, useModal } from "@nextui-org/react";
 import React, { useImperativeHandle, useRef, useState } from "react";
-import { IItemStack } from "@/save-editor/structures/item-stack";
+import ItemStack, { IItemStack } from "@/save-editor/structures/item-stack";
 import { ModalProps } from ".";
 import { NumberField, UuidField } from "./Fields";
 
@@ -81,6 +81,14 @@ const ItemStackDataModal = ({ itemStack, onUpdate, modalRef, type, ...props }: I
         </Row>
       </Modal.Body>
       <Modal.Footer>
+        {type === "edit" && (
+          <Button auto color="error" css={{ marginInlineEnd: "auto" }} onClick={() => {
+            values.current = new ItemStack({});
+            update();
+          }}>
+            Delete
+          </Button>
+        )}
         <Button auto flat color="error" onClick={() => setVisible(false)}>
           Close
         </Button>
