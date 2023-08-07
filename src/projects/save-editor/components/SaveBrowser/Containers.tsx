@@ -20,14 +20,14 @@ export interface ContainersProps {
 }
 
 export interface ContainerSlotProps {
-  item: ItemStack;
+  item: IItemStack;
   mods: LocalId[];
   gameMode?: GameMode;
   onUpdate?: (newItemStack: IItemStack) => void;
 }
 
 export const ContainerSlot = ({ item, mods, gameMode, onUpdate }: ContainerSlotProps) => {
-  const isEmpty = item.isEmpty();
+  const isEmpty = ItemStack.isEmpty(item);
   const uuid = item.uuid.toString();
 
   const [hideIcon, setHideIcon] = useState(false);
@@ -275,7 +275,7 @@ const Containers = ({ saveEditor, buttons }: ContainersProps) => {
       <Collapse.Group splitted>
         {containers.map((container) => {
           let subtitle: ReactNode;
-          let expanded = container.items.findIndex(item => !item.isEmpty()) !== -1;
+          let expanded = container.items.findIndex(item => ItemStack.isEmpty(item)) !== -1;
 
           const player = owners.get(container.id);
           const summary = player ? playerSummaries.get(player.steamId64) : null;

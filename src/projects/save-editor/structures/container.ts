@@ -8,7 +8,7 @@ export interface IContainer {
   id: number;
   size: number;
   stackSize: number;
-  items: ItemStack[];
+  items: IItemStack[];
   filterCount: number;
   filterUuids: Uuid[];
 }
@@ -20,7 +20,7 @@ export default class Container implements IContainer, IDeserializable<IContainer
   id: number = 0;
   size: number = 0;
   stackSize: number = 0xFFFF;
-  items: ItemStack[] = [];
+  items: IItemStack[] = [];
   filterCount: number = 0;
   filterUuids: Uuid[] = [];
   
