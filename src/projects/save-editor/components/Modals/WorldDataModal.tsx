@@ -84,7 +84,7 @@ const WorldDataModal = ({ world, onUpdate, modalRef, type, ...props }: WorldData
         </Row>
       </Modal.Body>
       <Modal.Footer>
-        <Button auto flat color="error" onClick={() => setVisible(false)}>
+        <Button auto color="secondary" onClick={() => setVisible(false)}>
           Close
         </Button>
         <Button auto disabled={updateDisabled} onClick={() => update()}>
