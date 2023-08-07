@@ -44,14 +44,29 @@ export const ContainerSlot = ({ item, mods, gameMode, onUpdate }: ContainerSlotP
 
   const cardCss: CSS = {
     borderTop: "1px solid $border !important",
-    minHeight: "$48",
+    minHeight: "13.5rem",
   }
 
   if (isEmpty) {
     return (
       <Card variant="bordered" css={cardCss}>
-        <Card.Body>
-        </Card.Body>
+        <Card.Header css={{
+          padding: "$xs",
+          paddingBlockEnd: "$1",
+          "& > *": {
+            justifyContent: "flex-end",
+          },
+        }}>
+          {onUpdate && (
+            <Action tooltip="Add item stack" icon="add" modal={
+              <ItemStackDataModal
+                itemStack={item}
+                type="add"
+                onUpdate={onUpdate}
+              />
+            }/>
+          )}
+        </Card.Header>
       </Card>
     );
   }
