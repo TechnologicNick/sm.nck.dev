@@ -8,7 +8,7 @@ import Stack from "components/Stack";
 import Image from "next/image";
 import { PlayerSummary } from "pages/api/save-editor/player-summaries";
 import { GameMode, LocalId } from "projects/content-database/types";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { trpc } from "utils/trpc";
 import { Action } from "../DataGrids/Cells/ActionsCell";
 import ItemStackDataModal from "../Modals/ItemStackDataModal";
@@ -23,10 +23,11 @@ export interface ContainerSlotProps {
   item: IItemStack;
   mods: LocalId[];
   gameMode?: GameMode;
-  onUpdate?: (newItemStack: IItemStack) => void;
+  slot: number;
+  onUpdate?: (newItemStack: IItemStack, slot: number) => void;
 }
 
-export const ContainerSlot = ({ item, mods, gameMode, onUpdate }: ContainerSlotProps) => {
+export const ContainerSlot = ({ item, mods, gameMode, slot, onUpdate }: ContainerSlotProps) => {
   const isEmpty = ItemStack.isEmpty(item);
   const uuid = item.uuid.toString();
 
@@ -62,7 +63,7 @@ export const ContainerSlot = ({ item, mods, gameMode, onUpdate }: ContainerSlotP
               <ItemStackDataModal
                 itemStack={item}
                 type="add"
-                onUpdate={onUpdate}
+                onUpdate={(newItemStack) => onUpdate(newItemStack, slot)}
               />
             }/>
           )}
@@ -89,7 +90,7 @@ export const ContainerSlot = ({ item, mods, gameMode, onUpdate }: ContainerSlotP
             <ItemStackDataModal
               itemStack={item}
               type="edit"
-              onUpdate={onUpdate}
+              onUpdate={(newItemStack) => onUpdate(newItemStack, slot)}
             />
           }/>
         )}
@@ -186,6 +187,12 @@ export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, g
     setLastUpdatedItem(container.items[size - 1]);
   }
 
+  const onUpdate = useCallback((newItemStack: IItemStack, slot: number) => {
+    container.items[slot] = new ItemStack(newItemStack);
+    saveEditor?.updateContainer(container);
+    setLastUpdatedItem(container.items[slot]);
+  }, [container, saveEditor]);
+
   return (
     <Collapse
       title={title ?? `Container #${container.id}`}
@@ -246,17 +253,14 @@ export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, g
         gap: "$$gap",
         paddingTop: "2px",
       }}>
-        {container.items.slice(0, container.size).map((item, slot) => (
+        {container.items.map((item, slot) => (slot > container.size) ? null : (
           <ContainerSlot
             key={slot}
             item={item}
             mods={mods}
             gameMode={gameMode}
-            onUpdate={saveEditor && ((newItemStack) => {
-              container.items[slot] = new ItemStack(newItemStack);
-              saveEditor.updateContainer(container);
-              setLastUpdatedItem(container.items[slot]);
-            })}
+            slot={slot}
+            onUpdate={saveEditor && onUpdate}
           />
         ))}
       </Container>
