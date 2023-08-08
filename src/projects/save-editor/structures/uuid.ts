@@ -66,6 +66,10 @@ export default class Uuid {
     reversed.reverse();
     return reversed;
   }
+
+  isNil() {
+    return this.blob.every(byte => byte === 0);
+  }
     
   static NIL = new Uuid();
 

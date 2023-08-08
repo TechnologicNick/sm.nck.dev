@@ -14,6 +14,7 @@ import { Action } from "../DataGrids/Cells/ActionsCell";
 import ItemStackDataModal from "../Modals/ItemStackDataModal";
 import Div from "components/Div";
 import Fieldset from "components/Fieldset";
+import { getBaseGameContent } from "@/save-editor/types/game-mode";
 
 export interface ContainersProps {
   saveEditor: SaveEditor;
@@ -63,6 +64,8 @@ export const ContainerSlot = memo(({ item, mods, gameMode, slot, onUpdate }: Con
             <Action tooltip="Add item stack" icon="add" modal={
               <ItemStackDataModal
                 itemStack={item}
+                mods={mods}
+                gameMode={gameMode}
                 type="add"
                 onUpdate={(newItemStack) => onUpdate(newItemStack, slot)}
               />
@@ -90,6 +93,8 @@ export const ContainerSlot = memo(({ item, mods, gameMode, slot, onUpdate }: Con
           <Action tooltip="Edit item stack" icon="edit" modal={
             <ItemStackDataModal
               itemStack={item}
+              mods={mods}
+              gameMode={gameMode}
               type="edit"
               onUpdate={(newItemStack) => onUpdate(newItemStack, slot)}
             />
@@ -348,6 +353,7 @@ const Containers = ({ saveEditor, buttons }: ContainersProps) => {
   const [playerSummaries, setPlayerSummaries] = useState(new Map(players.map(player => [player.steamId64, null as PlayerSummary | null])));
 
   const mods = saveEditor.getUserGeneratedContent().map(mod => mod.localId.toString());
+  const gameMode = getBaseGameContent(saveEditor.getGameMode());
 
   return (
     <>
@@ -397,6 +403,7 @@ const Containers = ({ saveEditor, buttons }: ContainersProps) => {
               subtitle={subtitle}
               expanded={expanded}
               mods={mods}
+              gameMode={gameMode}
               saveEditor={saveEditor}
             />
           );

@@ -3,6 +3,9 @@ import React, { useImperativeHandle, useRef, useState } from "react";
 import ItemStack, { IItemStack } from "@/save-editor/structures/item-stack";
 import { ModalProps } from ".";
 import { NumberField, UuidField } from "./Fields";
+import { ContainerSlot } from "../SaveBrowser/Containers";
+import { GameMode, LocalId } from "projects/content-database/types";
+import ItemStackUuidField from "./Fields/ItemStackUuidFIeld";
 
 const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -10,11 +13,13 @@ const capitalizeFirstLetter = (string: string) => {
 
 export interface ItemStackDataModalProps extends ModalProps {
   itemStack?: IItemStack;
+  mods: LocalId[];
+  gameMode?: GameMode;
   onUpdate: (newItemStack: IItemStack) => void;
   type: "edit" | "add";
 }
 
-const ItemStackDataModal = ({ itemStack, onUpdate, modalRef, type, ...props }: ItemStackDataModalProps) => {
+const ItemStackDataModal = ({ itemStack, mods, gameMode, onUpdate, modalRef, type, ...props }: ItemStackDataModalProps) => {
   const { setVisible, visible, bindings } = useModal();
   useImperativeHandle(modalRef, () => ({
     setVisible,
@@ -70,9 +75,7 @@ const ItemStackDataModal = ({ itemStack, onUpdate, modalRef, type, ...props }: I
         </Text>
       </Modal.Header>
       <Modal.Body>
-        <Row>
-          <UuidField {...getFieldProps("uuid")} label="UUID" />
-        </Row>
+        <ItemStackUuidField {...getFieldProps("uuid")} label="UUID" mods={mods} gameMode={gameMode} />
         <Row>
           <NumberField {...getFieldProps("quantity")} label="Quantity" {...uint32} />
         </Row>
