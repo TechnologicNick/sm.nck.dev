@@ -3,7 +3,7 @@ import SaveEditor from "@/save-editor/save-editor";
 import ContainerStructure from "@/save-editor/structures/container";
 import ItemStack, { IItemStack } from "@/save-editor/structures/item-stack";
 import Player from "@/save-editor/structures/player";
-import { Card, Collapse, Container, CSS, Input, Loading, Row, Spacer, Text } from "@nextui-org/react";
+import { Card, Collapse, CollapseIconVariantsProps, Container, CSS, Input, Loading, Row, Spacer, StyledCollapseIcon, Text } from "@nextui-org/react";
 import Stack from "components/Stack";
 import Image from "next/image";
 import { PlayerSummary } from "pages/api/save-editor/player-summaries";
@@ -161,6 +161,25 @@ export const ContainerSlot = memo(({ item, mods, gameMode, slot, onUpdate }: Con
   );
 });
 
+// https://github.com/nextui-org/nextui/blob/fae56648da8a82534f5876dc7097ca71c45355a0/packages/react/src/collapse/collapse-icon.tsx
+const CollapseIcon = memo(({ ...props }: CollapseIconVariantsProps) => {
+  return (
+    <StyledCollapseIcon
+      className="nextui-collapse-icon"
+      fill="none"
+      focusable="false"
+      height="20"
+      role="presentation"
+      viewBox="0 0 24 24"
+      width="20"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path d="M15.5 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} />
+    </StyledCollapseIcon>
+  );
+});
+
 export interface ContainerDisplayProps {
   container: ContainerStructure;
   title?: ReactNode;
@@ -199,7 +218,11 @@ export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, g
       subtitle={subtitle}
       expanded={expanded ?? true}
       arrowIcon={saveEditor && (
-        <Div>
+        <Div css={{
+          display: "flex",
+          alignItems: "center",
+          gap: "$lg",
+        }}>
           <Input
             aria-label={`Size of container #${container.id}`}
             type="number"
@@ -224,6 +247,7 @@ export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, g
               setSize(size);
             }}
           />
+          <CollapseIcon />
         </Div>
       )}
       css={{
