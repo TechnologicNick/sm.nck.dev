@@ -12,7 +12,8 @@ export { default as DeleteIcon } from "./DeleteIcon";
 export type AvailableIcons = "add" | "edit" | "delete";
 export type IconProps = {
   icon: AvailableIcons,
-} & Partial<IconBaseProps> & CSS;
+  css?: CSS,
+} & Partial<IconBaseProps>
 
 export const Icon = (props: IconProps) => {
   switch(props.icon) {
