@@ -23,15 +23,26 @@ export const reloadDatabase = async () => {
   console.log("Database reloaded");
 }
 
+let reloadingPromise: Promise<void> | null = null;
+
+// TODO: Return stale data while reloading
 export const ensureDatabaseLoaded = async () => {
+  if (reloadingPromise) {
+    await reloadingPromise;
+    return;
+  }
+
   if (lastDatabaseReload < Date.now() - DATABASE_RELOAD_INTERVAL) {
     const previousDatabaseReload = lastDatabaseReload;
     try {
       lastDatabaseReload = Date.now();
-      await reloadDatabase();
+      reloadingPromise = reloadDatabase();
+      await reloadingPromise;
     } catch (error) {
       lastDatabaseReload = previousDatabaseReload;
       throw error;
+    } finally {
+      reloadingPromise = null;
     }
   }
 }
