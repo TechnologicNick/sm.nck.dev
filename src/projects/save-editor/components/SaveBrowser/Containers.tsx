@@ -344,7 +344,7 @@ const Containers = ({ saveEditor, buttons }: ContainersProps) => {
       <Collapse.Group splitted>
         {containers.map((container) => {
           let subtitle: ReactNode;
-          let expanded = container.items.findIndex(item => ItemStack.isEmpty(item)) !== -1;
+          let expanded = container.items.findIndex(item => !ItemStack.isEmpty(item)) !== -1;
 
           const player = owners.get(container.id);
           const summary = player ? playerSummaries.get(player.steamId64) : null;
