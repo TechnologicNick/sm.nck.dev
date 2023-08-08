@@ -8,7 +8,7 @@ import Stack from "components/Stack";
 import Image from "next/image";
 import { PlayerSummary } from "pages/api/save-editor/player-summaries";
 import { GameMode, LocalId } from "projects/content-database/types";
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { memo, ReactNode, useCallback, useEffect, useState } from "react";
 import { trpc } from "utils/trpc";
 import { Action } from "../DataGrids/Cells/ActionsCell";
 import ItemStackDataModal from "../Modals/ItemStackDataModal";
@@ -27,7 +27,7 @@ export interface ContainerSlotProps {
   onUpdate?: (newItemStack: IItemStack, slot: number) => void;
 }
 
-export const ContainerSlot = ({ item, mods, gameMode, slot, onUpdate }: ContainerSlotProps) => {
+export const ContainerSlot = memo(({ item, mods, gameMode, slot, onUpdate }: ContainerSlotProps) => {
   const isEmpty = ItemStack.isEmpty(item);
   const uuid = item.uuid.toString();
 
@@ -159,7 +159,7 @@ export const ContainerSlot = ({ item, mods, gameMode, slot, onUpdate }: Containe
       </Card.Footer>
     </Card>
   );
-}
+});
 
 export interface ContainerDisplayProps {
   container: ContainerStructure;

@@ -1,5 +1,5 @@
-import { Col, Row, Tooltip, styled, TooltipColors, Modal } from "@nextui-org/react";
-import React, { ReactElement, ReactNode, useRef, useState } from "react";
+import { Col, Row, Tooltip, styled, TooltipColors } from "@nextui-org/react";
+import React, { ReactElement, ReactNode, useRef } from "react";
 import { AriaButtonProps } from "@react-types/button";
 import { useButton } from "@react-aria/button";
 import { Icon, AvailableIcons } from "./Icons";
