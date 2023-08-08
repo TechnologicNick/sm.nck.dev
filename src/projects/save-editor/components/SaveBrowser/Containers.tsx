@@ -8,11 +8,12 @@ import Stack from "components/Stack";
 import Image from "next/image";
 import { PlayerSummary } from "pages/api/save-editor/player-summaries";
 import { GameMode, LocalId } from "projects/content-database/types";
-import { memo, ReactNode, useCallback, useEffect, useState } from "react";
+import { memo, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { trpc } from "utils/trpc";
 import { Action } from "../DataGrids/Cells/ActionsCell";
 import ItemStackDataModal from "../Modals/ItemStackDataModal";
 import Div from "components/Div";
+import Fieldset from "components/Fieldset";
 
 export interface ContainersProps {
   saveEditor: SaveEditor;
@@ -190,7 +191,7 @@ export interface ContainerDisplayProps {
   saveEditor?: SaveEditor;
 }
 
-export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, gameMode, saveEditor }: ContainerDisplayProps) => {
+export const ContainerDisplay = ({ container, title, subtitle, expanded = true, mods, gameMode, saveEditor }: ContainerDisplayProps) => {
   const [lastUpdatedItem, setLastUpdatedItem] = useState<IItemStack | null>(null);
 
   const setSize = (size: number) => {
@@ -212,11 +213,21 @@ export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, g
     setLastUpdatedItem(container.items[slot]);
   }, [container, saveEditor]);
 
+  const fieldsetRef = useRef<HTMLFieldSetElement>(null);
+
   return (
     <Collapse
       title={title ?? `Container #${container.id}`}
       subtitle={subtitle}
-      expanded={expanded ?? true}
+      expanded={expanded}
+      onChange={(e) => {
+        const oldState = e.currentTarget.dataset.state;
+        if (oldState === "open") {
+          fieldsetRef.current!.setAttribute("disabled", "");
+        } else {
+          fieldsetRef.current!.removeAttribute("disabled");
+        }
+      }}
       arrowIcon={saveEditor && (
         <Div css={{
           display: "flex",
@@ -265,29 +276,31 @@ export const ContainerDisplay = ({ container, title, subtitle, expanded, mods, g
         },
       }}
     >
-      <Container fluid css={{
-        $$maxColumns: 10,
-        $$itemMinWidth: "8rem",
-        $$gap: "$space$md",
-        $$gapCount: "calc($$maxColumns - 1)",
-        $$totalGap: "calc($$gap * $$gapCount)",
-        $$itemMaxWidth: "calc((100% - $$totalGap) / $$maxColumns)",
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(max($$itemMinWidth, $$itemMaxWidth), 1fr))",
-        gap: "$$gap",
-        paddingTop: "2px",
-      }}>
-        {container.items.map((item, slot) => (slot > container.size) ? null : (
-          <ContainerSlot
-            key={slot}
-            item={item}
-            mods={mods}
-            gameMode={gameMode}
-            slot={slot}
-            onUpdate={saveEditor && onUpdate}
-          />
-        ))}
-      </Container>
+      <Fieldset ref={fieldsetRef} disabled={!expanded}>
+        <Container fluid css={{
+          $$maxColumns: 10,
+          $$itemMinWidth: "8rem",
+          $$gap: "$space$md",
+          $$gapCount: "calc($$maxColumns - 1)",
+          $$totalGap: "calc($$gap * $$gapCount)",
+          $$itemMaxWidth: "calc((100% - $$totalGap) / $$maxColumns)",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(max($$itemMinWidth, $$itemMaxWidth), 1fr))",
+          gap: "$$gap",
+          paddingTop: "2px",
+        }}>
+          {container.items.map((item, slot) => (slot > container.size) ? null : (
+            <ContainerSlot
+              key={slot}
+              item={item}
+              mods={mods}
+              gameMode={gameMode}
+              slot={slot}
+              onUpdate={saveEditor && onUpdate}
+            />
+          ))}
+        </Container>
+      </Fieldset>
     </Collapse>
   );
 }
