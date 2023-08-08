@@ -193,6 +193,7 @@ export interface ContainerDisplayProps {
 
 export const ContainerDisplay = ({ container, title, subtitle, expanded = true, mods, gameMode, saveEditor }: ContainerDisplayProps) => {
   const [lastUpdatedItem, setLastUpdatedItem] = useState<IItemStack | null>(null);
+  const [deleted, setDeleted] = useState(false);
 
   const setSize = (size: number) => {
     if (!saveEditor) {
@@ -214,6 +215,10 @@ export const ContainerDisplay = ({ container, title, subtitle, expanded = true, 
   }, [container, saveEditor]);
 
   const fieldsetRef = useRef<HTMLFieldSetElement>(null);
+
+  if (deleted) {
+    return null;
+  }
 
   return (
     <Collapse
@@ -256,6 +261,20 @@ export const ContainerDisplay = ({ container, title, subtitle, expanded = true, 
                 return;
               }
               setSize(size);
+            }}
+          />
+          <Action
+            tooltip="Delete container"
+            icon="delete"
+            color="error"
+            css={{
+              width: "unset",
+              "svg": {
+                transform: "unset !important",
+              }
+            }}
+            onClick={() => {
+              saveEditor.deleteContainers([ container.id ]) && setDeleted(true);
             }}
           />
           <CollapseIcon />
