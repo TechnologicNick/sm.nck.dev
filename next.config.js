@@ -6,6 +6,7 @@
 module.exports = (phase, { defaultConfig }) => {
   return {
     output: "standalone",
+    productionBrowserSourceMaps: true,
 
     experimental: {
       urlImports: [
