@@ -30,7 +30,7 @@ export default class Uuid {
 
   toString() {
     if (!this.#options.unsafe) {
-      return stringify(this.blob);
+      return stringify(this.blob) as `${string}-${string}-${string}-${string}-${string}`;
     }
 
     const hex = (byte: number) => byte.toString(16).padStart(2, "0");
@@ -56,7 +56,7 @@ export default class Uuid {
       hex(this.blob[13]) +
       hex(this.blob[14]) +
       hex(this.blob[15])
-    );
+    ) as `${string}-${string}-${string}-${string}-${string}`;
   }
 
   getReversedBlob() {

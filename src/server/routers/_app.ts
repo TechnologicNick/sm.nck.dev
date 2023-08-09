@@ -1,10 +1,10 @@
 import { steamRouter } from "server/routers/steam";
 import { t } from "server/trpc";
-import { modDatabaseRouter } from "./mod-database";
+import { contentDatabaseRouter } from "./content-database";
 
 export const appRouter = t.router({
   steam: steamRouter,
-  modDatabase: modDatabaseRouter,
+  contentDatabase: contentDatabaseRouter,
 });
 
 export type AppRouter = typeof appRouter;
