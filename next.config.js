@@ -7,6 +7,7 @@ module.exports = (phase, { defaultConfig }) => {
   return {
     output: "standalone",
     productionBrowserSourceMaps: true,
+    compress: false, // Offload gzip compression to nginx
 
     experimental: {
       urlImports: [
