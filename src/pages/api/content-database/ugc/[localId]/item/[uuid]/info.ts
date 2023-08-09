@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getManifestByFileId, ensureDatabaseLoaded, getFileFromManifest } from 'projects/content-database/content-database';
 import { Description, descriptions } from 'projects/content-database/databases/descriptions';
+import { InventoryDescription } from 'projects/content-database/databases/game-assets';
 import { FileId, localIdSchema, uuidSchema } from 'projects/content-database/types';
 import stripJsonComments from 'strip-json-comments';
 import { handleHttpError, InternalServerError, NotFoundError } from 'utils/errors';
@@ -16,19 +17,19 @@ export const getInventoryDescription = async (fileId: FileId, uuid: string) => {
 
   const buffer = await getFileFromManifest(manifest, "Gui\\Language\\English\\inventoryDescriptions.json");
   if (!buffer) {
-    throw new NotFoundError("inventoryDescriptions.json not found");
+    throw new NotFoundError(`inventoryDescriptions.json not found for ${fileId}`);
   }
 
-  let inventoryDescriptions: Record<string, any>;
+  let inventoryDescriptions: Record<string, InventoryDescription>;
   try {
     inventoryDescriptions = JSON.parse(stripJsonComments(buffer.toString()));
   } catch (error) {
-    throw new InternalServerError("inventoryDescriptions.json is not valid JSON");
+    throw new InternalServerError(`inventoryDescriptions.json is not valid JSON for ${fileId}`);
   }
 
   const inventoryDescription = inventoryDescriptions[uuid];
   if (!inventoryDescription) {
-    throw new NotFoundError("UUID not found in inventoryDescriptions.json");
+    throw new NotFoundError(`UUID ${uuid} not found in inventoryDescriptions.json for ${fileId}`);
   }
 
   return inventoryDescription;
@@ -47,6 +48,7 @@ export const getInfo = async (description: Description, uuid: string) => {
       },
     },
     inventoryDescription: await getInventoryDescription(fileId, uuid),
+    icon: `/api/content-database/ugc/${localId}/item/${uuid}/icon.png` as const,
   }
 }
 

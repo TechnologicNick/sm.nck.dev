@@ -7,6 +7,8 @@ interface UuidOptions {
 
 export default class Uuid {
 
+  static readonly sizeof = 0x10;
+
   blob: Uint8Array;
   #options: UuidOptions = {
     reverse: false,
@@ -63,6 +65,10 @@ export default class Uuid {
     const reversed = Uint8Array.from(this.blob);
     reversed.reverse();
     return reversed;
+  }
+
+  isNil() {
+    return this.blob.every(byte => byte === 0);
   }
     
   static NIL = new Uuid();

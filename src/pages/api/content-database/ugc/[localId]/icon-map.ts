@@ -3,6 +3,7 @@ import { getManifestByFileId, ensureDatabaseLoaded, getFileFromManifest } from '
 import { descriptions } from 'projects/content-database/databases/descriptions';
 import { FileId, localIdSchema } from 'projects/content-database/types';
 import { parseResourceImageSet } from 'projects/content-database/utils/mygui/resource-image-set';
+import asGlobalService from 'utils/as-global-service';
 import withCache from 'utils/with-cache';
 import { z } from 'zod';
 
@@ -10,7 +11,7 @@ const querySchema = z.object({
   localId: localIdSchema,
 });
 
-export const getIconMap = withCache(async (fileId: FileId) => {
+export const getIconMap = asGlobalService(() => withCache(async (fileId: FileId) => {
   const manifest = await getManifestByFileId(fileId);
 
   const xml = await getFileFromManifest(manifest, "Gui\\IconMap.xml");
@@ -23,7 +24,7 @@ export const getIconMap = withCache(async (fileId: FileId) => {
   } catch (error) {
     throw new Error(`Failed to parse IconMap.xml: ${error}`);
   }
-}, (fileId) => fileId);
+}, (fileId) => fileId), `${__filename}/getIconMap`);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const query = querySchema.safeParse(req.query);

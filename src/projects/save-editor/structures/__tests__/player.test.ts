@@ -25,7 +25,7 @@ describe("Player", () => {
       pitch: -0.8226400017738342,
       steamId64: BigInt("76561198142527219"),
       inventoryContainerId: 1,
-      unknown0x2E: 2,
+      carryContainerId: 2,
       unknown0x32: 0xFFFFFFFF,
     })
   });
@@ -49,7 +49,7 @@ describe("Player", () => {
       pitch: -0.8226400017738342,
       steamId64: BigInt("76561198142527219"),
       inventoryContainerId: 1,
-      unknown0x2E: 2,
+      carryContainerId: 2,
       unknown0x32: 0xFFFFFFFF,
     });
 

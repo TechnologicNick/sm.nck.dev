@@ -11,7 +11,7 @@ export interface IPlayer extends IGenericData {
   pitch: number;
   steamId64: bigint;
   inventoryContainerId: number;
-  unknown0x2E: number;
+  carryContainerId: number;
   unknown0x32: number;
 }
 
@@ -26,7 +26,7 @@ export default class Player extends GenericData implements IPlayer, IDeserializa
   pitch: number = 0;
   steamId64: bigint = BigInt(0);
   inventoryContainerId: number = 0;
-  unknown0x2E: number = 0;
+  carryContainerId: number = 0;
   unknown0x32: number = 0xFFFFFFFF;
 
   static deserialize(buffer: Buffer) {
@@ -41,7 +41,7 @@ export default class Player extends GenericData implements IPlayer, IDeserializa
     const pitch = base.data.readFloatBE(0x1E);
     const steamId64 = BigInt(`0x${base.data.slice(0x22, 0x22 + 8).toString("hex")}`);
     const inventoryContainerId = base.data.readUInt32BE(0x2A);
-    const unknown0x2E = base.data.readUInt32BE(0x2E);
+    const carryContainerId = base.data.readUInt32BE(0x2E);
     const unknown0x32 = base.data.readUInt32BE(0x32);
 
     return new Player({
@@ -55,7 +55,7 @@ export default class Player extends GenericData implements IPlayer, IDeserializa
       pitch,
       steamId64,
       inventoryContainerId,
-      unknown0x2E,
+      carryContainerId,
       unknown0x32,
     })
   }
@@ -77,7 +77,7 @@ export default class Player extends GenericData implements IPlayer, IDeserializa
     buffer.writeFloatBE(this.pitch, 0x1E);
     Buffer.from(this.steamId64.toString(16).padStart(16, "0"), "hex").copy(buffer, 0x22, 0, 8);
     buffer.writeUInt32BE(this.inventoryContainerId, 0x2A);
-    buffer.writeUInt32BE(this.unknown0x2E, 0x2E);
+    buffer.writeUInt32BE(this.carryContainerId, 0x2E);
     buffer.writeUInt32BE(this.unknown0x32, 0x32);
 
     this.data = buffer;

@@ -1,6 +1,6 @@
 import { styled } from "@nextui-org/react";
-import { GoTrashcan } from "react-icons/go";
+import { GoTrash } from "react-icons/go";
 
-export default styled(GoTrashcan, {
+export default styled(GoTrash, {
   color: "$error",
 });

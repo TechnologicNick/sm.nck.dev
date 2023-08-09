@@ -1,3 +1,5 @@
+import { GameMode as BaseGameMode } from "projects/content-database/types";
+
 enum GameMode {
   AlphaTerrain = 0,
   FlatTerrain = 1,
@@ -26,6 +28,25 @@ export enum GameModeDescriptions {
   Survival = "Survival mode",
   Custom = "Custom game mode (Steam Workshop)",
   Development = "Axolot Games development game mode",
+}
+
+export const getBaseGameContent = (gameMode: GameMode): BaseGameMode | undefined => {
+  switch (gameMode) {
+    case GameMode.AlphaTerrain:
+    case GameMode.FlatTerrain:
+    case GameMode.ClassicTerrain:
+    case GameMode.CreatedTerrain_Test:
+    case GameMode.CreatedTerrain:
+    case GameMode.Terrain:
+      return "creative";
+    case GameMode.Challenge:
+    case GameMode.ChallengeBuilder:
+      return "challenge";
+    case GameMode.Survival:
+      return "survival";
+    default:
+      return undefined;
+  }
 }
 
 export default GameMode;
