@@ -25,6 +25,6 @@ describe("World", () => {
     });
 
     // Padding at the end of the buffer is allowed
-    expect(expected.toString("hex").startsWith(player.serializeData()?.toString("hex"))).toBeTruthy;
+    expect(expected.toString("hex").startsWith(player.serializeData()?.toString("hex"))).toBeTruthy();
   });
 });
