@@ -9,8 +9,6 @@ import { FaMoon, FaSun } from "react-icons/fa";
 const ThemeSwitcher = (props: PropsOf<typeof Link>) => {
   const { theme, setTheme } = useTheme();
 
-  console.log(theme);
-
   // Update the state to show the correct icon on mount
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
