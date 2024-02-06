@@ -566,6 +566,14 @@
     "@react-types/button" "^3.9.0"
     "@react-types/shared" "^3.21.0"
 
+"@nextui-org/framer-transitions@2.0.15":
+  version "2.0.15"
+  resolved "https://registry.yarnpkg.com/@nextui-org/framer-transitions/-/framer-transitions-2.0.15.tgz#da53e1923e8091d0a9d91e8791cf661d8e8b3b01"
+  integrity sha512-UlWMCAFdrq8wKrYFGwc+O4kFhKCkL4L9ZadBkP0PqjmfyAC2gA3ygRbNqtKhFMWeKbBAiC8qQ9aTBEA/+0r/EA==
+  dependencies:
+    "@nextui-org/shared-utils" "2.0.4"
+    "@nextui-org/system" "2.0.15"
+
 "@nextui-org/link@^2.0.26":
   version "2.0.26"
   resolved "https://registry.yarnpkg.com/@nextui-org/link/-/link-2.0.26.tgz#154446f755a52a51cf4d0d1a6f1c9412856053f2"
@@ -579,6 +587,24 @@
     "@react-aria/link" "^3.6.1"
     "@react-aria/utils" "^3.21.1"
     "@react-types/link" "^3.5.1"
+
+"@nextui-org/navbar@^2.0.27":
+  version "2.0.27"
+  resolved "https://registry.yarnpkg.com/@nextui-org/navbar/-/navbar-2.0.27.tgz#3d318692db701d3d5c74de6a41546ca37ac673a1"
+  integrity sha512-iP4Pn4ItQkAW1nbu1Jmrh5l9pMVG43lDxq9rbx6DbLjLnnZOOrE6fURb8uN5NVy3ooV5dF02zKAoxlkE5fN/xw==
+  dependencies:
+    "@nextui-org/framer-transitions" "2.0.15"
+    "@nextui-org/react-utils" "2.0.10"
+    "@nextui-org/shared-utils" "2.0.4"
+    "@nextui-org/use-aria-toggle-button" "2.0.6"
+    "@nextui-org/use-scroll-position" "2.0.4"
+    "@react-aria/focus" "^3.14.3"
+    "@react-aria/interactions" "^3.19.1"
+    "@react-aria/overlays" "^3.18.1"
+    "@react-aria/utils" "^3.21.1"
+    "@react-stately/toggle" "^3.6.3"
+    "@react-stately/utils" "^3.8.0"
+    react-remove-scroll "^2.5.6"
 
 "@nextui-org/react-rsc-utils@2.0.10":
   version "2.0.10"
@@ -674,7 +700,7 @@
   dependencies:
     clsx "^1.2.1"
 
-"@nextui-org/system@^2.0.15":
+"@nextui-org/system@2.0.15", "@nextui-org/system@^2.0.15":
   version "2.0.15"
   resolved "https://registry.yarnpkg.com/@nextui-org/system/-/system-2.0.15.tgz#b0a532f0b3a27e911c076d2ac180d38c72d64952"
   integrity sha512-WFDq+Rx6D+gmK1YGEG2RBARPK9EOYonQDt5Tq2tUchzOOqj3kXXcM5Z0F3fudM59eIncLa/tX/ApJSTLry+hsw==
@@ -734,6 +760,22 @@
     "@react-aria/ssr" "^3.8.0"
     "@react-aria/utils" "^3.21.1"
     "@react-types/shared" "^3.21.0"
+
+"@nextui-org/use-aria-toggle-button@2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@nextui-org/use-aria-toggle-button/-/use-aria-toggle-button-2.0.6.tgz#d347f01514710f73dd42acee4106ecfa734b6aed"
+  integrity sha512-6Sjp7a0HQjmboLKNZu9AtZmyHz8+vhqcDwJDYTZjrrna0udxEXG+6C14YZzQxoJcvuaMimr5E8Aq0AxyRAr0MQ==
+  dependencies:
+    "@nextui-org/use-aria-button" "2.0.6"
+    "@react-aria/utils" "^3.21.1"
+    "@react-stately/toggle" "^3.6.3"
+    "@react-types/button" "^3.9.0"
+    "@react-types/shared" "^3.21.0"
+
+"@nextui-org/use-scroll-position@2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@nextui-org/use-scroll-position/-/use-scroll-position-2.0.4.tgz#9d4f83c88381969267a1ae8faf1c8b0f4e3af9d3"
+  integrity sha512-5ugiHqQ1OptBmujOsJGigbUt/rQ826+8RKYSpBp1uax1eF7TlpigXt6mS1PDsJIyEauHi8rjH5B3weOn1//tug==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -2518,6 +2560,11 @@ delayed-stream@~1.0.0:
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==
 
+detect-node-es@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/detect-node-es/-/detect-node-es-1.1.0.tgz#163acdf643330caa0b4cd7c21e7ee7755d6fa493"
+  integrity sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ==
+
 detect-node@^2.0.4, detect-node@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
@@ -2762,6 +2809,11 @@ get-intrinsic@^1.0.2, get-intrinsic@^1.1.1, get-intrinsic@^1.1.3, get-intrinsic@
     has-proto "^1.0.1"
     has-symbols "^1.0.3"
 
+get-nonce@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/get-nonce/-/get-nonce-1.0.1.tgz#fdf3f0278073820d2ce9426c18f07481b1e0cdf3"
+  integrity sha512-FJhYRoDaiatfEkUK8HKlicmu/3SGFD51q3itKDGoSTysQJBnfOcxU5GxnhE1E6soB76MbT0MBtnKJuXyAx+96Q==
+
 glob-parent@^5.1.2, glob-parent@~5.1.2:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.2.tgz#869832c58034fe68a4093c17dc15e8340d8401c4"
@@ -2940,6 +2992,13 @@ intl-messageformat@^10.1.0:
     "@formatjs/fast-memoize" "2.2.0"
     "@formatjs/icu-messageformat-parser" "2.6.0"
     tslib "^2.4.0"
+
+invariant@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
+  integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
+  dependencies:
+    loose-envify "^1.0.0"
 
 ip@^2.0.0:
   version "2.0.0"
@@ -3254,7 +3313,7 @@ long@^5.0.0:
   resolved "https://registry.yarnpkg.com/long/-/long-5.2.3.tgz#a3ba97f3877cf1d778eccbcb048525ebb77499e1"
   integrity sha512-lcHwpNoggQTObv5apGNCTdJrO69eHOZMi4BNC+rTLER8iHAqGrUVeLh/irVIM7zTw2bOXA8T6uNPeujwOLg/2Q==
 
-loose-envify@^1.1.0:
+loose-envify@^1.0.0, loose-envify@^1.1.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
@@ -3761,10 +3820,38 @@ react-refresh@^0.14.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.0.tgz#4e02825378a5f227079554d4284889354e5f553e"
   integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==
 
+react-remove-scroll-bar@^2.3.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/react-remove-scroll-bar/-/react-remove-scroll-bar-2.3.4.tgz#53e272d7a5cb8242990c7f144c44d8bd8ab5afd9"
+  integrity sha512-63C4YQBUt0m6ALadE9XV56hV8BgJWDmmTPY758iIJjfQKt2nYwoUrPk0LXRXcB/yIj82T1/Ixfdpdk68LwIB0A==
+  dependencies:
+    react-style-singleton "^2.2.1"
+    tslib "^2.0.0"
+
+react-remove-scroll@^2.5.6:
+  version "2.5.7"
+  resolved "https://registry.yarnpkg.com/react-remove-scroll/-/react-remove-scroll-2.5.7.tgz#15a1fd038e8497f65a695bf26a4a57970cac1ccb"
+  integrity sha512-FnrTWO4L7/Bhhf3CYBNArEG/yROV0tKmTv7/3h9QCFvH6sndeFf1wPqOcbFVu5VAulS5dV1wGT3GZZ/1GawqiA==
+  dependencies:
+    react-remove-scroll-bar "^2.3.4"
+    react-style-singleton "^2.2.1"
+    tslib "^2.1.0"
+    use-callback-ref "^1.3.0"
+    use-sidecar "^1.1.2"
+
 react-ssr-prepass@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/react-ssr-prepass/-/react-ssr-prepass-1.5.0.tgz#bc4ca7fcb52365e6aea11cc254a3d1bdcbd030c5"
   integrity sha512-yFNHrlVEReVYKsLI5lF05tZoHveA5pGzjFbFJY/3pOqqjGOmMmqx83N4hIjN2n6E1AOa+eQEUxs3CgRnPmT0RQ==
+
+react-style-singleton@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/react-style-singleton/-/react-style-singleton-2.2.1.tgz#f99e420492b2d8f34d38308ff660b60d0b1205b4"
+  integrity sha512-ZWj0fHEMyWkHzKYUr2Bs/4zU6XLmq9HsgBURm7g5pAVfyn49DgUiNgY2d4lXRlYSiCif9YBGpQleewkcqddc7g==
+  dependencies:
+    get-nonce "^1.0.0"
+    invariant "^2.2.4"
+    tslib "^2.0.0"
 
 react@^18.2.0:
   version "18.2.0"
@@ -4230,6 +4317,11 @@ tsconfck@^2.1.0:
   resolved "https://registry.yarnpkg.com/tsconfck/-/tsconfck-2.1.1.tgz#9b51603d2712d1f4740fa14748ca886a2e1893e5"
   integrity sha512-ZPCkJBKASZBmBUNqGHmRhdhM8pJYDdOXp4nRgj/O0JwUwsMq50lCDRQP/M5GBNAA0elPrq4gAeu4dkaVCuKWww==
 
+tslib@^2.0.0, tslib@^2.1.0:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
+  integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
+
 tslib@^2.4.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.0.tgz#b295854684dbda164e181d259a22cd779dcd7bc3"
@@ -4293,6 +4385,21 @@ url-parse@^1.5.3:
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
+
+use-callback-ref@^1.3.0:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/use-callback-ref/-/use-callback-ref-1.3.1.tgz#9be64c3902cbd72b07fe55e56408ae3a26036fd0"
+  integrity sha512-Lg4Vx1XZQauB42Hw3kK7JM6yjVjgFmFC5/Ab797s79aARomD2nEErc4mCgM8EZrARLmmbWpi5DGCadmK50DcAQ==
+  dependencies:
+    tslib "^2.0.0"
+
+use-sidecar@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/use-sidecar/-/use-sidecar-1.1.2.tgz#2f43126ba2d7d7e117aa5855e5d8f0276dfe73c2"
+  integrity sha512-epTbsLuzZ7lPClpz2TyryBfztm7m+28DlEv2ZCQ3MDr5ssiwyOwGH/e5F9CkfWjJ1t4clvI58yF822/GUkjjhw==
+  dependencies:
+    detect-node-es "^1.1.0"
+    tslib "^2.0.0"
 
 use-sync-external-store@^1.2.0:
   version "1.2.0"

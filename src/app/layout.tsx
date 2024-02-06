@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { fontSans } from "./fonts";
 import { Providers } from "./providers";
 import { Link } from "@nextui-org/link";
+import Navbar from "components/navigation/navbar-v2";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -17,7 +18,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="relative flex flex-col h-screen">
-            {/* <Navbar /> */}
+            <Navbar />
             {children}
             <footer className="w-full flex items-center justify-center py-3">
               <Link
