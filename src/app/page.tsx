@@ -16,7 +16,7 @@ const SaveEditorProject = () => {
       as={Link}
       size="lg"
       startContent={<TbFileDatabase size={40} />}
-      className="w-full bg-[linear-gradient(69deg,#d946ef,#ec4899_90%)]"
+      className="dark w-full bg-[linear-gradient(69deg,#d946ef,#ec4899_90%)]"
     >
       Save Editor
     </Button>
