@@ -39,6 +39,7 @@ export default function HomePage() {
       </p>
       <Spacer y={8}/>
       <SaveEditorProject />
+      <Spacer y={8}/>
     </main>
   );
 }
