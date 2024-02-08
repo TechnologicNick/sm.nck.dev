@@ -5,6 +5,7 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-o
 import { Link } from "@nextui-org/link";
 import { NavbarItem, NavbarMenuItem } from "@nextui-org/navbar";
 import { PropsOf } from "@nextui-org/system";
+import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { GoChevronDown } from "react-icons/go";
 
@@ -42,17 +43,21 @@ export const saveEditorDropdownItems = [
 ] as const satisfies Array<PropsOf<typeof DropdownItem>>;
 
 export const SaveEditorDropdown = () => {
+  const pathname = usePathname();
+  const isActive = pathname?.startsWith("/save-editor") ?? false;
+
   return (
     <Dropdown>
       <NavbarItem>
         <DropdownTrigger>
           <Button
             disableRipple
-            className="p-0 bg-transparent data-[hover=true]:bg-transparent"
+            className={clsx("p-0 bg-transparent data-[hover=true]:bg-transparent", isActive && "font-semibold")}
             endContent={<GoChevronDown />}
             radius="sm"
             variant="light"
             size="lg"
+            color={isActive ? "primary" : "default"}
           >
             Save Editor
           </Button>
