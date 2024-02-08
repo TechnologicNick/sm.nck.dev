@@ -9,6 +9,13 @@ import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { GoChevronDown } from "react-icons/go";
 
+type NavigationLink = {
+  key: string;
+  textValue: string;
+  description: string;
+  href: string;
+};
+
 export const saveEditorDropdownItems = [
   {
     key: "game",
@@ -40,7 +47,7 @@ export const saveEditorDropdownItems = [
     description: "Inventories and items of all parts and players.",
     href: "/save-editor/containers"
   },
-] as const satisfies Array<PropsOf<typeof DropdownItem>>;
+] as const satisfies NavigationLink[];
 
 export const SaveEditorDropdown = () => {
   const pathname = usePathname();
