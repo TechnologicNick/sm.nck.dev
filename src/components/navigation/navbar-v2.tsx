@@ -1,19 +1,23 @@
 import { Link } from "@nextui-org/link";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle } from "@nextui-org/navbar";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from "@nextui-org/navbar";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import ThemeSwitcher from "./theme-switcher";
+import { NavbarMenuLinks, SaveEditorDropdown } from "./navbar-links";
 
 const NavbarV2 = () => {
   return (
-    <Navbar isBordered>
+    <Navbar
+      isBordered
+      height="3.25rem"
+    >
       <NavbarMenuToggle className="sm:hidden" />
       <NavbarBrand>
         <Link href="/" color="foreground" className="max-sm:hidden font-semibold">
           sm.nck.dev
         </Link>
       </NavbarBrand>
-      <NavbarContent justify="center">
-
+      <NavbarContent justify="center" className="max-sm:hidden">
+        <SaveEditorDropdown />
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="flex">
@@ -30,6 +34,9 @@ const NavbarV2 = () => {
           <ThemeSwitcher className="text-xl text-default-600 dark:text-default-500" />
         </NavbarItem>
       </NavbarContent>
+      <NavbarMenu>
+        <NavbarMenuLinks />
+      </NavbarMenu>
     </Navbar>
   );
 }

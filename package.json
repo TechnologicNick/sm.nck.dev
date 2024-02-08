@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@nextui-org/button": "^2.0.26",
+    "@nextui-org/dropdown": "^2.1.16",
     "@nextui-org/link": "^2.0.26",
     "@nextui-org/navbar": "^2.0.27",
     "@nextui-org/react": "1.0.0-beta.13",
